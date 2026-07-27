@@ -38,7 +38,7 @@ export default defineConfig({
     name: '__MSG_extName__',
     description: '__MSG_extDescription__',
     default_locale: 'en',
-    version: '0.1.5',
+    version: '0.1.6',
     permissions: ['contextMenus', 'storage', 'tabs', 'downloads'],
     host_permissions: ['<all_urls>'],
     icons: {
