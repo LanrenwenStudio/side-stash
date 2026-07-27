@@ -511,5 +511,65 @@
   },
   "pinTipBodyShort": {
     "message": "點擊右上角圖釘圖示（📌）將 Side Stash 固定到工具列"
+  },
+  "toastZippingImages": {
+    "message": "正在打包壓縮圖片..."
+  },
+  "toastZippedZipSuccess": {
+    "message": "已打包下載 $1 張圖片 (.zip)"
+  },
+  "toastZippedZipPartial": {
+    "message": "已打包 $1 張圖片 (.zip)，$2 張未能獲取"
+  },
+  "toastDownloadingIndividual": {
+    "message": "正在逐張下載 $1 張圖片..."
+  },
+  "toastDownloadedIndividualSuccess": {
+    "message": "已完成 $1 張圖片逐張下載"
+  },
+  "toastDownloadedIndividualPartial": {
+    "message": "已下載 $1 張圖片 ($2 張失敗)"
+  },
+  "toastSeededMockData": {
+    "message": "已填充 7 條測試資料"
+  },
+  "toastClearedAllData": {
+    "message": "已清空所有資料"
+  },
+  "tooltipDownloadZip": {
+    "message": "打包下載 (.zip)"
+  },
+  "tooltipDownloadIndividual": {
+    "message": "逐張單独下載"
+  },
+  "tooltipCopySelected": {
+    "message": "複製選中項"
+  },
+  "tooltipCutSelected": {
+    "message": "剪切選中項"
+  },
+  "tooltipDeleteSelected": {
+    "message": "刪除選中項"
+  },
+  "loadMockDataBtn": {
+    "message": "填充測試資料 (7 條)"
+  },
+  "debugToolsHeading": {
+    "message": "⚡ Debug / 測試工具"
+  },
+  "debugSeedMockBtn": {
+    "message": "填充測試資料"
+  },
+  "debugOpenWelcomeBtn": {
+    "message": "打開引導頁"
+  },
+  "debugClearAllBtn": {
+    "message": "清空資料"
+  },
+  "welcomeTryStashed": {
+    "message": "已暫存"
+  },
+  "welcomeTryAllStashed": {
+    "message": "已全存入側邊欄"
   }
 }

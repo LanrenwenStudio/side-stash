@@ -192,18 +192,18 @@ export function SettingsSheet({
           {onSeedMockData || onClearAllData || onOpenWelcomePage || onResetPinTip ? (
             <div className="grid gap-2 border-t border-zinc-200/90 pt-3 dark:border-zinc-800">
               <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                ⚡ Debug / 测试工具
+                {t('debugToolsHeading', '⚡ Debug & Testing')}
               </span>
               <div className="grid grid-cols-2 gap-2">
                 {onSeedMockData ? (
                   <Button type="button" variant="secondary" onClick={onSeedMockData}>
-                    填充测试数据
+                    {t('debugSeedMockBtn', 'Load Test Data')}
                   </Button>
                 ) : null}
                 {onOpenWelcomePage ? (
                   <Button type="button" variant="secondary" onClick={onOpenWelcomePage}>
                     <ExternalLink className="size-3.5" aria-hidden="true" />
-                    打开引导页
+                    {t('debugOpenWelcomeBtn', 'Open Welcome Page')}
                   </Button>
                 ) : null}
                 {onResetPinTip ? (
@@ -213,7 +213,7 @@ export function SettingsSheet({
                 ) : null}
                 {onClearAllData ? (
                   <Button type="button" variant="danger" onClick={onClearAllData}>
-                    清空数据
+                    {t('debugClearAllBtn', 'Clear All Data')}
                   </Button>
                 ) : null}
               </div>

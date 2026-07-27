@@ -94,7 +94,7 @@ export function EmptyState({
               onClick={onLoadMockData}
             >
               <Sparkles className="size-3.5 text-zinc-900 dark:text-zinc-100" aria-hidden="true" />
-              <span>填充测试数据 (7 条)</span>
+              <span>{t('loadMockDataBtn', 'Load test items (7)')}</span>
             </Button>
           ) : null}
         </div>

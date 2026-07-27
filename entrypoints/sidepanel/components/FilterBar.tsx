@@ -301,7 +301,7 @@ export function FilterBar({
           <div className="flex shrink-0 items-center gap-1">
             {selectedImageCount > 0 ? (
               <>
-                <ActionTooltip content="打包下载 (.zip)">
+                <ActionTooltip content={t('tooltipDownloadZip', 'Download as ZIP (.zip)')}>
                   <button
                     type="button"
                     aria-label={t('downloadZipTooltip', 'Package selected images as ZIP')}
@@ -312,7 +312,7 @@ export function FilterBar({
                   </button>
                 </ActionTooltip>
 
-                <ActionTooltip content="逐张单独下载">
+                <ActionTooltip content={t('tooltipDownloadIndividual', 'Download individually')}>
                   <button
                     type="button"
                     aria-label={t('downloadIndividualTooltip', 'Download selected images individually')}
@@ -325,7 +325,7 @@ export function FilterBar({
               </>
             ) : null}
 
-            <ActionTooltip content="复制选中项">
+            <ActionTooltip content={t('tooltipCopySelected', 'Copy selected')}>
               <button
                 type="button"
                 aria-label={t('copySelectedTooltip', 'Copy all text and links')}
@@ -336,7 +336,7 @@ export function FilterBar({
               </button>
             </ActionTooltip>
 
-            <ActionTooltip content="剪切选中项">
+            <ActionTooltip content={t('tooltipCutSelected', 'Cut selected')}>
               <button
                 type="button"
                 aria-label={t('cutSelectedTooltip', 'Cut selected items')}
@@ -347,7 +347,7 @@ export function FilterBar({
               </button>
             </ActionTooltip>
 
-            <ActionTooltip content="删除选中项">
+            <ActionTooltip content={t('tooltipDeleteSelected', 'Delete selected')}>
               <button
                 type="button"
                 aria-label={t('deleteSelectedTooltip', 'Delete selected items')}

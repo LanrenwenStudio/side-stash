@@ -443,21 +443,21 @@ export function App() {
     }
 
     setToast({
-      message: '正在打包压缩图片...',
+      message: t('toastZippingImages', 'Zipping images...'),
       type: 'info',
     });
 
     const result = await downloadImagesZip(images);
     if (result.ok > 0 && result.failed === 0) {
       setToast({
-        message: `已打包下载 ${result.ok} 张图片 (.zip)`,
+        message: t('toastZippedZipSuccess', 'Zipped and downloading $1 images (.zip)', [String(result.ok)]),
         type: 'success',
       });
       return;
     }
     if (result.ok > 0) {
       setToast({
-        message: `已打包 ${result.ok} 张图片 (.zip)，${result.failed} 张未能获取`,
+        message: t('toastZippedZipPartial', 'Zipped $1 images (.zip), $2 failed', [String(result.ok), String(result.failed)]),
         type: 'warning',
       });
       return;
@@ -479,21 +479,21 @@ export function App() {
     }
 
     setToast({
-      message: `正在逐张下载 ${images.length} 张图片...`,
+      message: t('toastDownloadingIndividual', 'Downloading $1 images individually...', [String(images.length)]),
       type: 'info',
     });
 
     const result = await downloadImageItemsSequentially(images);
     if (result.ok > 0 && result.failed === 0) {
       setToast({
-        message: `已完成 ${result.ok} 张图片逐张下载`,
+        message: t('toastDownloadedIndividualSuccess', 'Downloaded $1 images successfully', [String(result.ok)]),
         type: 'success',
       });
       return;
     }
     if (result.ok > 0) {
       setToast({
-        message: `已下载 ${result.ok} 张图片 (${result.failed} 张失败)`,
+        message: t('toastDownloadedIndividualPartial', 'Downloaded $1 images ($2 failed)', [String(result.ok), String(result.failed)]),
         type: 'warning',
       });
       return;
@@ -653,7 +653,7 @@ export function App() {
     const nextItems = await seedMockItems();
     setItems(nextItems);
     setToast({
-      message: '已填充 7 条测试数据',
+      message: t('toastSeededMockData', 'Loaded 7 test items'),
       type: 'success',
     });
   };
@@ -663,7 +663,7 @@ export function App() {
     setItems(nextItems);
     setSelectedIds(new Set());
     setToast({
-      message: '已清空所有数据',
+      message: t('toastClearedAllData', 'Cleared all items'),
       type: 'info',
     });
   };

@@ -247,7 +247,7 @@ function WelcomeApp() {
                 {activeFeedback === 'text' ? (
                   <>
                     <Check className="size-3.5" />
-                    已暂存
+                    {t('welcomeTryStashed', 'Saved')}
                   </>
                 ) : (
                   <>
@@ -297,7 +297,7 @@ function WelcomeApp() {
                 {activeFeedback === 'link' ? (
                   <>
                     <Check className="size-3.5" />
-                    已暂存
+                    {t('welcomeTryStashed', 'Saved')}
                   </>
                 ) : (
                   <>
@@ -352,7 +352,7 @@ function WelcomeApp() {
                 {activeFeedback === 'image' ? (
                   <>
                     <Check className="size-3.5" />
-                    已暂存
+                    {t('welcomeTryStashed', 'Saved')}
                   </>
                 ) : (
                   <>
@@ -399,7 +399,7 @@ function WelcomeApp() {
               {activeFeedback === 'all' ? (
                 <>
                   <Check className="size-3.5" />
-                  已全存入侧边栏
+                  {t('welcomeTryAllStashed', 'All items saved to side panel')}
                 </>
               ) : (
                 <>
