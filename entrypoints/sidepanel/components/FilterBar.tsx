@@ -1,11 +1,11 @@
 import React from 'react';
 import type { RefObject } from 'react';
 import {
-  Archive,
   ChevronDown,
   Copy,
   Download,
   FileText,
+  FolderDown,
   Image as ImageIcon,
   Link2,
   ListFilter,
@@ -307,7 +307,7 @@ export function FilterBar({
                     onClick={onDownloadZip}
                     className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-zinc-100 outline-none transition-colors hover:bg-white/20 dark:text-zinc-900 dark:hover:bg-zinc-900/20"
                   >
-                    <Archive className="size-4 shrink-0 stroke-[2.25]" aria-hidden="true" />
+                    <FolderDown className="size-4 shrink-0 stroke-[2.25]" aria-hidden="true" />
                   </button>
                 </ActionTooltip>
 
