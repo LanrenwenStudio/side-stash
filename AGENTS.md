@@ -26,5 +26,5 @@ When the user asks only to package / zip / 打包 (no release wording):
 
 ## Development / 开发
 
-- Do not rely on Hot Module Replacement (HMR) for this Chrome extension.
-- Every time code changes are made, re-run the build/dev process (`npm run build` / `npm run dev`) so that the extension is cleanly re-compiled and re-executed.
+- Hot reload / HMR is functional in dev mode (`npm run dev`).
+- Modifications to files are auto-reloaded by WXT/Vite. You do not need to restart `npm run dev` after every code change.

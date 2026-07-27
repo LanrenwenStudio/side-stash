@@ -400,5 +400,116 @@
   },
   "sectionRecent": {
     "message": "Zuletzt"
+  },
+  "searchShortcut": {
+    "message": "Focus search (/)"
+  },
+  "downloadSelectedImagesTooltip": {
+    "message": "Download selected images only"
+  },
+  "copySelectedTooltip": {
+    "message": "Copy all text and links"
+  },
+  "cutSelectedTooltip": {
+    "message": "Cut selected items"
+  },
+  "deleteSelectedTooltip": {
+    "message": "Delete selected items"
+  },
+  "actionUndo": {
+    "message": "Undo"
+  },
+  "deleteSuccess": {
+    "message": "Item deleted."
+  },
+  "deleteMultipleSuccess": {
+    "message": "Deleted $1 items."
+  },
+  "duplicateNotice": {
+    "message": "Item already saved."
+  },
+  "toastWarningTitle": {
+    "message": "Warning"
+  },
+  "toastErrorTitle": {
+    "message": "Error"
+  },
+  "toastConfirm": {
+    "message": "Got it"
+  },
+  "welcomeTryTitle": {
+    "message": "Quick Try"
+  },
+  "welcomeTrySubtitle": {
+    "message": "Click any sample below to save it and see it live in the side panel:"
+  },
+  "welcomeTryTextTitle": {
+    "message": "Sample Text"
+  },
+  "welcomeTryTextContent": {
+    "message": "Side Stash is a privacy-first side panel for text, links, and images."
+  },
+  "welcomeTryTextBtn": {
+    "message": "+ Stash text"
+  },
+  "welcomeTryLinkTitle": {
+    "message": "Sample Link"
+  },
+  "welcomeTryLinkContent": {
+    "message": "Side Stash GitHub Repository"
+  },
+  "welcomeTryLinkBtn": {
+    "message": "+ Stash link"
+  },
+  "welcomeTryImageTitle": {
+    "message": "Sample Image"
+  },
+  "welcomeTryImageAlt": {
+    "message": "Side Stash Logo"
+  },
+  "welcomeTryImageBtn": {
+    "message": "+ Stash image"
+  },
+  "welcomeTryAddAllBtn": {
+    "message": "Stash all samples"
+  },
+  "welcomePinTitle": {
+    "message": "📌 Pin to Toolbar"
+  },
+  "welcomePinSubtitle": {
+    "message": "Pin Side Stash to open your side panel anytime in one click:"
+  },
+  "welcomePinStep1Title": {
+    "message": "Click Extension Icon"
+  },
+  "welcomePinStep1Body": {
+    "message": "Click the puzzle icon (🧩) in the top-right Chrome toolbar"
+  },
+  "welcomePinStep2Title": {
+    "message": "Locate Side Stash"
+  },
+  "welcomePinStep2Body": {
+    "message": "Find Side Stash in your list of extensions"
+  },
+  "welcomePinStep3Title": {
+    "message": "Click Pin Icon"
+  },
+  "welcomePinStep3Body": {
+    "message": "Click the pin icon (📌) to pin it to your toolbar"
+  },
+  "pinTipTitle": {
+    "message": "📌 Pin Side Stash to Toolbar"
+  },
+  "pinTipBody": {
+    "message": "Click Chrome's puzzle icon (🧩) in the top-right toolbar, find Side Stash and click 📌 Pin for one-click access anytime!"
+  },
+  "pinTipGotIt": {
+    "message": "Got it"
+  },
+  "pinTipReset": {
+    "message": "Reset Pin Tip"
+  },
+  "pinTipBodyShort": {
+    "message": "Click the top-right Pin icon (📌) to pin Side Stash"
   }
 }

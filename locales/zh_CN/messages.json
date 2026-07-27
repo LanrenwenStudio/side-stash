@@ -327,43 +327,118 @@
     "message": "欢迎使用 Side Stash"
   },
   "welcomeSubtitle": {
-    "message": "轻量侧边栏，收藏文本、链接与图片——默认本地隐私。"
+    "message": "随手暂存文本、链接与图片，数据仅留本地。"
   },
   "welcomeStep1Title": {
-    "message": "在任意页面右键"
+    "message": "右键随手保存"
   },
   "welcomeStep1Body": {
-    "message": "用右键菜单保存选中文本、链接或图片。"
+    "message": "选中文本，或右键网页上的链接、图片，选择「保存到侧边栏」。"
   },
   "welcomeStep2Title": {
-    "message": "打开侧边栏"
+    "message": "快捷键高效暂存"
   },
   "welcomeStep2Body": {
-    "message": "点击工具栏图标即可查看、筛选并复制收藏。"
+    "message": "选中文本后按 Alt+S，无需右键即可快速保存选区。"
   },
   "welcomeStep3Title": {
-    "message": "全部本地保存"
+    "message": "工具栏一键查看"
   },
   "welcomeStep3Body": {
-    "message": "数据仅存本机。无需账号，不上传，不追踪。"
+    "message": "点击工具栏图标随时展开侧边栏，支持搜索、筛选与一键复制。"
   },
   "welcomePermissionsTitle": {
-    "message": "为什么需要这些权限？"
+    "message": "隐私与权限说明"
   },
   "welcomePermContext": {
-    "message": "右键菜单：在右键时添加「保存到侧边栏」。"
+    "message": "右键菜单：在右键时添加「保存到侧边栏」快捷选项。"
   },
   "welcomePermStorage": {
-    "message": "存储：仅在本机保存你的收藏。"
+    "message": "纯本地存储：数据仅保存在本机，无账号、零上传、无追踪。"
   },
   "welcomePermTabs": {
-    "message": "标签页与网站访问：读取标题/网址以便带来源上下文。内容绝不会上传。"
+    "message": "标签页与网址：仅用于自动记录标题与来源网址，方便日后溯源。"
   },
   "welcomeCta": {
     "message": "打开侧边栏"
   },
   "welcomeHint": {
-    "message": "会打开侧边栏，方便你马上开始。提示：可将 Side Stash 固定到工具栏。"
+    "message": "小贴士：建议将 Side Stash 图标固定到浏览器工具栏，使用更顺手。"
+  },
+  "welcomeTryTitle": {
+    "message": "快速体验"
+  },
+  "welcomeTrySubtitle": {
+    "message": "点击下方示例即可暂存，侧边栏将自动展开同步展示："
+  },
+  "welcomeTryTextTitle": {
+    "message": "文本示例"
+  },
+  "welcomeTryTextContent": {
+    "message": "Side Stash 是一款隐私优先的随手暂存侧边栏工具。"
+  },
+  "welcomeTryTextBtn": {
+    "message": "+ 暂存文本"
+  },
+  "welcomeTryLinkTitle": {
+    "message": "链接示例"
+  },
+  "welcomeTryLinkContent": {
+    "message": "Side Stash 开源项目主页"
+  },
+  "welcomeTryLinkBtn": {
+    "message": "+ 暂存链接"
+  },
+  "welcomeTryImageTitle": {
+    "message": "图片示例"
+  },
+  "welcomeTryImageAlt": {
+    "message": "Side Stash 图标"
+  },
+  "welcomeTryImageBtn": {
+    "message": "+ 暂存图片"
+  },
+  "welcomeTryAddAllBtn": {
+    "message": "一键暂存全部示例"
+  },
+  "welcomePinTitle": {
+    "message": "📌 固定插件到工具栏"
+  },
+  "welcomePinSubtitle": {
+    "message": "固定后可随时一键展开侧边栏，使用更高效："
+  },
+  "welcomePinStep1Title": {
+    "message": "点击扩展图标"
+  },
+  "welcomePinStep1Body": {
+    "message": "点击 Chrome 右上角的拼图图标（🧩）"
+  },
+  "welcomePinStep2Title": {
+    "message": "找到 Side Stash"
+  },
+  "welcomePinStep2Body": {
+    "message": "在列表中找到 Side Stash 插件"
+  },
+  "welcomePinStep3Title": {
+    "message": "点击图钉固定"
+  },
+  "welcomePinStep3Body": {
+    "message": "点击右侧图钉图标（📌）将其固定在工具栏"
+  },
+  "pinTipTitle": {
+    "message": "📌 建议固定插件到工具栏"
+  },
+  "pinTipBody": {
+    "message": "点击浏览器右上角的拼图图标（🧩），找到 Side Stash 并点击右侧图钉（📌），即可随时一键调出侧边栏！"
+  },
+  "pinTipBodyShort": {
+    "message": "点击右上角图钉图标（📌）将 Side Stash 固定到工具栏"
+  },
+  "pinTipGotIt": {
+    "message": "知道了"
+  },
+  "pinTipReset": {
+    "message": "重置固定提示"
   },
   "commandSaveSelection": {
     "message": "保存选中文本到 Side Stash"

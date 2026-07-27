@@ -64,6 +64,8 @@ type FilterBarProps = {
   onImportFile: (file: File) => void;
   onSeedMockData?: () => void;
   onClearAllData?: () => void;
+  onOpenWelcomePage?: () => void;
+  onResetPinTip?: () => void;
 };
 
 const FILTERS: ItemFilter[] = ['all', 'text', 'link', 'image'];
@@ -105,6 +107,8 @@ export function FilterBar({
   onImportFile,
   onSeedMockData,
   onClearAllData,
+  onOpenWelcomePage,
+  onResetPinTip,
 }: FilterBarProps) {
   return (
     <section className="grid gap-2.5">
@@ -124,8 +128,8 @@ export function FilterBar({
             value={query}
             onChange={(event) => onQueryChange(event.target.value)}
           />
-          <div className="absolute top-1/2 right-2.5 flex -translate-y-1/2 items-center">
-            {query ? (
+          {query ? (
+            <div className="absolute top-1/2 right-2.5 flex -translate-y-1/2 items-center">
               <button
                 aria-label={t('filterClear', 'Clear')}
                 className="flex size-5.5 cursor-pointer items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
@@ -134,12 +138,8 @@ export function FilterBar({
               >
                 <X className="size-3.5" aria-hidden="true" />
               </button>
-            ) : (
-              <kbd className="pointer-events-none select-none rounded-md border border-zinc-300/80 bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-zinc-600 shadow-2xs dark:border-zinc-700/80 dark:bg-zinc-800 dark:text-zinc-300">
-                /
-              </kbd>
-            )}
-          </div>
+            </div>
+          ) : null}
         </label>
 
         <SettingsSheet
@@ -155,6 +155,8 @@ export function FilterBar({
           onLanguageChange={onLanguageChange}
           onSeedMockData={onSeedMockData}
           onClearAllData={onClearAllData}
+          onOpenWelcomePage={onOpenWelcomePage}
+          onResetPinTip={onResetPinTip}
         />
       </div>
 
@@ -267,7 +269,7 @@ export function FilterBar({
       {/* Select All / Batch Actions Banner */}
       <div
         className={cn(
-          'flex min-h-8.5 items-center justify-between gap-1.5 rounded-xl border px-2.5 py-1 text-xs transition-all duration-200',
+          'flex min-h-8.5 items-center justify-between gap-1.5 rounded-xl border px-2 py-0.5 text-xs transition-all duration-200',
           selectedCount > 0
             ? 'border-zinc-900 bg-zinc-900 text-zinc-50 shadow-md dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900'
             : 'border-zinc-200/90 bg-white text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400',
@@ -275,21 +277,20 @@ export function FilterBar({
       >
         <label
           className={cn(
-            'inline-flex shrink-0 min-w-0 cursor-pointer items-center gap-1.5 font-medium select-none text-[11px]',
+            'flex min-w-0 flex-1 cursor-pointer items-center gap-2 py-1 px-1 text-[11px] font-medium select-none',
             !hasFilteredItems && 'pointer-events-none opacity-50',
           )}
         >
           <Checkbox
             checked={allFilteredSelected ? true : hasPartialSelection ? 'indeterminate' : false}
-            className={
-              selectedCount > 0
-                ? 'border-zinc-500 bg-transparent data-[state=checked]:border-white data-[state=checked]:bg-white data-[state=checked]:text-zinc-900 data-[state=indeterminate]:border-white data-[state=indeterminate]:bg-white data-[state=indeterminate]:text-zinc-900 dark:border-zinc-400 dark:data-[state=checked]:border-zinc-900 dark:data-[state=checked]:bg-zinc-900 dark:data-[state=checked]:text-white dark:data-[state=indeterminate]:border-zinc-900 dark:data-[state=indeterminate]:bg-zinc-900 dark:data-[state=indeterminate]:text-white'
-                : undefined
-            }
+            className={cn(
+              selectedCount > 0 &&
+                'border-2 border-white/70 bg-transparent text-white hover:border-white data-[state=checked]:border-2 data-[state=checked]:border-white data-[state=checked]:bg-white/25 data-[state=checked]:text-white data-[state=indeterminate]:border-2 data-[state=indeterminate]:border-white data-[state=indeterminate]:bg-white/25 data-[state=indeterminate]:text-white dark:border-2 dark:border-zinc-500 dark:bg-transparent dark:text-zinc-900 dark:hover:border-zinc-950 dark:data-[state=checked]:border-2 dark:data-[state=checked]:border-zinc-950 dark:data-[state=checked]:bg-zinc-950 dark:data-[state=checked]:text-white dark:data-[state=indeterminate]:border-2 dark:data-[state=indeterminate]:border-zinc-950 dark:data-[state=indeterminate]:bg-zinc-950 dark:data-[state=indeterminate]:text-white',
+            )}
             disabled={!hasFilteredItems}
             onCheckedChange={(checked) => onToggleSelectAll(checked === true)}
           />
-          <span className="truncate font-medium">
+          <span className="whitespace-nowrap font-medium">
             {selectedCount > 0
               ? t('selectedCount', '$1 selected', [String(selectedCount)])
               : t('selectAll', 'Select all')}

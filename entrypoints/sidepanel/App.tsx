@@ -1,5 +1,6 @@
 import React, { startTransition, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { browser } from 'wxt/browser';
+import { Pin, X } from 'lucide-react';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { EmptyState } from './components/EmptyState';
 import { FilterBar } from './components/FilterBar';
@@ -53,6 +54,7 @@ export function App() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [, setLanguageVersion] = useState(0);
   const [items, setItems] = useState<SavedItem[]>([]);
+  const [pinTipDismissed, setPinTipDismissed] = useState<boolean>(true);
   const [activeFilter, setActiveFilter] = useState<ItemFilter>('all');
   const [dateFilter, setDateFilter] = useState<DateFilter>('all');
   const [domainFilter, setDomainFilter] = useState('');
@@ -95,6 +97,26 @@ export function App() {
   const allFilteredSelected =
     filteredItems.length > 0 && filteredItems.every((item) => selectedIds.has(item.id));
   const someFilteredSelected = filteredItems.some((item) => selectedIds.has(item.id));
+
+  useEffect(() => {
+    void browser.storage.local.get('pinTipDismissed').then((res) => {
+      setPinTipDismissed(Boolean(res.pinTipDismissed));
+    });
+  }, []);
+
+  const handleDismissPinTip = () => {
+    setPinTipDismissed(true);
+    void browser.storage.local.set({ pinTipDismissed: true });
+  };
+
+  const handleResetPinTip = () => {
+    setPinTipDismissed(false);
+    void browser.storage.local.set({ pinTipDismissed: false });
+    setToast({
+      message: t('pinTipReset', 'Reset Pin Tip'),
+      type: 'info',
+    });
+  };
 
   useEffect(() => {
     return subscribeToLanguageChange(() => {
@@ -646,6 +668,12 @@ export function App() {
     });
   };
 
+  const handleOpenWelcomePage = () => {
+    void browser.tabs.create({
+      url: browser.runtime.getURL('/welcome.html'),
+    });
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
@@ -697,9 +725,50 @@ export function App() {
 
   return (
     <TooltipProvider delayDuration={120}>
-      <div className="flex h-full min-h-0 flex-col bg-transparent text-zinc-950 dark:text-zinc-50">
+      <div className="relative flex h-full min-h-0 flex-col bg-transparent text-zinc-950 dark:text-zinc-50">
+        {/* Floating Pin Tip Banner - full width container so pointing emoji stays 40px from right edge regardless of sidepanel resizing */}
+        {!pinTipDismissed ? (
+          <div className="relative z-30 shrink-0 border-b border-amber-300/80 bg-amber-50/95 px-3 pt-4 pb-2.5 text-amber-950 shadow-2xs backdrop-blur-sm dark:border-amber-800/80 dark:bg-amber-950/95 dark:text-amber-100">
+            {/* Pointing up hand emoji aligned directly underneath Chrome's native Pin icon (~40px from right edge, inside visible iframe top) */}
+            <div className="pointer-events-none absolute top-0.5 right-[40px] select-none text-base animate-bounce">
+              👆
+            </div>
+
+            <div className="mx-auto flex max-w-[460px] items-center justify-between gap-2.5">
+              <div className="flex min-w-0 flex-1 items-center gap-2 text-amber-950 dark:text-amber-100">
+                <Pin className="size-3.5 shrink-0 text-amber-700 dark:text-amber-300" />
+                <p className="m-0 text-[11px] font-medium leading-snug text-amber-900 dark:text-amber-200">
+                  {t(
+                    'pinTipBodyShort',
+                    '点击右上角图钉图标（📌）将 Side Stash 固定到工具栏',
+                  )}
+                </p>
+              </div>
+
+              <div className="flex shrink-0 items-center gap-1.5">
+                <button
+                  type="button"
+                  className="inline-flex h-6.5 items-center justify-center rounded-lg bg-amber-900 px-2.5 text-[10.5px] font-semibold text-white shadow-2xs transition-colors hover:bg-amber-950 dark:bg-amber-100 dark:text-amber-950 dark:hover:bg-white"
+                  onClick={handleDismissPinTip}
+                >
+                  {t('pinTipGotIt', '知道了')}
+                </button>
+                <button
+                  type="button"
+                  aria-label={t('pinTipGotIt', 'Close')}
+                  className="shrink-0 text-amber-700 hover:text-amber-950 dark:text-amber-400 dark:hover:text-amber-100"
+                  onClick={handleDismissPinTip}
+                >
+                  <X className="size-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         <div className="mx-auto flex h-full min-h-0 w-full max-w-[460px] flex-col px-2.5 py-2.5 sm:px-3 sm:py-3">
           <div className="shrink-0">
+
             <FilterBar
               activeFilter={activeFilter}
               dateFilter={dateFilter}
@@ -744,6 +813,8 @@ export function App() {
               }}
               onSeedMockData={handleSeedMockData}
               onClearAllData={handleClearAllData}
+              onOpenWelcomePage={handleOpenWelcomePage}
+              onResetPinTip={handleResetPinTip}
             />
           </div>
 

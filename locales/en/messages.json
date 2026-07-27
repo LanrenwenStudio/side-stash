@@ -327,43 +327,118 @@
     "message": "Welcome to Side Stash"
   },
   "welcomeSubtitle": {
-    "message": "A lightweight side panel for text, links, and images — private by default."
+    "message": "Quickly save text, links, and images — private by default."
   },
   "welcomeStep1Title": {
-    "message": "Right-click on any page"
+    "message": "Right-click to save"
   },
   "welcomeStep1Body": {
-    "message": "Save selected text, a link, or an image with the context menu."
+    "message": "Select text, or right-click any link or image and choose “Save to side panel”."
   },
   "welcomeStep2Title": {
-    "message": "Open the side panel"
+    "message": "Keyboard shortcut"
   },
   "welcomeStep2Body": {
-    "message": "Click the Side Stash toolbar icon to review, filter, and copy your stash."
+    "message": "Select text and press Alt+S to save your selection instantly without right-clicking."
   },
   "welcomeStep3Title": {
-    "message": "Everything stays local"
+    "message": "One-click toolbar access"
   },
   "welcomeStep3Body": {
-    "message": "Data is stored only on this device. No account, no upload, no tracking."
+    "message": "Click the toolbar icon anytime to open the side panel, search, filter, or copy."
   },
   "welcomePermissionsTitle": {
-    "message": "Why these permissions?"
+    "message": "Privacy & Permissions"
   },
   "welcomePermContext": {
-    "message": "Context menus: add “Save to side panel” when you right-click."
+    "message": "Context menu: adds “Save to side panel” to your right-click menu."
   },
   "welcomePermStorage": {
-    "message": "Storage: keep your stash on this device only."
+    "message": "Local storage: saved strictly on this device. No account, no upload, zero tracking."
   },
   "welcomePermTabs": {
-    "message": "Tabs & host access: read page title/URL so each item has source context. Content is never uploaded."
+    "message": "Tabs & URLs: captured automatically to preserve source context for your saved items."
   },
   "welcomeCta": {
     "message": "Open side panel"
   },
   "welcomeHint": {
-    "message": "We’ll open the side panel so you can start right away. Tip: pin Side Stash to the toolbar."
+    "message": "Tip: Pin Side Stash to your browser toolbar for quick one-click access."
+  },
+  "welcomeTryTitle": {
+    "message": "Quick Try"
+  },
+  "welcomeTrySubtitle": {
+    "message": "Click any sample below to save it and see it live in the side panel:"
+  },
+  "welcomeTryTextTitle": {
+    "message": "Sample Text"
+  },
+  "welcomeTryTextContent": {
+    "message": "Side Stash is a privacy-first side panel for text, links, and images."
+  },
+  "welcomeTryTextBtn": {
+    "message": "+ Stash text"
+  },
+  "welcomeTryLinkTitle": {
+    "message": "Sample Link"
+  },
+  "welcomeTryLinkContent": {
+    "message": "Side Stash GitHub Repository"
+  },
+  "welcomeTryLinkBtn": {
+    "message": "+ Stash link"
+  },
+  "welcomeTryImageTitle": {
+    "message": "Sample Image"
+  },
+  "welcomeTryImageAlt": {
+    "message": "Side Stash Logo"
+  },
+  "welcomeTryImageBtn": {
+    "message": "+ Stash image"
+  },
+  "welcomeTryAddAllBtn": {
+    "message": "Stash all samples"
+  },
+  "welcomePinTitle": {
+    "message": "📌 Pin to Toolbar"
+  },
+  "welcomePinSubtitle": {
+    "message": "Pin Side Stash to open your side panel anytime in one click:"
+  },
+  "welcomePinStep1Title": {
+    "message": "Click Extension Icon"
+  },
+  "welcomePinStep1Body": {
+    "message": "Click the puzzle icon (🧩) in the top-right Chrome toolbar"
+  },
+  "welcomePinStep2Title": {
+    "message": "Locate Side Stash"
+  },
+  "welcomePinStep2Body": {
+    "message": "Find Side Stash in your list of extensions"
+  },
+  "welcomePinStep3Title": {
+    "message": "Click Pin Icon"
+  },
+  "welcomePinStep3Body": {
+    "message": "Click the pin icon (📌) to pin it to your toolbar"
+  },
+  "pinTipTitle": {
+    "message": "📌 Pin Side Stash to Toolbar"
+  },
+  "pinTipBody": {
+    "message": "Click Chrome's puzzle icon (🧩) in the top-right toolbar, find Side Stash and click 📌 Pin for one-click access anytime!"
+  },
+  "pinTipBodyShort": {
+    "message": "Click the top-right Pin icon (📌) to pin Side Stash"
+  },
+  "pinTipGotIt": {
+    "message": "Got it"
+  },
+  "pinTipReset": {
+    "message": "Reset Pin Tip"
   },
   "commandSaveSelection": {
     "message": "Save selected text to Side Stash"

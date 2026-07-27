@@ -60,6 +60,20 @@ export function ItemRow({
         ? t('badgeImage', 'Image')
         : t('badgeText', 'Text');
 
+  const typeBadgeClass =
+    item.type === 'link'
+      ? 'border-indigo-200/80 bg-indigo-50 text-indigo-700 dark:border-indigo-900/60 dark:bg-indigo-950/60 dark:text-indigo-300'
+      : item.type === 'image'
+        ? 'border-amber-200/80 bg-amber-50 text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/60 dark:text-amber-300'
+        : 'border-emerald-200/80 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/60 dark:text-emerald-300';
+
+  const typeIconBoxClass =
+    item.type === 'link'
+      ? 'border-indigo-200/80 bg-indigo-50/70 text-indigo-600 dark:border-indigo-900/60 dark:bg-indigo-950/50 dark:text-indigo-400'
+      : item.type === 'image'
+        ? 'border-amber-200/80 bg-amber-50/70 text-amber-600 dark:border-amber-900/60 dark:bg-amber-950/50 dark:text-amber-400'
+        : 'border-emerald-200/80 bg-emerald-50/70 text-emerald-600 dark:border-emerald-900/60 dark:bg-emerald-950/50 dark:text-emerald-400';
+
   const copyTitle =
     item.type === 'image'
       ? t('actionCopyImageUrl', 'Copy image URL')
@@ -73,7 +87,7 @@ export function ItemRow({
         'group relative rounded-xl border bg-white transition-all duration-200 dark:bg-zinc-900/90',
         item.pinned && 'border-l-[3.5px] border-l-zinc-950 dark:border-l-zinc-100',
         selected
-          ? 'border-zinc-950 ring-1 ring-zinc-950/20 bg-zinc-100/80 dark:border-zinc-100 dark:ring-zinc-100/20 dark:bg-zinc-800 shadow-2xs'
+          ? 'border-2 border-zinc-950 bg-zinc-100/80 dark:border-2 dark:border-zinc-100 dark:bg-zinc-800/90'
           : item.pinned
             ? 'border-zinc-300 bg-zinc-50/40 dark:border-zinc-700 dark:bg-zinc-900/90 shadow-2xs'
             : 'border-zinc-200/90 hover:border-zinc-300 hover:shadow-2xs dark:border-zinc-800/90 dark:hover:border-zinc-700',
@@ -110,7 +124,10 @@ export function ItemRow({
               />
             ) : (
               <span
-                className="mt-0.5 grid size-7.5 shrink-0 place-items-center rounded-lg border border-zinc-200 bg-zinc-100/80 text-zinc-700 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+                className={cn(
+                  'mt-0.5 grid size-7.5 shrink-0 place-items-center rounded-lg border shadow-2xs',
+                  typeIconBoxClass,
+                )}
               >
                 <TypeIcon className="size-3.5" aria-hidden="true" />
               </span>
@@ -132,7 +149,10 @@ export function ItemRow({
 
               <div className="mt-1 flex min-w-0 items-center gap-1.5 overflow-hidden text-[10.5px] text-zinc-500 dark:text-zinc-400">
                 <span
-                  className="shrink-0 rounded px-1.5 py-px text-[9.5px] font-semibold tracking-wider uppercase border border-zinc-200/80 bg-zinc-100 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
+                  className={cn(
+                    'shrink-0 rounded px-1.5 py-px text-[9.5px] font-semibold tracking-wider uppercase border',
+                    typeBadgeClass,
+                  )}
                 >
                   {typeLabel}
                 </span>

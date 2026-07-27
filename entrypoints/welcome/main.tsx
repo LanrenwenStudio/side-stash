@@ -1,6 +1,16 @@
 import React, { StrictMode, useEffect, useState } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { ChevronDown, Languages } from 'lucide-react';
+import {
+  Check,
+  ChevronDown,
+  FileText,
+  Image as ImageIcon,
+  Languages,
+  Link2,
+  Pin,
+  Plus,
+  Sparkles,
+} from 'lucide-react';
 import { browser } from 'wxt/browser';
 import {
   getLanguageSelectValue,
@@ -19,7 +29,16 @@ type SidePanelApi = {
   setPanelBehavior?: (options: { openPanelOnActionClick: boolean }) => Promise<void>;
 };
 
-async function openSidePanelThenClose() {
+const STORAGE_KEY = 'items';
+
+const buildId = () => {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+  return `item-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+};
+
+async function openSidePanelOnly() {
   try {
     const sidePanel = (browser as typeof browser & { sidePanel?: SidePanelApi }).sidePanel;
     const currentWindow = await browser.windows.getCurrent();
@@ -27,25 +46,52 @@ async function openSidePanelThenClose() {
     if (sidePanel?.open && typeof currentWindow.id === 'number') {
       await sidePanel.open({ windowId: currentWindow.id });
     } else {
-      // Fallback for environments without sidePanel.open in this context.
       await browser.runtime.sendMessage({ type: 'side-stash-open-panel' });
     }
   } catch {
     try {
       await browser.runtime.sendMessage({ type: 'side-stash-open-panel' });
     } catch {
-      // ignore — user can still open via toolbar icon
+      // ignore
     }
   }
+}
 
-  // Small delay so the panel open call isn't cut off by tab close on some Chrome builds.
-  window.setTimeout(() => {
-    window.close();
-  }, 120);
+async function saveDemoItems(
+  demoItems: Array<{
+    type: 'text' | 'link' | 'image';
+    content: string;
+    linkUrl?: string;
+    imageUrl?: string;
+    imageAlt?: string;
+  }>,
+) {
+  try {
+    const stored = await browser.storage.local.get(STORAGE_KEY);
+    const existing = Array.isArray(stored[STORAGE_KEY]) ? stored[STORAGE_KEY] : [];
+    const newItems = demoItems.map((item) => ({
+      id: buildId(),
+      type: item.type,
+      content: item.content,
+      linkUrl: item.linkUrl,
+      imageUrl: item.imageUrl,
+      imageAlt: item.imageAlt,
+      pageTitle: t('welcomeTitle', 'Welcome to Side Stash'),
+      pageUrl: window.location.href,
+      createdAt: new Date().toISOString(),
+      pinned: false,
+    }));
+    await browser.storage.local.set({ [STORAGE_KEY]: [...newItems, ...existing] });
+  } catch (err) {
+    console.error('Failed to save demo items', err);
+  }
+
+  await openSidePanelOnly();
 }
 
 function WelcomeApp() {
   const [, setLanguageVersion] = useState(0);
+  const [activeFeedback, setActiveFeedback] = useState<string | null>(null);
   const languageSelectValue = getLanguageSelectValue();
   const resolvedLocale = getResolvedLocale();
 
@@ -59,34 +105,36 @@ function WelcomeApp() {
     document.title = t('welcomeTitle', 'Welcome to Side Stash');
   }, [languageSelectValue, resolvedLocale]);
 
-  useEffect(() => {
-    // Attempt to automatically trigger side panel opening on installation welcome page
-    void openSidePanelThenClose().catch(() => undefined);
-  }, []);
+  const triggerFeedback = (key: string) => {
+    setActiveFeedback(key);
+    window.setTimeout(() => {
+      setActiveFeedback((current) => (current === key ? null : current));
+    }, 2000);
+  };
 
   const steps = [
     {
       n: '1',
-      title: t('welcomeStep1Title', 'Right-click on any page'),
+      title: t('welcomeStep1Title', 'Right-click to save'),
       body: t(
         'welcomeStep1Body',
-        'Save selected text, a link, or an image with the context menu.',
+        'Select text, or right-click any link or image and choose “Save to side panel”.',
       ),
     },
     {
       n: '2',
-      title: t('welcomeStep2Title', 'Open the side panel'),
+      title: t('welcomeStep2Title', 'Keyboard shortcut'),
       body: t(
         'welcomeStep2Body',
-        'Click the Side Stash toolbar icon to review, filter, and copy your stash.',
+        'Select text and press Alt+S to save your selection instantly without right-clicking.',
       ),
     },
     {
       n: '3',
-      title: t('welcomeStep3Title', 'Everything stays local'),
+      title: t('welcomeStep3Title', 'One-click toolbar access'),
       body: t(
         'welcomeStep3Body',
-        'Data is stored only on this device. No account, no upload, no tracking.',
+        'Click the toolbar icon anytime to open the side panel, search, filter, or copy.',
       ),
     },
   ];
@@ -105,7 +153,7 @@ function WelcomeApp() {
             <p className="mt-2 mb-0 max-w-md text-sm leading-6 text-zinc-600 dark:text-zinc-400">
               {t(
                 'welcomeSubtitle',
-                'A lightweight side panel for text, links, and images — private by default.',
+                'Quickly save text, links, and images — private by default.',
               )}
             </p>
           </div>
@@ -142,6 +190,227 @@ function WelcomeApp() {
           </label>
         </header>
 
+        {/* Interactive Playground Section */}
+        <section className="rounded-2xl border border-sky-200 bg-sky-50/50 p-5 shadow-sm dark:border-sky-900/60 dark:bg-sky-950/20">
+          <div className="flex items-center gap-2">
+            <Sparkles className="size-4 text-sky-600 dark:text-sky-400" />
+            <h2 className="m-0 text-sm font-semibold text-sky-950 dark:text-sky-200">
+              {t('welcomeTryTitle', 'Quick Try')}
+            </h2>
+          </div>
+          <p className="mt-1 mb-4 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            {t(
+              'welcomeTrySubtitle',
+              'Click any sample below to save it and see it live in the side panel:',
+            )}
+          </p>
+
+          <div className="grid gap-3">
+            {/* Text Sample */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400">
+                  <FileText className="size-4" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold text-zinc-500 uppercase dark:text-zinc-400">
+                    {t('welcomeTryTextTitle', 'Sample Text')}
+                  </div>
+                  <div className="mt-0.5 text-xs text-zinc-800 dark:text-zinc-200 truncate">
+                    {t(
+                      'welcomeTryTextContent',
+                      'Side Stash is a privacy-first side panel for text, links, and images.',
+                    )}
+                  </div>
+                </div>
+              </div>
+              <button
+                className={`inline-flex shrink-0 h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium transition-colors ${
+                  activeFeedback === 'text'
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-zinc-100 text-zinc-800 hover:bg-sky-600 hover:text-white dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-sky-500 dark:hover:text-white'
+                }`}
+                type="button"
+                onClick={() => {
+                  triggerFeedback('text');
+                  void saveDemoItems([
+                    {
+                      type: 'text',
+                      content: t(
+                        'welcomeTryTextContent',
+                        'Side Stash is a privacy-first side panel for text, links, and images.',
+                      ),
+                    },
+                  ]);
+                }}
+              >
+                {activeFeedback === 'text' ? (
+                  <>
+                    <Check className="size-3.5" />
+                    已暂存
+                  </>
+                ) : (
+                  <>
+                    <Plus className="size-3.5" />
+                    {t('welcomeTryTextBtn', '+ Stash text')}
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Link Sample */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400">
+                  <Link2 className="size-4" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold text-zinc-500 uppercase dark:text-zinc-400">
+                    {t('welcomeTryLinkTitle', 'Sample Link')}
+                  </div>
+                  <div className="mt-0.5 text-xs text-zinc-800 dark:text-zinc-200 truncate">
+                    {t('welcomeTryLinkContent', 'Side Stash GitHub Repository')}
+                  </div>
+                  <div className="text-[11px] text-zinc-400 dark:text-zinc-500 truncate">
+                    https://github.com/LanrenwenStudio/side-stash
+                  </div>
+                </div>
+              </div>
+              <button
+                className={`inline-flex shrink-0 h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium transition-colors ${
+                  activeFeedback === 'link'
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-zinc-100 text-zinc-800 hover:bg-sky-600 hover:text-white dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-sky-500 dark:hover:text-white'
+                }`}
+                type="button"
+                onClick={() => {
+                  triggerFeedback('link');
+                  void saveDemoItems([
+                    {
+                      type: 'link',
+                      content: t('welcomeTryLinkContent', 'Side Stash GitHub Repository'),
+                      linkUrl: 'https://github.com/LanrenwenStudio/side-stash',
+                    },
+                  ]);
+                }}
+              >
+                {activeFeedback === 'link' ? (
+                  <>
+                    <Check className="size-3.5" />
+                    已暂存
+                  </>
+                ) : (
+                  <>
+                    <Plus className="size-3.5" />
+                    {t('welcomeTryLinkBtn', '+ Stash link')}
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Image Sample */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950 dark:text-amber-400">
+                  <ImageIcon className="size-4" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold text-zinc-500 uppercase dark:text-zinc-400">
+                    {t('welcomeTryImageTitle', 'Sample Image')}
+                  </div>
+                  <div className="mt-0.5 flex items-center gap-2">
+                    <img
+                      src={browser.runtime.getURL('/icon-48.png')}
+                      alt="Side Stash Logo"
+                      className="size-5 rounded"
+                    />
+                    <span className="text-xs text-zinc-800 dark:text-zinc-200 truncate">
+                      {t('welcomeTryImageAlt', 'Side Stash Logo')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <button
+                className={`inline-flex shrink-0 h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium transition-colors ${
+                  activeFeedback === 'image'
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-zinc-100 text-zinc-800 hover:bg-sky-600 hover:text-white dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-sky-500 dark:hover:text-white'
+                }`}
+                type="button"
+                onClick={() => {
+                  triggerFeedback('image');
+                  void saveDemoItems([
+                    {
+                      type: 'image',
+                      content: t('welcomeTryImageAlt', 'Side Stash Logo'),
+                      imageUrl: browser.runtime.getURL('/icon-128.png'),
+                      imageAlt: t('welcomeTryImageAlt', 'Side Stash Logo'),
+                    },
+                  ]);
+                }}
+              >
+                {activeFeedback === 'image' ? (
+                  <>
+                    <Check className="size-3.5" />
+                    已暂存
+                  </>
+                ) : (
+                  <>
+                    <Plus className="size-3.5" />
+                    {t('welcomeTryImageBtn', '+ Stash image')}
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-sky-200/60 dark:border-sky-900/40">
+            <button
+              className={`inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg px-4 text-xs font-semibold text-white shadow-xs transition-colors ${
+                activeFeedback === 'all'
+                  ? 'bg-emerald-600'
+                  : 'bg-sky-600 hover:bg-sky-500 dark:bg-sky-500 dark:hover:bg-sky-400'
+              }`}
+              type="button"
+              onClick={() => {
+                triggerFeedback('all');
+                void saveDemoItems([
+                  {
+                    type: 'text',
+                    content: t(
+                      'welcomeTryTextContent',
+                      'Side Stash is a privacy-first side panel for text, links, and images.',
+                    ),
+                  },
+                  {
+                    type: 'link',
+                    content: t('welcomeTryLinkContent', 'Side Stash GitHub Repository'),
+                    linkUrl: 'https://github.com/LanrenwenStudio/side-stash',
+                  },
+                  {
+                    type: 'image',
+                    content: t('welcomeTryImageAlt', 'Side Stash Logo'),
+                    imageUrl: browser.runtime.getURL('/icon-128.png'),
+                    imageAlt: t('welcomeTryImageAlt', 'Side Stash Logo'),
+                  },
+                ]);
+              }}
+            >
+              {activeFeedback === 'all' ? (
+                <>
+                  <Check className="size-3.5" />
+                  已全存入侧边栏
+                </>
+              ) : (
+                <>
+                  <Sparkles className="size-3.5" />
+                  {t('welcomeTryAddAllBtn', 'Stash all samples')}
+                </>
+              )}
+            </button>
+          </div>
+        </section>
+
         <section className="grid gap-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           {steps.map((step) => (
             <article key={step.n} className="flex gap-3">
@@ -158,49 +427,83 @@ function WelcomeApp() {
           ))}
         </section>
 
-        <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-          <h2 className="m-0 text-sm font-semibold">
-            {t('welcomePermissionsTitle', 'Why these permissions?')}
-          </h2>
-          <ul className="mt-3 mb-0 grid list-disc gap-2 pl-5 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-            <li>
-              {t(
-                'welcomePermContext',
-                'Context menus: add “Save to side panel” when you right-click.',
-              )}
-            </li>
-            <li>
-              {t(
-                'welcomePermStorage',
-                'Storage: keep your stash on this device only.',
-              )}
-            </li>
-            <li>
-              {t(
-                'welcomePermTabs',
-                'Tabs & host access: read page title/URL so each item has source context. Content is never uploaded.',
-              )}
-            </li>
-          </ul>
-        </section>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            className="inline-flex h-11 items-center justify-center rounded-lg bg-zinc-950 px-5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white"
-            type="button"
-            onClick={() => {
-              void openSidePanelThenClose();
-            }}
-          >
-            {t('welcomeCta', 'Open side panel')}
-          </button>
-          <p className="m-0 text-xs text-zinc-500 dark:text-zinc-400">
+        {/* Pin to Toolbar Guide Section */}
+        <section className="rounded-2xl border border-amber-200/80 bg-amber-50/40 p-5 shadow-sm dark:border-amber-900/50 dark:bg-amber-950/20">
+          <div className="flex items-center gap-2">
+            <Pin className="size-4 text-amber-600 dark:text-amber-400" />
+            <h2 className="m-0 text-sm font-semibold text-amber-950 dark:text-amber-200">
+              {t('welcomePinTitle', '📌 Pin to Toolbar')}
+            </h2>
+          </div>
+          <p className="mt-1 mb-4 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
             {t(
-              'welcomeHint',
-              'Tip: pin Side Stash to the toolbar for one-click access.',
+              'welcomePinSubtitle',
+              'Pin Side Stash to open your side panel anytime in one click:',
             )}
           </p>
-        </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* Step 1 */}
+            <div className="flex flex-col gap-2 rounded-xl border border-zinc-200/80 bg-white p-3.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="flex items-center gap-2">
+                <span className="grid size-6 shrink-0 place-items-center rounded-md bg-amber-100 text-xs font-bold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                  1
+                </span>
+                <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                  {t('welcomePinStep1Title', 'Click Extension Icon')}
+                </span>
+              </div>
+              <p className="m-0 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                {t(
+                  'welcomePinStep1Body',
+                  'Click the puzzle icon (🧩) in the top-right Chrome toolbar',
+                )}
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex flex-col gap-2 rounded-xl border border-zinc-200/80 bg-white p-3.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="flex items-center gap-2">
+                <span className="grid size-6 shrink-0 place-items-center rounded-md bg-amber-100 text-xs font-bold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                  2
+                </span>
+                <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                  {t('welcomePinStep2Title', 'Locate Side Stash')}
+                </span>
+              </div>
+              <p className="m-0 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                {t(
+                  'welcomePinStep2Body',
+                  'Find Side Stash in your list of extensions',
+                )}
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex flex-col gap-2 rounded-xl border border-zinc-200/80 bg-white p-3.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="flex items-center gap-2">
+                <span className="grid size-6 shrink-0 place-items-center rounded-md bg-amber-100 text-xs font-bold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                  3
+                </span>
+                <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                  {t('welcomePinStep3Title', 'Click Pin Icon')}
+                </span>
+              </div>
+              <p className="m-0 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                {t(
+                  'welcomePinStep3Body',
+                  'Click the pin icon (📌) to pin it to your toolbar',
+                )}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <footer className="mt-2 text-center text-xs text-zinc-400 dark:text-zinc-500">
+          <p className="m-0">
+            🔒 {t('welcomePermStorage', 'Local storage: saved strictly on this device. No account, no upload, zero tracking.')}
+          </p>
+        </footer>
       </div>
     </div>
   );

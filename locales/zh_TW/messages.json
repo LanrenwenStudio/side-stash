@@ -421,5 +421,95 @@
   },
   "sectionRecent": {
     "message": "最近"
+  },
+  "copySelectedTooltip": {
+    "message": "複製全部文字與連結"
+  },
+  "cutSelectedTooltip": {
+    "message": "剪切選取的項目"
+  },
+  "deleteSelectedTooltip": {
+    "message": "刪除選取的項目"
+  },
+  "downloadSelectedImagesTooltip": {
+    "message": "僅下載選取的圖片"
+  },
+  "searchShortcut": {
+    "message": "聚焦搜尋（/）"
+  },
+  "welcomePinTitle": {
+    "message": "📌 固定外掛到工具列"
+  },
+  "welcomePinSubtitle": {
+    "message": "固定後可隨時一鍵展開側邊欄，使用更高效："
+  },
+  "welcomePinStep1Title": {
+    "message": "點擊擴充功能圖示"
+  },
+  "welcomePinStep1Body": {
+    "message": "點擊 Chrome 右上角的拼圖圖示（🧩）"
+  },
+  "welcomePinStep2Title": {
+    "message": "找到 Side Stash"
+  },
+  "welcomePinStep2Body": {
+    "message": "在清單中找到 Side Stash 外掛"
+  },
+  "welcomePinStep3Title": {
+    "message": "點擊圖釘固定"
+  },
+  "welcomePinStep3Body": {
+    "message": "點擊右側圖釘圖示（📌）將其固定在工具列"
+  },
+  "welcomeTryTitle": {
+    "message": "快速體驗"
+  },
+  "welcomeTrySubtitle": {
+    "message": "點擊下方範例即可暫存，側邊欄將自動展開同步展示："
+  },
+  "welcomeTryTextTitle": {
+    "message": "文字範例"
+  },
+  "welcomeTryTextContent": {
+    "message": "Side Stash 是一款隱私優先的隨手暫存側邊欄工具。"
+  },
+  "welcomeTryTextBtn": {
+    "message": "+ 暫存文字"
+  },
+  "welcomeTryLinkTitle": {
+    "message": "連結範例"
+  },
+  "welcomeTryLinkContent": {
+    "message": "Side Stash 開源專案主頁"
+  },
+  "welcomeTryLinkBtn": {
+    "message": "+ 暫存連結"
+  },
+  "welcomeTryImageTitle": {
+    "message": "圖片範例"
+  },
+  "welcomeTryImageAlt": {
+    "message": "Side Stash 圖示"
+  },
+  "welcomeTryImageBtn": {
+    "message": "+ 暫存圖片"
+  },
+  "welcomeTryAddAllBtn": {
+    "message": "一鍵暫存全部範例"
+  },
+  "pinTipTitle": {
+    "message": "📌 建議固定外掛到工具列"
+  },
+  "pinTipBody": {
+    "message": "點擊瀏覽器右上角的拼圖圖示（🧩），找到 Side Stash 並點擊右側圖釘（📌），即可隨時一鍵調出側邊欄！"
+  },
+  "pinTipGotIt": {
+    "message": "知道了"
+  },
+  "pinTipReset": {
+    "message": "重置固定提示"
+  },
+  "pinTipBodyShort": {
+    "message": "點擊右上角圖釘圖示（📌）將 Side Stash 固定到工具列"
   }
 }
