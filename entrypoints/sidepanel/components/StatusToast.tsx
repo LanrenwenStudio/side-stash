@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AlertCircle, AlertTriangle, CheckCircle2, Info } from 'lucide-react';
 import { cn } from '../lib/cn';
 
@@ -14,6 +14,17 @@ type StatusToastProps = {
 };
 
 export function StatusToast({ message, type = 'success', action }: StatusToastProps) {
+  const duration = action ? 4500 : type === 'warning' || type === 'error' ? 4200 : 2200;
+  const [secondsLeft, setSecondsLeft] = useState(Math.ceil(duration / 1000));
+
+  useEffect(() => {
+    const startedAt = Date.now();
+    const interval = window.setInterval(() => {
+      setSecondsLeft(Math.max(0, Math.ceil((duration - (Date.now() - startedAt)) / 1000)));
+    }, 100);
+    return () => window.clearInterval(interval);
+  }, [duration, message]);
+
   if (!message) {
     return null;
   }
@@ -27,20 +38,20 @@ export function StatusToast({ message, type = 'success', action }: StatusToastPr
 
   const styleMap = {
     success:
-      'border-zinc-200 bg-white text-zinc-800 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100',
+      'border-zinc-200/90 bg-white/95 text-zinc-900 shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:border-zinc-800 dark:bg-zinc-900/95 dark:text-zinc-50',
     warning:
-      'border-amber-200/80 bg-amber-50 text-amber-900 dark:border-amber-900/50 dark:bg-zinc-950 dark:text-amber-200',
+      'border-amber-200/90 bg-amber-50/95 text-amber-950 shadow-[0_8px_30px_rgba(245,158,11,0.15)] dark:border-amber-900/60 dark:bg-zinc-900/95 dark:text-amber-200',
     error:
-      'border-red-200/80 bg-red-50 text-red-900 dark:border-red-900/50 dark:bg-zinc-950 dark:text-red-200',
+      'border-rose-200/90 bg-rose-50/95 text-rose-950 shadow-[0_8px_30px_rgba(244,63,94,0.15)] dark:border-rose-900/60 dark:bg-zinc-900/95 dark:text-rose-200',
     info:
-      'border-zinc-200 bg-white text-zinc-800 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100',
+      'border-zinc-200/90 bg-white/95 text-zinc-900 shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:border-zinc-800 dark:bg-zinc-900/95 dark:text-zinc-50',
   };
 
   const iconColorMap = {
-    success: 'text-emerald-600 dark:text-emerald-400',
-    warning: 'text-amber-600 dark:text-amber-400',
-    error: 'text-red-600 dark:text-red-400',
-    info: 'text-zinc-500 dark:text-zinc-400',
+    success: 'text-emerald-500 dark:text-emerald-400',
+    warning: 'text-amber-500 dark:text-amber-400',
+    error: 'text-rose-500 dark:text-rose-400',
+    info: 'text-zinc-900 dark:text-zinc-100',
   };
 
   const IconComponent = iconMap[type] || CheckCircle2;
@@ -49,7 +60,7 @@ export function StatusToast({ message, type = 'success', action }: StatusToastPr
     <div
       aria-live="polite"
       className={cn(
-        'pointer-events-auto fixed inset-x-3 bottom-3 z-50 mx-auto flex w-[min(420px,calc(100vw-1.5rem))] items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-xs font-medium shadow-[0_8px_30px_rgba(24,24,27,0.08)]',
+        'pointer-events-auto fixed inset-x-3 bottom-3 z-50 mx-auto flex w-[min(420px,calc(100vw-1.5rem))] items-center justify-between gap-2.5 rounded-xl border px-3.5 py-2.5 text-xs font-medium backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-2 duration-200',
         styleMap[type] || styleMap.success,
       )}
     >
@@ -59,11 +70,11 @@ export function StatusToast({ message, type = 'success', action }: StatusToastPr
       </div>
       {action ? (
         <button
-          className="ml-1 shrink-0 cursor-pointer rounded-md px-2 py-1 text-[11px] font-semibold text-zinc-900 underline-offset-2 transition-colors hover:bg-zinc-100 hover:underline dark:text-zinc-100 dark:hover:bg-zinc-800"
+          className="ml-1 shrink-0 cursor-pointer rounded-lg bg-zinc-900 px-2.5 py-1 text-[11px] font-semibold text-white shadow-2xs transition-all hover:bg-zinc-800 active:scale-95 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
           type="button"
           onClick={action.onClick}
         >
-          {action.label}
+          {action.label} <span className="ml-1 tabular-nums opacity-70">{secondsLeft}s</span>
         </button>
       ) : null}
     </div>

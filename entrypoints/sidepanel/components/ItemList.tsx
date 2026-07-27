@@ -1,4 +1,5 @@
 import React from 'react';
+import { Clock, Pin } from 'lucide-react';
 import { t } from '../../../lib/i18n';
 import type { SavedItem } from '../types';
 import { ItemRow } from './ItemRow';
@@ -46,12 +47,16 @@ export function ItemList({
     ));
 
   return (
-    <div className="grid gap-3" aria-live="polite">
+    <div className="grid gap-3.5" aria-live="polite">
       {pinned.length > 0 ? (
         <section className="grid gap-2">
-          <h2 className="m-0 px-0.5 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase dark:text-zinc-400">
-            {t('sectionPinned', 'Pinned')}
-          </h2>
+          <div className="flex items-center gap-1.5 px-1 text-[11px] font-semibold tracking-wider text-zinc-900 uppercase dark:text-zinc-100">
+            <Pin className="size-3 fill-current" aria-hidden="true" />
+            <span>{t('sectionPinned', 'Pinned')}</span>
+            <span className="ml-0.5 rounded-full bg-zinc-900 px-1.5 py-0.2 font-mono text-[10px] text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold">
+              {pinned.length}
+            </span>
+          </div>
           <ul className="m-0 grid list-none content-start gap-2 p-0">{renderItems(pinned)}</ul>
         </section>
       ) : null}
@@ -59,9 +64,10 @@ export function ItemList({
       {rest.length > 0 ? (
         <section className="grid gap-2">
           {pinned.length > 0 ? (
-            <h2 className="m-0 px-0.5 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase dark:text-zinc-400">
-              {t('sectionRecent', 'Recent')}
-            </h2>
+            <div className="flex items-center gap-1.5 px-1 text-[11px] font-semibold tracking-wider text-zinc-400 uppercase dark:text-zinc-500">
+              <Clock className="size-3" aria-hidden="true" />
+              <span>{t('sectionRecent', 'Recent')}</span>
+            </div>
           ) : null}
           <ul className="m-0 grid list-none content-start gap-2 p-0">{renderItems(rest)}</ul>
         </section>

@@ -23,3 +23,8 @@ When the user asks only to package / zip / 打包 (no release wording):
 
 1. Run `npm run zip` (and Firefox zip if requested).
 2. Open `.output/` as above — never the repo root.
+
+## Development / 开发
+
+- Do not rely on Hot Module Replacement (HMR) for this Chrome extension.
+- Every time code changes are made, re-run the build/dev process (`npm run build` / `npm run dev`) so that the extension is cleanly re-compiled and re-executed.

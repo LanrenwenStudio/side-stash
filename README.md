@@ -16,9 +16,12 @@ Side Stash is a lightweight browser side‑panel collector. Right‑click any we
 - Keyboard shortcut: `Alt+S` saves the current selection
 - Side panel list with local persistence
 - Filters by type, date, site, and keyword/URL
-- Pin important items
+- Pin important items (with independent left accent line & selection state coexistence)
 - Copy formats: plain, Markdown, with source
 - Multi‑select copy / cut / delete
+- Dual image download modes: batch ZIP archive packaging (`fflate`), or individual batch downloads
+- High-performance Radix UI custom tooltips (`@radix-ui/react-tooltip` with 120ms fast hover response)
+- Debug mode with 1-click 7-item mock data seeding for developer testing
 - Export / import JSON; export Markdown
 - Source display (domain)
 

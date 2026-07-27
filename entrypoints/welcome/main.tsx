@@ -1,5 +1,5 @@
 import React, { StrictMode, useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 import { ChevronDown, Languages } from 'lucide-react';
 import { browser } from 'wxt/browser';
 import {
@@ -58,6 +58,11 @@ function WelcomeApp() {
   useEffect(() => {
     document.title = t('welcomeTitle', 'Welcome to Side Stash');
   }, [languageSelectValue, resolvedLocale]);
+
+  useEffect(() => {
+    // Attempt to automatically trigger side panel opening on installation welcome page
+    void openSidePanelThenClose().catch(() => undefined);
+  }, []);
 
   const steps = [
     {
@@ -206,8 +211,17 @@ if (!container) {
   throw new Error('Welcome root element not found.');
 }
 
+type ContainerWithRoot = HTMLElement & { _reactRoot?: Root };
+const rootContainer = container as ContainerWithRoot;
+
+if (!rootContainer._reactRoot) {
+  rootContainer._reactRoot = createRoot(rootContainer);
+}
+
+const root = rootContainer._reactRoot;
+
 void initializeI18n().then(() => {
-  createRoot(container).render(
+  root.render(
     <StrictMode>
       <WelcomeApp />
     </StrictMode>,

@@ -140,6 +140,9 @@
   "searchLabel": {
     "message": "Search saved items"
   },
+  "searchShortcut": {
+    "message": "Focus search (/)"
+  },
   "searchTitle": {
     "message": "Search stash"
   },
@@ -175,6 +178,18 @@
   },
   "copySelected": {
     "message": "Copy"
+  },
+  "downloadSelectedImagesTooltip": {
+    "message": "Download selected images only"
+  },
+  "copySelectedTooltip": {
+    "message": "Copy all text and links"
+  },
+  "cutSelectedTooltip": {
+    "message": "Cut selected items"
+  },
+  "deleteSelectedTooltip": {
+    "message": "Delete selected items"
   },
   "cutSelected": {
     "message": "Cut"

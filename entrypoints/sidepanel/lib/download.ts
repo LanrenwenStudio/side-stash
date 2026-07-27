@@ -1,3 +1,4 @@
+import { zipSync } from 'fflate';
 import { browser } from 'wxt/browser';
 import type { SavedItem } from '../types';
 
@@ -79,7 +80,6 @@ export function getImageDownloadFilename(item: SavedItem, preferredExt = '') {
 }
 
 async function downloadViaAnchor(url: string, filename: string) {
-  // Prefer fetching through extension host permissions so we can force a filename.
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -101,7 +101,6 @@ async function downloadViaAnchor(url: string, filename: string) {
     window.setTimeout(() => URL.revokeObjectURL(objectUrl), 2000);
     return true;
   } catch {
-    // Last resort: navigate-style download (filename may be ignored cross-origin).
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = filename;
@@ -114,9 +113,48 @@ async function downloadViaAnchor(url: string, filename: string) {
   }
 }
 
+function dataUrlToUint8Array(dataUrl: string): { bytes: Uint8Array; ext: string } | null {
+  try {
+    const parts = dataUrl.split(',');
+    const header = parts[0];
+    const base64 = parts[1];
+    if (!header || !base64) {
+      return null;
+    }
+    const mimeMatch = header.match(/data:(image\/[a-zA-Z0-9+-]+);/);
+    const ext = mimeMatch ? extensionFromContentType(mimeMatch[1]) : '';
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return { bytes, ext };
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchImageBytes(url: string): Promise<{ bytes: Uint8Array; ext: string } | null> {
+  if (url.startsWith('data:')) {
+    return dataUrlToUint8Array(url);
+  }
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      return null;
+    }
+    const blob = await response.blob();
+    const arrayBuffer = await blob.arrayBuffer();
+    const ext = extensionFromContentType(blob.type) || extensionFromUrl(url) || 'jpg';
+    return { bytes: new Uint8Array(arrayBuffer), ext };
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Download a single image item to the user's default downloads folder.
- * Uses chrome.downloads when available; falls back to fetch + anchor.
  */
 export async function downloadImageItem(item: SavedItem): Promise<boolean> {
   const url = (item.imageUrl || '').trim();
@@ -137,14 +175,94 @@ export async function downloadImageItem(item: SavedItem): Promise<boolean> {
       return true;
     }
   } catch {
-    // fall through to anchor/fetch path
+    // fall through
   }
 
   return downloadViaAnchor(url, filename);
 }
 
-/** Download multiple image items sequentially (avoids flooding the download manager). */
-export async function downloadImageItems(items: SavedItem[]): Promise<{ ok: number; failed: number }> {
+/**
+ * Package multiple image items into a single .zip file and trigger download.
+ */
+export async function downloadImagesZip(
+  items: SavedItem[],
+  zipFilename?: string,
+): Promise<{ ok: number; failed: number }> {
+  const images = items.filter((item) => item.type === 'image' && item.imageUrl);
+  if (!images.length) {
+    return { ok: 0, failed: 0 };
+  }
+
+  const zipData: Record<string, Uint8Array> = {};
+  const usedNames = new Set<string>();
+  let ok = 0;
+  let failed = 0;
+
+  for (let index = 0; index < images.length; index++) {
+    const item = images[index];
+    const url = (item.imageUrl || '').trim();
+    const fetched = await fetchImageBytes(url);
+
+    if (!fetched || !fetched.bytes.length) {
+      failed += 1;
+      continue;
+    }
+
+    let filename = getImageDownloadFilename(item, fetched.ext);
+
+    if (usedNames.has(filename)) {
+      const parts = filename.lastIndexOf('.');
+      if (parts !== -1) {
+        const name = filename.slice(0, parts);
+        const ext = filename.slice(parts);
+        filename = `${name}_${index + 1}${ext}`;
+      } else {
+        filename = `${filename}_${index + 1}`;
+      }
+    }
+
+    usedNames.add(filename);
+    zipData[filename] = fetched.bytes;
+    ok += 1;
+  }
+
+  if (ok === 0) {
+    return { ok: 0, failed };
+  }
+
+  const zipped = zipSync(zipData);
+  const blob = new Blob([zipped.buffer], { type: 'application/zip' });
+  const stamp = new Date().toISOString().slice(0, 10);
+  const finalZipName = zipFilename || `side-stash-images-${stamp}.zip`;
+  const objectUrl = URL.createObjectURL(blob);
+
+  try {
+    if (browser?.downloads?.download) {
+      await browser.downloads.download({
+        url: objectUrl,
+        filename: finalZipName,
+        saveAs: false,
+      });
+    } else {
+      const anchor = document.createElement('a');
+      anchor.href = objectUrl;
+      anchor.download = finalZipName;
+      anchor.click();
+      anchor.remove();
+    }
+  } finally {
+    window.setTimeout(() => URL.revokeObjectURL(objectUrl), 10000);
+  }
+
+  return { ok, failed };
+}
+
+/**
+ * Download multiple image items sequentially as individual image files (one by one).
+ */
+export async function downloadImageItemsSequentially(
+  items: SavedItem[],
+): Promise<{ ok: number; failed: number }> {
   const images = items.filter((item) => item.type === 'image' && item.imageUrl);
   let ok = 0;
   let failed = 0;
@@ -157,8 +275,18 @@ export async function downloadImageItems(items: SavedItem[]): Promise<{ ok: numb
       failed += 1;
     }
     // Small gap so Chrome can register each download cleanly.
-    await new Promise((resolve) => window.setTimeout(resolve, 120));
+    await new Promise((resolve) => window.setTimeout(resolve, 150));
   }
 
   return { ok, failed };
+}
+
+/** Default batch download helper (falls back to ZIP for 2+ images). */
+export async function downloadImageItems(items: SavedItem[]): Promise<{ ok: number; failed: number }> {
+  const images = items.filter((item) => item.type === 'image' && item.imageUrl);
+  if (images.length <= 1) {
+    return downloadImageItemsSequentially(images);
+  }
+
+  return downloadImagesZip(images);
 }

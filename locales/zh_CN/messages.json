@@ -140,6 +140,9 @@
   "searchLabel": {
     "message": "搜索已保存内容"
   },
+  "searchShortcut": {
+    "message": "聚焦搜索（/）"
+  },
   "searchTitle": {
     "message": "快速搜索"
   },
@@ -175,6 +178,18 @@
   },
   "copySelected": {
     "message": "复制"
+  },
+  "downloadSelectedImagesTooltip": {
+    "message": "仅下载选中的图片"
+  },
+  "copySelectedTooltip": {
+    "message": "复制全部文本和链接"
+  },
+  "cutSelectedTooltip": {
+    "message": "剪切选中的内容"
+  },
+  "deleteSelectedTooltip": {
+    "message": "删除选中的内容"
   },
   "cutSelected": {
     "message": "剪切"

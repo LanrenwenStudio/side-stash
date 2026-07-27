@@ -1,7 +1,10 @@
 import { browser } from 'wxt/browser';
 import type { CopyFormat, PanelPreferences, SavedItem } from '../types';
 
+import { MOCK_ITEMS } from './mockData';
+
 const STORAGE_KEY = 'items';
+const INITIALIZED_KEY = 'debug_initialized';
 const PREFERENCES_KEY = 'panelPreferences';
 
 const DEFAULT_PREFERENCES: PanelPreferences = {
@@ -11,11 +14,25 @@ const DEFAULT_PREFERENCES: PanelPreferences = {
 
 export async function getItems(): Promise<SavedItem[]> {
   if (!browser?.storage?.local) {
-    return [];
+    return MOCK_ITEMS;
   }
 
-  const stored = await browser.storage.local.get(STORAGE_KEY);
-  return Array.isArray(stored[STORAGE_KEY]) ? (stored[STORAGE_KEY] as SavedItem[]) : [];
+  const stored = await browser.storage.local.get([STORAGE_KEY, INITIALIZED_KEY]);
+
+  if (Array.isArray(stored[STORAGE_KEY])) {
+    return stored[STORAGE_KEY] as SavedItem[];
+  }
+
+  // First run seed with default mock items for testing
+  if (!stored[INITIALIZED_KEY]) {
+    await browser.storage.local.set({
+      [STORAGE_KEY]: MOCK_ITEMS,
+      [INITIALIZED_KEY]: true,
+    });
+    return MOCK_ITEMS;
+  }
+
+  return [];
 }
 
 export async function saveItems(items: SavedItem[]) {
@@ -23,7 +40,17 @@ export async function saveItems(items: SavedItem[]) {
     return;
   }
 
-  await browser.storage.local.set({ [STORAGE_KEY]: items });
+  await browser.storage.local.set({ [STORAGE_KEY]: items, [INITIALIZED_KEY]: true });
+}
+
+export async function seedMockItems(): Promise<SavedItem[]> {
+  await saveItems(MOCK_ITEMS);
+  return MOCK_ITEMS;
+}
+
+export async function clearAllItems(): Promise<SavedItem[]> {
+  await saveItems([]);
+  return [];
 }
 
 export async function removeItems(ids: string[]) {

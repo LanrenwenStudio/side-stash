@@ -24,19 +24,26 @@ import {
   parseImportPayload,
 } from './lib/items';
 import {
+  clearAllItems,
   getItems,
   getPanelPreferences,
   mergeImportedItems,
   removeItems,
   saveItems,
+  seedMockItems,
   setPanelPreferences,
   subscribeToItems,
   subscribeToPreferences,
   updateItem,
 } from './lib/storage';
-import { downloadImageItem, downloadImageItems } from './lib/download';
+import {
+  downloadImageItem,
+  downloadImageItemsSequentially,
+  downloadImagesZip,
+} from './lib/download';
 import { downloadTextFile, readTextFile } from './lib/transfer';
 import type { CopyFormat, DateFilter, ItemFilter, SavedItem } from './types';
+import { TooltipProvider } from './components/ui/tooltip';
 
 type DeleteState =
   | { ids: string[]; itemLabel: string; message: string }
@@ -403,7 +410,7 @@ export function App() {
     });
   };
 
-  const handleDownloadSelected = async () => {
+  const handleDownloadSelectedZip = async () => {
     const images = selectedItems.filter((item) => item.type === 'image' && item.imageUrl);
     if (!images.length) {
       setToast({
@@ -413,20 +420,58 @@ export function App() {
       return;
     }
 
-    const result = await downloadImageItems(images);
+    setToast({
+      message: '正在打包压缩图片...',
+      type: 'info',
+    });
+
+    const result = await downloadImagesZip(images);
     if (result.ok > 0 && result.failed === 0) {
       setToast({
-        message: t('downloadImagesSuccess', 'Downloading $1 images.', [String(result.ok)]),
+        message: `已打包下载 ${result.ok} 张图片 (.zip)`,
         type: 'success',
       });
       return;
     }
     if (result.ok > 0) {
       setToast({
-        message: t('downloadImagesPartial', 'Downloaded $1 of $2 images.', [
-          String(result.ok),
-          String(result.ok + result.failed),
-        ]),
+        message: `已打包 ${result.ok} 张图片 (.zip)，${result.failed} 张未能获取`,
+        type: 'warning',
+      });
+      return;
+    }
+    setToast({
+      message: t('downloadImageFailed', 'Could not download image.'),
+      type: 'error',
+    });
+  };
+
+  const handleDownloadSelectedIndividual = async () => {
+    const images = selectedItems.filter((item) => item.type === 'image' && item.imageUrl);
+    if (!images.length) {
+      setToast({
+        message: t('downloadImageNoneSelected', 'No images selected.'),
+        type: 'warning',
+      });
+      return;
+    }
+
+    setToast({
+      message: `正在逐张下载 ${images.length} 张图片...`,
+      type: 'info',
+    });
+
+    const result = await downloadImageItemsSequentially(images);
+    if (result.ok > 0 && result.failed === 0) {
+      setToast({
+        message: `已完成 ${result.ok} 张图片逐张下载`,
+        type: 'success',
+      });
+      return;
+    }
+    if (result.ok > 0) {
+      setToast({
+        message: `已下载 ${result.ok} 张图片 (${result.failed} 张失败)`,
         type: 'warning',
       });
       return;
@@ -582,6 +627,25 @@ export function App() {
     }
   };
 
+  const handleSeedMockData = async () => {
+    const nextItems = await seedMockItems();
+    setItems(nextItems);
+    setToast({
+      message: '已填充 7 条测试数据',
+      type: 'success',
+    });
+  };
+
+  const handleClearAllData = async () => {
+    const nextItems = await clearAllItems();
+    setItems(nextItems);
+    setSelectedIds(new Set());
+    setToast({
+      message: '已清空所有数据',
+      type: 'info',
+    });
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
@@ -632,92 +696,100 @@ export function App() {
   }, [copyFormat, deleteState, filteredItems, selectedIds.size, selectedItems]);
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-transparent text-zinc-950 dark:text-zinc-50">
-      <div className="mx-auto flex h-full min-h-0 w-full max-w-[460px] flex-col px-2.5 py-2.5 sm:px-3 sm:py-3">
-        <div className="shrink-0">
-          <FilterBar
-            activeFilter={activeFilter}
-            dateFilter={dateFilter}
-            domainFilter={domainFilter}
-            domainOptions={domainOptions}
-            allFilteredSelected={allFilteredSelected}
-            filteredCount={filteredItems.length}
-            hasFilteredItems={filteredItems.length > 0}
-            hasPartialSelection={someFilteredSelected}
-            query={query}
-            searchInputRef={searchInputRef}
-            selectedCount={selectedCount}
-            selectedImageCount={selectedImageCount}
-            copyFormat={copyFormat}
-            openPanelOnSave={openPanelOnSave}
-            languageSelectValue={languageSelectValue}
-            resolvedLocaleLabel={getLocaleLabel(resolvedLocale)}
-            onClearQuery={() => setQuery('')}
-            onFilterChange={setActiveFilter}
-            onDateFilterChange={setDateFilter}
-            onDomainFilterChange={setDomainFilter}
-            onQueryChange={setQuery}
-            onToggleSelectAll={handleToggleSelectAll}
-            onCopy={handleCopySelected}
-            onCut={handleCutSelected}
-            onDelete={() => openDeleteDialog(selectedItems)}
-            onDownload={() => {
-              void handleDownloadSelected();
-            }}
-            onLanguageChange={(value) => {
-              void setLanguagePreference(value);
-            }}
-            onCopyFormatChange={handleCopyFormatChange}
-            onOpenPanelOnSaveChange={handleOpenPanelOnSaveChange}
-            onExportJson={handleExportJson}
-            onExportMarkdown={handleExportMarkdown}
-            onImportFile={(file) => {
-              void handleImportFile(file);
-            }}
-          />
+    <TooltipProvider delayDuration={120}>
+      <div className="flex h-full min-h-0 flex-col bg-transparent text-zinc-950 dark:text-zinc-50">
+        <div className="mx-auto flex h-full min-h-0 w-full max-w-[460px] flex-col px-2.5 py-2.5 sm:px-3 sm:py-3">
+          <div className="shrink-0">
+            <FilterBar
+              activeFilter={activeFilter}
+              dateFilter={dateFilter}
+              domainFilter={domainFilter}
+              domainOptions={domainOptions}
+              allFilteredSelected={allFilteredSelected}
+              filteredCount={filteredItems.length}
+              hasFilteredItems={filteredItems.length > 0}
+              hasPartialSelection={someFilteredSelected}
+              query={query}
+              searchInputRef={searchInputRef}
+              selectedCount={selectedCount}
+              selectedImageCount={selectedImageCount}
+              copyFormat={copyFormat}
+              openPanelOnSave={openPanelOnSave}
+              languageSelectValue={languageSelectValue}
+              resolvedLocaleLabel={getLocaleLabel(resolvedLocale)}
+              onClearQuery={() => setQuery('')}
+              onFilterChange={setActiveFilter}
+              onDateFilterChange={setDateFilter}
+              onDomainFilterChange={setDomainFilter}
+              onQueryChange={setQuery}
+              onToggleSelectAll={handleToggleSelectAll}
+              onCopy={handleCopySelected}
+              onCut={handleCutSelected}
+              onDelete={() => openDeleteDialog(selectedItems)}
+              onDownloadZip={() => {
+                void handleDownloadSelectedZip();
+              }}
+              onDownloadIndividual={() => {
+                void handleDownloadSelectedIndividual();
+              }}
+              onLanguageChange={(value) => {
+                void setLanguagePreference(value);
+              }}
+              onCopyFormatChange={handleCopyFormatChange}
+              onOpenPanelOnSaveChange={handleOpenPanelOnSaveChange}
+              onExportJson={handleExportJson}
+              onExportMarkdown={handleExportMarkdown}
+              onImportFile={(file) => {
+                void handleImportFile(file);
+              }}
+              onSeedMockData={handleSeedMockData}
+              onClearAllData={handleClearAllData}
+            />
+          </div>
+
+          <main className="mt-2.5 min-h-0 flex-1 overflow-x-hidden overflow-y-auto pb-14">
+            {filteredItems.length === 0 ? (
+              <EmptyState
+                hasActiveFilters={hasActiveFilters}
+                hasItems={items.length > 0}
+                onResetFilters={handleResetFilters}
+                onLoadMockData={handleSeedMockData}
+              />
+            ) : (
+              <ItemList
+                items={filteredItems}
+                selectedIds={selectedIds}
+                onCopyItem={handleCopySingle}
+                onCutItem={handleCutSingle}
+                onDeleteItem={handleDeleteSingle}
+                onDownloadItem={(item) => {
+                  void handleDownloadSingle(item);
+                }}
+                onOpenItem={handleOpenItem}
+                onToggleItem={handleToggleItem}
+                onTogglePin={(item) => {
+                  void handleTogglePin(item);
+                }}
+              />
+            )}
+          </main>
         </div>
 
-        <main className="mt-2.5 min-h-0 flex-1 overflow-x-hidden overflow-y-auto pb-14">
-          {filteredItems.length === 0 ? (
-            <EmptyState
-              hasActiveFilters={hasActiveFilters}
-              hasItems={items.length > 0}
-              onResetFilters={handleResetFilters}
-            />
-          ) : (
-            <ItemList
-              items={filteredItems}
-              selectedIds={selectedIds}
-              onCopyItem={handleCopySingle}
-              onCutItem={handleCutSingle}
-              onDeleteItem={handleDeleteSingle}
-              onDownloadItem={(item) => {
-                void handleDownloadSingle(item);
-              }}
-              onOpenItem={handleOpenItem}
-              onToggleItem={handleToggleItem}
-              onTogglePin={(item) => {
-                void handleTogglePin(item);
-              }}
-            />
-          )}
-        </main>
+        <StatusToast message={toast?.message ?? ''} type={toast?.type} action={toast?.action} />
+
+        <ConfirmDialog
+          description={deleteState?.message ?? t('confirmDelete', 'Delete this item?')}
+          open={deleteState !== null}
+          title={t('confirmTitle', 'Delete item')}
+          value={deleteState?.itemLabel ?? ''}
+          onConfirm={handleConfirmDelete}
+          onOpenChange={(open) => {
+            if (!open) {
+              setDeleteState(null);
+            }
+          }}
+        />
       </div>
-
-      <StatusToast message={toast?.message ?? ''} type={toast?.type} action={toast?.action} />
-
-      <ConfirmDialog
-        description={deleteState?.message ?? t('confirmDelete', 'Delete this item?')}
-        open={deleteState !== null}
-        title={t('confirmTitle', 'Delete item')}
-        value={deleteState?.itemLabel ?? ''}
-        onConfirm={handleConfirmDelete}
-        onOpenChange={(open) => {
-          if (!open) {
-            setDeleteState(null);
-          }
-        }}
-      />
-    </div>
+    </TooltipProvider>
   );
 }

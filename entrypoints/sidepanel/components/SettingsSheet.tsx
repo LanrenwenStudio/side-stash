@@ -24,6 +24,8 @@ type SettingsSheetProps = {
   onExportJson: () => void;
   onExportMarkdown: () => void;
   onImportFile: (file: File) => void;
+  onSeedMockData?: () => void;
+  onClearAllData?: () => void;
 };
 
 export function SettingsSheet({
@@ -37,6 +39,8 @@ export function SettingsSheet({
   onExportJson,
   onExportMarkdown,
   onImportFile,
+  onSeedMockData,
+  onClearAllData,
 }: SettingsSheetProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -45,18 +49,21 @@ export function SettingsSheet({
       <DialogTrigger asChild>
         <Button
           aria-label={t('settingsTitle', 'Settings')}
-          className="size-9 shrink-0 text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white"
+          className="size-9 shrink-0 rounded-xl text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
           size="icon"
           title={t('settingsTitle', 'Settings')}
           type="button"
           variant="secondary"
         >
-          <Settings className="size-3.5" aria-hidden="true" />
+          <Settings className="size-4" aria-hidden="true" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[min(360px,calc(100vw-1.5rem))]">
+      <DialogContent className="max-w-[min(360px,calc(100vw-1.5rem))] rounded-2xl">
         <DialogHeader>
-          <DialogTitle>{t('settingsTitle', 'Settings')}</DialogTitle>
+          <DialogTitle className="flex items-center gap-2 text-base">
+            <Settings className="size-4 text-zinc-900 dark:text-zinc-100" aria-hidden="true" />
+            {t('settingsTitle', 'Settings')}
+          </DialogTitle>
           <DialogDescription>
             {t('settingsSubtitle', 'Language, panel behavior, copy format, and local backup.')}
           </DialogDescription>
@@ -70,11 +77,11 @@ export function SettingsSheet({
             <div className="relative">
               <Languages
                 aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-zinc-500 dark:text-zinc-400"
+                className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-zinc-400 dark:text-zinc-500"
               />
               <select
                 aria-label={t('languageLabel', 'Language')}
-                className="h-10 w-full cursor-pointer appearance-none rounded-lg border border-zinc-200 bg-white py-0 pr-9 pl-9 text-left text-sm font-medium text-zinc-800 outline-none transition-colors hover:bg-zinc-50 focus:ring-2 focus:ring-zinc-400/30 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900"
+                className="h-9.5 w-full cursor-pointer appearance-none rounded-xl border border-zinc-200 bg-white py-0 pr-9 pl-9 text-xs font-medium text-zinc-800 outline-none transition-all hover:bg-zinc-50 focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800/80 dark:focus:border-zinc-100"
                 title={resolvedLocaleLabel}
                 value={languageSelectValue}
                 onChange={(event) => onLanguageChange(event.target.value as LanguageSelectValue)}
@@ -98,12 +105,12 @@ export function SettingsSheet({
           </label>
 
           <div className="grid gap-1.5">
-            <div className="flex items-start justify-between gap-3 rounded-lg border border-zinc-200 bg-white px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-950">
+            <div className="flex items-start justify-between gap-3 rounded-xl border border-zinc-200 bg-zinc-50/70 p-3 dark:border-zinc-800 dark:bg-zinc-900/60">
               <div className="min-w-0 flex-1">
-                <p className="m-0 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                <p className="m-0 text-xs font-semibold text-zinc-800 dark:text-zinc-200">
                   {t('openPanelOnSaveLabel', 'Open panel when saving')}
                 </p>
-                <p className="mt-1 mb-0 text-[11px] leading-4 text-zinc-500 dark:text-zinc-400">
+                <p className="mt-1 mb-0 text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
                   {t(
                     'openPanelOnSaveHint',
                     'Automatically expand the side panel after you save text, a link, or an image.',
@@ -113,7 +120,7 @@ export function SettingsSheet({
               <button
                 aria-checked={openPanelOnSave}
                 aria-label={t('openPanelOnSaveLabel', 'Open panel when saving')}
-                className={`relative mt-0.5 h-6 w-10 shrink-0 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/40 ${
+                className={`relative mt-0.5 h-6 w-10 shrink-0 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/40 ${
                   openPanelOnSave
                     ? 'bg-zinc-900 dark:bg-zinc-100'
                     : 'bg-zinc-200 dark:bg-zinc-700'
@@ -124,7 +131,7 @@ export function SettingsSheet({
               >
                 <span
                   aria-hidden="true"
-                  className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow-sm transition-transform dark:bg-zinc-900 ${
+                  className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow-sm transition-transform dark:bg-zinc-950 ${
                     openPanelOnSave ? 'translate-x-4' : 'translate-x-0'
                   }`}
                 />
@@ -139,7 +146,7 @@ export function SettingsSheet({
             <div className="relative">
               <select
                 aria-label={t('copyFormatLabel', 'Copy format')}
-                className="h-10 w-full appearance-none rounded-lg border border-zinc-200 bg-white py-0 pr-9 pl-3 text-left text-sm font-medium text-zinc-800 outline-none transition-colors focus:ring-2 focus:ring-zinc-400/30 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
+                className="h-9.5 w-full appearance-none rounded-xl border border-zinc-200 bg-white py-0 pr-9 pl-3 text-xs font-medium text-zinc-800 outline-none transition-all focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-100"
                 value={copyFormat}
                 onChange={(event) => onCopyFormatChange(event.target.value as CopyFormat)}
               >
@@ -152,7 +159,7 @@ export function SettingsSheet({
                 className="pointer-events-none absolute top-1/2 right-3 size-3.5 -translate-y-1/2 text-zinc-400"
               />
             </div>
-            <span className="text-[11px] leading-4 text-zinc-500 dark:text-zinc-400">
+            <span className="text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
               {t('copyFormatHint', 'Used for single and bulk copy/cut.')}
             </span>
           </label>
@@ -194,17 +201,37 @@ export function SettingsSheet({
             />
           </div>
 
-          <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs leading-5 text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
-            <p className="m-0 font-semibold text-zinc-800 dark:text-zinc-200">
+          {onSeedMockData || onClearAllData ? (
+            <div className="grid gap-2 border-t border-zinc-200/90 pt-3 dark:border-zinc-800">
+              <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                ⚡ Debug / 测试工具
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {onSeedMockData ? (
+                  <Button type="button" variant="secondary" onClick={onSeedMockData}>
+                    填充测试数据
+                  </Button>
+                ) : null}
+                {onClearAllData ? (
+                  <Button type="button" variant="danger" onClick={onClearAllData}>
+                    清空数据
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="rounded-xl border border-zinc-200 bg-zinc-50/80 p-3 text-xs leading-relaxed text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100">
+            <p className="m-0 font-semibold text-zinc-900 dark:text-zinc-100">
               {t('privacyHeading', 'Local by design')}
             </p>
-            <p className="mt-1 mb-0">
+            <p className="mt-1 mb-0 text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
               {t(
                 'privacyBody',
                 'Items stay in chrome.storage.local on this device. Nothing is uploaded or tracked.',
               )}
             </p>
-            <p className="mt-2 mb-0 text-[11px] text-zinc-500 dark:text-zinc-500">
+            <p className="mt-2 mb-0 font-mono text-[10.5px] text-zinc-600 dark:text-zinc-400">
               {t('shortcutHint', 'Shortcut: Alt+S saves the current selection.')}
             </p>
           </div>

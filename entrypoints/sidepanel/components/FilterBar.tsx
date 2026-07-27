@@ -1,6 +1,7 @@
 import React from 'react';
 import type { RefObject } from 'react';
 import {
+  Archive,
   ChevronDown,
   Copy,
   Download,
@@ -20,6 +21,7 @@ import type { CopyFormat, DateFilter, ItemFilter } from '../types';
 import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
 import { SettingsSheet } from './SettingsSheet';
+import { ActionTooltip } from './ui/tooltip';
 
 type DomainOption = {
   domain: string;
@@ -52,13 +54,16 @@ type FilterBarProps = {
   onCopy: () => void;
   onCut: () => void;
   onDelete: () => void;
-  onDownload: () => void;
+  onDownloadZip: () => void;
+  onDownloadIndividual: () => void;
   onLanguageChange: (value: LanguageSelectValue) => void;
   onCopyFormatChange: (format: CopyFormat) => void;
   onOpenPanelOnSaveChange: (enabled: boolean) => void;
   onExportJson: () => void;
   onExportMarkdown: () => void;
   onImportFile: (file: File) => void;
+  onSeedMockData?: () => void;
+  onClearAllData?: () => void;
 };
 
 const FILTERS: ItemFilter[] = ['all', 'text', 'link', 'image'];
@@ -90,43 +95,51 @@ export function FilterBar({
   onCopy,
   onCut,
   onDelete,
-  onDownload,
+  onDownloadZip,
+  onDownloadIndividual,
   onLanguageChange,
   onCopyFormatChange,
   onOpenPanelOnSaveChange,
   onExportJson,
   onExportMarkdown,
   onImportFile,
+  onSeedMockData,
+  onClearAllData,
 }: FilterBarProps) {
   return (
-    <section className="grid gap-2">
+    <section className="grid gap-2.5">
+      {/* Search and Settings Header */}
       <div className="flex items-center gap-2">
         <label className="relative block min-w-0 flex-1">
           <Search
-            className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-zinc-400"
+            className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-zinc-400 transition-colors dark:text-zinc-500"
             aria-hidden="true"
           />
           <input
             ref={searchInputRef}
             aria-label={t('searchLabel', 'Search saved items')}
-            className="h-9 w-full min-w-0 rounded-lg border border-zinc-200/90 bg-white px-3 py-2.5 pl-8 pr-9 text-[13px] text-zinc-950 outline-none transition-colors placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-400/20 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:placeholder:text-zinc-500 dark:focus:border-zinc-600"
+            className="h-9 w-full min-w-0 rounded-xl border border-zinc-200 bg-white py-2 pr-10 pl-9 text-xs text-zinc-900 shadow-2xs outline-none transition-all placeholder:text-zinc-400 focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-100 dark:focus:ring-zinc-100/10"
             placeholder={t('filterPlaceholder', 'Search snippets...')}
-            type="search"
+            type="text"
             value={query}
             onChange={(event) => onQueryChange(event.target.value)}
           />
-          {query ? (
-            <Button
-              aria-label={t('filterClear', 'Clear')}
-              className="absolute top-1/2 right-1 -translate-y-1/2 size-7"
-              size="icon"
-              type="button"
-              variant="ghost"
-              onClick={onClearQuery}
-            >
-              <X className="size-3.5" aria-hidden="true" />
-            </Button>
-          ) : null}
+          <div className="absolute top-1/2 right-2.5 flex -translate-y-1/2 items-center">
+            {query ? (
+              <button
+                aria-label={t('filterClear', 'Clear')}
+                className="flex size-5.5 cursor-pointer items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                type="button"
+                onClick={onClearQuery}
+              >
+                <X className="size-3.5" aria-hidden="true" />
+              </button>
+            ) : (
+              <kbd className="pointer-events-none select-none rounded-md border border-zinc-300/80 bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-zinc-600 shadow-2xs dark:border-zinc-700/80 dark:bg-zinc-800 dark:text-zinc-300">
+                /
+              </kbd>
+            )}
+          </div>
         </label>
 
         <SettingsSheet
@@ -140,12 +153,15 @@ export function FilterBar({
           onExportMarkdown={onExportMarkdown}
           onImportFile={onImportFile}
           onLanguageChange={onLanguageChange}
+          onSeedMockData={onSeedMockData}
+          onClearAllData={onClearAllData}
         />
       </div>
 
+      {/* Main Category Filter Segmented Control */}
       <div
         aria-label={t('filterGroupLabel', 'Filter by type')}
-        className="grid grid-cols-4 gap-0.5 rounded-lg border border-zinc-200/90 bg-zinc-100/80 p-0.5 dark:border-zinc-800 dark:bg-zinc-900/80"
+        className="grid grid-cols-4 gap-1 rounded-xl border border-zinc-200/90 bg-zinc-100/80 p-1 dark:border-zinc-800/90 dark:bg-zinc-900/80"
         role="group"
       >
         {FILTERS.map((filter) => {
@@ -166,27 +182,30 @@ export function FilterBar({
                   ? Link2
                   : ImageIcon;
 
+          const isActive = activeFilter === filter;
+
           return (
             <button
               key={filter}
-              aria-pressed={activeFilter === filter}
+              aria-pressed={isActive}
               className={cn(
-                'inline-flex h-7 min-w-0 items-center justify-center gap-1 rounded-md px-1 text-[11px] font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/40',
-                activeFilter === filter
-                  ? 'bg-white text-zinc-900 shadow-[0_1px_0_rgba(0,0,0,0.04)] dark:bg-zinc-950 dark:text-zinc-50'
+                'inline-flex h-7.5 min-w-0 items-center justify-center gap-1.5 rounded-lg px-1.5 text-[11px] font-medium transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/40 dark:focus-visible:ring-zinc-100/40',
+                isActive
+                  ? 'bg-zinc-950 text-white shadow-2xs font-semibold dark:bg-zinc-100 dark:text-zinc-950'
                   : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
               )}
               type="button"
               onClick={() => onFilterChange(filter)}
             >
-              <Icon className="size-3 shrink-0" aria-hidden="true" />
+              <Icon className="size-3.5 shrink-0" aria-hidden="true" />
               <span className="truncate">{label}</span>
             </button>
           );
         })}
       </div>
 
-      <div className="grid grid-cols-[1fr_auto] gap-2">
+      {/* Date & Site Filter Row */}
+      <div className="grid grid-cols-[1fr_auto] gap-1.5">
         <div
           aria-label={t('dateFilterGroupLabel', 'Filter by date')}
           className="grid grid-cols-4 gap-0.5 rounded-lg border border-zinc-200/90 bg-white p-0.5 dark:border-zinc-800 dark:bg-zinc-950"
@@ -202,14 +221,16 @@ export function FilterBar({
                     ? t('dateYesterday', 'Yesterday')
                     : t('dateWeek', '7 days');
 
+            const isActive = dateFilter === filter;
+
             return (
               <button
                 key={filter}
-                aria-pressed={dateFilter === filter}
+                aria-pressed={isActive}
                 className={cn(
-                  'inline-flex h-7 min-w-0 items-center justify-center rounded-md px-1 text-[11px] font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/40',
-                  dateFilter === filter
-                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
+                  'inline-flex h-6.5 min-w-0 items-center justify-center rounded-md px-0.5 text-[10.5px] font-medium transition-all outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/40 dark:focus-visible:ring-zinc-100/40',
+                  isActive
+                    ? 'bg-zinc-900 text-white shadow-2xs dark:bg-zinc-100 dark:text-zinc-900 font-semibold'
                     : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
                 )}
                 type="button"
@@ -225,7 +246,7 @@ export function FilterBar({
           <span className="sr-only">{t('domainFilterLabel', 'Filter by site')}</span>
           <select
             aria-label={t('domainFilterLabel', 'Filter by site')}
-            className="h-8 w-[124px] appearance-none rounded-lg border border-zinc-200/90 bg-white py-0 pr-7 pl-2 text-[11px] font-medium text-zinc-700 outline-none focus:ring-2 focus:ring-zinc-400/30 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-200"
+            className="h-7.5 w-[105px] min-[360px]:w-[124px] appearance-none rounded-lg border border-zinc-200/90 bg-white py-0 pr-6 pl-2 text-[10.5px] font-medium text-zinc-700 outline-none transition-colors hover:bg-zinc-50 focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:focus:border-zinc-100"
             value={domainFilter}
             onChange={(event) => onDomainFilterChange(event.target.value)}
           >
@@ -243,17 +264,18 @@ export function FilterBar({
         </label>
       </div>
 
+      {/* Select All / Batch Actions Banner */}
       <div
         className={cn(
-          'flex min-h-9 items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-xs transition-colors',
+          'flex min-h-8.5 items-center justify-between gap-1.5 rounded-xl border px-2.5 py-1 text-xs transition-all duration-200',
           selectedCount > 0
-            ? 'border-zinc-900/10 bg-zinc-900 text-zinc-100 dark:border-zinc-100/10 dark:bg-zinc-100 dark:text-zinc-900'
+            ? 'border-zinc-900 bg-zinc-900 text-zinc-50 shadow-md dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900'
             : 'border-zinc-200/90 bg-white text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400',
         )}
       >
         <label
           className={cn(
-            'inline-flex min-w-0 cursor-pointer items-center gap-2 font-medium',
+            'inline-flex shrink-0 min-w-0 cursor-pointer items-center gap-1.5 font-medium select-none text-[11px]',
             !hasFilteredItems && 'pointer-events-none opacity-50',
           )}
         >
@@ -267,7 +289,7 @@ export function FilterBar({
             disabled={!hasFilteredItems}
             onCheckedChange={(checked) => onToggleSelectAll(checked === true)}
           />
-          <span className="truncate">
+          <span className="truncate font-medium">
             {selectedCount > 0
               ? t('selectedCount', '$1 selected', [String(selectedCount)])
               : t('selectAll', 'Select all')}
@@ -275,56 +297,68 @@ export function FilterBar({
         </label>
 
         {selectedCount > 0 ? (
-          <div className="flex shrink-0 items-center gap-0.5">
+          <div className="flex shrink-0 items-center gap-1">
             {selectedImageCount > 0 ? (
-              <Button
-                aria-label={t('downloadSelectedImages', 'Download')}
-                className="h-7 gap-1 px-2 text-[11px] font-medium text-white hover:bg-white/10 hover:text-white dark:text-zinc-900 dark:hover:bg-zinc-900/10 dark:hover:text-zinc-900"
-                title={t('downloadSelectedImages', 'Download images')}
-                type="button"
-                variant="ghost"
-                onClick={onDownload}
-              >
-                <Download className="size-3" aria-hidden="true" />
-                <span>{t('downloadSelectedImages', 'Download')}</span>
-              </Button>
+              <>
+                <ActionTooltip content="打包下载 (.zip)">
+                  <button
+                    type="button"
+                    aria-label={t('downloadZipTooltip', 'Package selected images as ZIP')}
+                    onClick={onDownloadZip}
+                    className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-zinc-100 outline-none transition-colors hover:bg-white/20 dark:text-zinc-900 dark:hover:bg-zinc-900/20"
+                  >
+                    <Archive className="size-4 shrink-0 stroke-[2.25]" aria-hidden="true" />
+                  </button>
+                </ActionTooltip>
+
+                <ActionTooltip content="逐张单独下载">
+                  <button
+                    type="button"
+                    aria-label={t('downloadIndividualTooltip', 'Download selected images individually')}
+                    onClick={onDownloadIndividual}
+                    className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-zinc-100 outline-none transition-colors hover:bg-white/20 dark:text-zinc-900 dark:hover:bg-zinc-900/20"
+                  >
+                    <Download className="size-4 shrink-0 stroke-[2.25]" aria-hidden="true" />
+                  </button>
+                </ActionTooltip>
+              </>
             ) : null}
-            <Button
-              aria-label={t('copySelected', 'Copy')}
-              className="h-7 gap-1 px-2 text-[11px] font-medium text-white hover:bg-white/10 hover:text-white dark:text-zinc-900 dark:hover:bg-zinc-900/10 dark:hover:text-zinc-900"
-              title={t('copySelected', 'Copy')}
-              type="button"
-              variant="ghost"
-              onClick={onCopy}
-            >
-              <Copy className="size-3" aria-hidden="true" />
-              <span>{t('copySelected', 'Copy')}</span>
-            </Button>
-            <Button
-              aria-label={t('cutSelected', 'Cut')}
-              className="h-7 gap-1 px-2 text-[11px] font-medium text-white hover:bg-white/10 hover:text-white dark:text-zinc-900 dark:hover:bg-zinc-900/10 dark:hover:text-zinc-900"
-              title={t('cutSelected', 'Cut')}
-              type="button"
-              variant="ghost"
-              onClick={onCut}
-            >
-              <Scissors className="size-3" aria-hidden="true" />
-              <span>{t('cutSelected', 'Cut')}</span>
-            </Button>
-            <Button
-              aria-label={t('deleteSelected', 'Delete')}
-              className="h-7 gap-1 px-2 text-[11px] font-medium text-red-300 hover:bg-red-500/15 hover:text-red-200 dark:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-700"
-              title={t('deleteSelected', 'Delete')}
-              type="button"
-              variant="ghost"
-              onClick={onDelete}
-            >
-              <Trash2 className="size-3" aria-hidden="true" />
-              <span>{t('deleteSelected', 'Delete')}</span>
-            </Button>
+
+            <ActionTooltip content="复制选中项">
+              <button
+                type="button"
+                aria-label={t('copySelectedTooltip', 'Copy all text and links')}
+                onClick={onCopy}
+                className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-zinc-100 outline-none transition-colors hover:bg-white/20 dark:text-zinc-900 dark:hover:bg-zinc-900/20"
+              >
+                <Copy className="size-4 shrink-0 stroke-[2.25]" aria-hidden="true" />
+              </button>
+            </ActionTooltip>
+
+            <ActionTooltip content="剪切选中项">
+              <button
+                type="button"
+                aria-label={t('cutSelectedTooltip', 'Cut selected items')}
+                onClick={onCut}
+                className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-zinc-100 outline-none transition-colors hover:bg-white/20 dark:text-zinc-900 dark:hover:bg-zinc-900/20"
+              >
+                <Scissors className="size-4 shrink-0 stroke-[2.25]" aria-hidden="true" />
+              </button>
+            </ActionTooltip>
+
+            <ActionTooltip content="删除选中项">
+              <button
+                type="button"
+                aria-label={t('deleteSelectedTooltip', 'Delete selected items')}
+                onClick={onDelete}
+                className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-rose-400 outline-none transition-colors hover:bg-rose-500/25 hover:text-rose-200 dark:text-rose-600 dark:hover:bg-rose-500/20 dark:hover:text-rose-700"
+              >
+                <Trash2 className="size-4 shrink-0 stroke-[2.25]" aria-hidden="true" />
+              </button>
+            </ActionTooltip>
           </div>
         ) : (
-          <span className="shrink-0 tabular-nums text-[11px] font-medium">
+          <span className="shrink-0 font-mono text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
             {t('shownCount', '$1 shown', [String(filteredCount)])}
           </span>
         )}

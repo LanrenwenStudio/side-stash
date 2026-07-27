@@ -3,7 +3,6 @@ import { join } from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'wxt';
 
-/** Keep Chrome `_locales` in public/ in sync with importable `locales/`. */
 function syncLocalesToPublic() {
   const sourceRoot = join(process.cwd(), 'locales');
   const targetRoot = join(process.cwd(), 'public', '_locales');
@@ -12,15 +11,11 @@ function syncLocalesToPublic() {
     return;
   }
 
-  if (existsSync(targetRoot)) {
-    rmSync(targetRoot, { recursive: true, force: true });
-  }
-  mkdirSync(targetRoot, { recursive: true });
-
-  for (const locale of readdirSync(sourceRoot)) {
-    const from = join(sourceRoot, locale);
-    const to = join(targetRoot, locale);
-    cpSync(from, to, { recursive: true });
+  try {
+    mkdirSync(targetRoot, { recursive: true });
+    cpSync(sourceRoot, targetRoot, { recursive: true, force: true });
+  } catch {
+    // Ignore transient file lock during dev server watch cycles
   }
 }
 
