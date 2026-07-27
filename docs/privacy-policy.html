@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy - Side Stash</title>
+    <meta
+      name="description"
+      content="Privacy Policy for Side Stash, a local-first browser extension for saving text, links, and images."
+    />
+    <meta name="theme-color" content="#111827" />
+    <link rel="icon" sizes="16x16" href="assets/icon-16.png" />
+    <link rel="stylesheet" href="site.css" />
+    <style>
+      .policy-page {
+        width: min(900px, calc(100% - 36px));
+        margin: 0 auto;
+        padding: clamp(64px, 10vw, 120px) 0 96px;
+      }
+
+      .policy-header {
+        max-width: 720px;
+        margin-bottom: 48px;
+      }
+
+      .policy-header h1 {
+        margin: 0 0 16px;
+        font-size: clamp(2.4rem, 6vw, 4.8rem);
+        line-height: 0.98;
+        letter-spacing: -0.055em;
+      }
+
+      .policy-header p,
+      .policy-section p,
+      .policy-section li {
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .policy-header p {
+        margin: 0;
+        font-size: 1.15rem;
+      }
+
+      .policy-meta {
+        display: inline-flex;
+        margin-top: 20px;
+        padding: 7px 11px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .policy-section {
+        padding: 28px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .policy-section h2 {
+        margin: 0 0 10px;
+        font-size: 1.35rem;
+        letter-spacing: -0.02em;
+      }
+
+      .policy-section p {
+        margin: 0 0 12px;
+      }
+
+      .policy-section p:last-child {
+        margin-bottom: 0;
+      }
+
+      .policy-section ul {
+        margin: 12px 0 0;
+        padding-left: 1.25rem;
+      }
+
+      .policy-section li + li {
+        margin-top: 8px;
+      }
+
+      .policy-section a {
+        color: var(--accent-strong);
+        font-weight: 700;
+      }
+
+      .policy-back {
+        display: inline-flex;
+        margin-top: 40px;
+        color: var(--text);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .policy-back:hover {
+        color: var(--blue);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Side Stash home">
+        <img src="assets/icon-128.png" width="40" height="40" alt="" />
+        <span>Side Stash</span>
+      </a>
+      <a class="header-link" href="./">Back to Side Stash</a>
+    </header>
+
+    <main class="policy-page">
+      <header class="policy-header">
+        <h1>Privacy Policy</h1>
+        <p>
+          Side Stash is a local-first browser extension. This policy explains what information
+          the extension handles and what it does not do.
+        </p>
+        <span class="policy-meta">Effective date: July 27, 2026</span>
+      </header>
+
+      <section class="policy-section">
+        <h2>1. Scope</h2>
+        <p>
+          This Privacy Policy applies to the Side Stash browser extension and its public website
+          at <a href="https://sidestash.lanrenwen.com/">sidestash.lanrenwen.com</a>.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>2. Information stored by the extension</h2>
+        <p>
+          When you choose to save something, Side Stash stores the saved item in your browser's
+          local extension storage. Depending on what you save, an item can include:
+        </p>
+        <ul>
+          <li>Selected text or link text.</li>
+          <li>Image URLs, link URLs, and image alternative text.</li>
+          <li>The source page title and URL.</li>
+          <li>Creation time, pin state, and your local display preferences.</li>
+        </ul>
+        <p>
+          This information is stored with <code>chrome.storage.local</code> on your device. Side
+          Stash does not create an account for you and does not maintain a cloud copy of your stash.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>3. How information is used</h2>
+        <p>
+          Side Stash uses stored information only to provide the features you request: displaying,
+          searching, filtering, pinning, copying, exporting, importing, deleting, and downloading
+          saved items.
+        </p>
+        <p>
+          The extension does not use saved content for advertising, profiling, analytics, or
+          training machine-learning models.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>4. Permissions</h2>
+        <ul>
+          <li><strong>Context menus:</strong> provide right-click save actions.</li>
+          <li><strong>Storage:</strong> save items and preferences locally.</li>
+          <li><strong>Tabs:</strong> preserve the title and URL of the page you choose to save from.</li>
+          <li><strong>Downloads:</strong> download images only when you request a download.</li>
+          <li><strong>Host access:</strong> read the selected page context needed for saving text, links, and images.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>5. Network access and third parties</h2>
+        <p>
+          Side Stash does not send your saved content to a Lanrenwen Studio server. When you
+          explicitly download an image, your browser may request that image from its original
+          website. That request is subject to the original website's policies and your browser's
+          network behavior.
+        </p>
+        <p>
+          The extension is distributed through the Chrome Web Store. Chrome and Google may process
+          data according to their own policies when you use their services.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>6. Retention and deletion</h2>
+        <p>
+          Saved items remain in local browser storage until you delete them, clear the extension's
+          data, or uninstall Side Stash. You can delete individual items, delete selected items,
+          clear the stash, or remove imported backups from the extension.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>7. Children's privacy</h2>
+        <p>
+          Side Stash is not directed at children under 13. We do not knowingly collect personal
+          information from children.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>8. Changes to this policy</h2>
+        <p>
+          We may update this policy when the extension's data practices change. The effective date
+          at the top of this page will be updated when a new version is published.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>9. Contact</h2>
+        <p>
+          For privacy questions about Side Stash, contact
+          <a href="mailto:support@lanrenwen.com">support@lanrenwen.com</a>.
+        </p>
+      </section>
+
+      <a class="policy-back" href="./">← Back to Side Stash</a>
+    </main>
+
+    <footer>
+      <span>Side Stash</span>
+      <a href="https://github.com/LanrenwenStudio/side-stash">Source on GitHub</a>
+    </footer>
+  </body>
+</html>
