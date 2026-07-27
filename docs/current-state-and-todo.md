@@ -295,6 +295,11 @@ The near-term goal is to:
 - [ ] Rebuild and verify the production bundle
 - [ ] Update `README.md` to reflect the new architecture
 
+### Future ideas
+
+- [ ] Add a privacy-conscious way to aggregate which websites users save from most often
+- [ ] Handle image items separately so users can batch-download images instead of only copying their URLs
+
 ## Suggested Initial File Structure After Migration
 
 ```text

@@ -1,6 +1,18 @@
 import React from 'react';
 import type { RefObject } from 'react';
-import { ChevronDown, Copy, FileText, Image as ImageIcon, Link2, ListFilter, Scissors, Search, Trash2, X } from 'lucide-react';
+import {
+  ChevronDown,
+  Copy,
+  Download,
+  FileText,
+  Image as ImageIcon,
+  Link2,
+  ListFilter,
+  Scissors,
+  Search,
+  Trash2,
+  X,
+} from 'lucide-react';
 import { cn } from '../lib/cn';
 import { t } from '../../../lib/i18n';
 import type { LanguageSelectValue } from '../../../lib/i18n';
@@ -26,7 +38,9 @@ type FilterBarProps = {
   query: string;
   searchInputRef: RefObject<HTMLInputElement | null>;
   selectedCount: number;
+  selectedImageCount: number;
   copyFormat: CopyFormat;
+  openPanelOnSave: boolean;
   languageSelectValue: LanguageSelectValue;
   resolvedLocaleLabel: string;
   onClearQuery: () => void;
@@ -38,8 +52,10 @@ type FilterBarProps = {
   onCopy: () => void;
   onCut: () => void;
   onDelete: () => void;
+  onDownload: () => void;
   onLanguageChange: (value: LanguageSelectValue) => void;
   onCopyFormatChange: (format: CopyFormat) => void;
+  onOpenPanelOnSaveChange: (enabled: boolean) => void;
   onExportJson: () => void;
   onExportMarkdown: () => void;
   onImportFile: (file: File) => void;
@@ -60,7 +76,9 @@ export function FilterBar({
   query,
   searchInputRef,
   selectedCount,
+  selectedImageCount,
   copyFormat,
+  openPanelOnSave,
   languageSelectValue,
   resolvedLocaleLabel,
   onClearQuery,
@@ -72,8 +90,10 @@ export function FilterBar({
   onCopy,
   onCut,
   onDelete,
+  onDownload,
   onLanguageChange,
   onCopyFormatChange,
+  onOpenPanelOnSaveChange,
   onExportJson,
   onExportMarkdown,
   onImportFile,
@@ -111,9 +131,11 @@ export function FilterBar({
 
         <SettingsSheet
           copyFormat={copyFormat}
+          openPanelOnSave={openPanelOnSave}
           languageSelectValue={languageSelectValue}
           resolvedLocaleLabel={resolvedLocaleLabel}
           onCopyFormatChange={onCopyFormatChange}
+          onOpenPanelOnSaveChange={onOpenPanelOnSaveChange}
           onExportJson={onExportJson}
           onExportMarkdown={onExportMarkdown}
           onImportFile={onImportFile}
@@ -254,6 +276,19 @@ export function FilterBar({
 
         {selectedCount > 0 ? (
           <div className="flex shrink-0 items-center gap-0.5">
+            {selectedImageCount > 0 ? (
+              <Button
+                aria-label={t('downloadSelectedImages', 'Download')}
+                className="h-7 gap-1 px-2 text-[11px] font-medium text-white hover:bg-white/10 hover:text-white dark:text-zinc-900 dark:hover:bg-zinc-900/10 dark:hover:text-zinc-900"
+                title={t('downloadSelectedImages', 'Download images')}
+                type="button"
+                variant="ghost"
+                onClick={onDownload}
+              >
+                <Download className="size-3" aria-hidden="true" />
+                <span>{t('downloadSelectedImages', 'Download')}</span>
+              </Button>
+            ) : null}
             <Button
               aria-label={t('copySelected', 'Copy')}
               className="h-7 gap-1 px-2 text-[11px] font-medium text-white hover:bg-white/10 hover:text-white dark:text-zinc-900 dark:hover:bg-zinc-900/10 dark:hover:text-zinc-900"

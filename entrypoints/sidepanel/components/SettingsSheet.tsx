@@ -17,8 +17,10 @@ type SettingsSheetProps = {
   languageSelectValue: LanguageSelectValue;
   resolvedLocaleLabel: string;
   copyFormat: CopyFormat;
+  openPanelOnSave: boolean;
   onLanguageChange: (value: LanguageSelectValue) => void;
   onCopyFormatChange: (format: CopyFormat) => void;
+  onOpenPanelOnSaveChange: (enabled: boolean) => void;
   onExportJson: () => void;
   onExportMarkdown: () => void;
   onImportFile: (file: File) => void;
@@ -28,8 +30,10 @@ export function SettingsSheet({
   languageSelectValue,
   resolvedLocaleLabel,
   copyFormat,
+  openPanelOnSave,
   onLanguageChange,
   onCopyFormatChange,
+  onOpenPanelOnSaveChange,
   onExportJson,
   onExportMarkdown,
   onImportFile,
@@ -54,7 +58,7 @@ export function SettingsSheet({
         <DialogHeader>
           <DialogTitle>{t('settingsTitle', 'Settings')}</DialogTitle>
           <DialogDescription>
-            {t('settingsSubtitle', 'Language, copy format, and local backup.')}
+            {t('settingsSubtitle', 'Language, panel behavior, copy format, and local backup.')}
           </DialogDescription>
         </DialogHeader>
 
@@ -92,6 +96,41 @@ export function SettingsSheet({
               />
             </div>
           </label>
+
+          <div className="grid gap-1.5">
+            <div className="flex items-start justify-between gap-3 rounded-lg border border-zinc-200 bg-white px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-950">
+              <div className="min-w-0 flex-1">
+                <p className="m-0 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                  {t('openPanelOnSaveLabel', 'Open panel when saving')}
+                </p>
+                <p className="mt-1 mb-0 text-[11px] leading-4 text-zinc-500 dark:text-zinc-400">
+                  {t(
+                    'openPanelOnSaveHint',
+                    'Automatically expand the side panel after you save text, a link, or an image.',
+                  )}
+                </p>
+              </div>
+              <button
+                aria-checked={openPanelOnSave}
+                aria-label={t('openPanelOnSaveLabel', 'Open panel when saving')}
+                className={`relative mt-0.5 h-6 w-10 shrink-0 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/40 ${
+                  openPanelOnSave
+                    ? 'bg-zinc-900 dark:bg-zinc-100'
+                    : 'bg-zinc-200 dark:bg-zinc-700'
+                }`}
+                role="switch"
+                type="button"
+                onClick={() => onOpenPanelOnSaveChange(!openPanelOnSave)}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow-sm transition-transform dark:bg-zinc-900 ${
+                    openPanelOnSave ? 'translate-x-4' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
 
           <label className="grid gap-1.5">
             <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">

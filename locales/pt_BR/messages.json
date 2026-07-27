@@ -5,6 +5,9 @@
   "extDescription": {
     "message": "Salve texto, links e imagens em um painel lateral privado. Pesquise, filtre e copie — só no dispositivo."
   },
+  "menuSave": {
+    "message": "Salvar no Side Stash"
+  },
   "menuSaveText": {
     "message": "Salvar texto no painel lateral"
   },
@@ -20,11 +23,41 @@
   "actionCopy": {
     "message": "Copiar"
   },
+  "actionCopyImageUrl": {
+    "message": "Copiar URL da imagem"
+  },
+  "actionCopyLinkUrl": {
+    "message": "Copiar URL do link"
+  },
   "actionCut": {
     "message": "Recortar"
   },
   "actionOpen": {
     "message": "Abrir"
+  },
+  "actionDownloadImage": {
+    "message": "Baixar imagem"
+  },
+  "downloadSelectedImages": {
+    "message": "Baixar"
+  },
+  "downloadImageSuccess": {
+    "message": "Download da imagem iniciado."
+  },
+  "downloadImagesSuccess": {
+    "message": "Baixando $1 imagens."
+  },
+  "downloadImagesPartial": {
+    "message": "Baixadas $1 de $2 imagens."
+  },
+  "downloadImageFailed": {
+    "message": "Não foi possível baixar a imagem."
+  },
+  "downloadImageUnavailable": {
+    "message": "Nenhuma imagem para baixar."
+  },
+  "downloadImageNoneSelected": {
+    "message": "Nenhuma imagem selecionada."
   },
   "confirmDelete": {
     "message": "Excluir este item?"
@@ -204,7 +237,13 @@
     "message": "Configurações"
   },
   "settingsSubtitle": {
-    "message": "Idioma, formato de cópia e backup local."
+    "message": "Idioma, comportamento do painel, formato de cópia e backup local."
+  },
+  "openPanelOnSaveLabel": {
+    "message": "Abrir painel ao salvar"
+  },
+  "openPanelOnSaveHint": {
+    "message": "Abre automaticamente o painel lateral ao salvar texto, um link ou uma imagem."
   },
   "privacyHeading": {
     "message": "Local por design"

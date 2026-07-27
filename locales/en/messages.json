@@ -5,6 +5,9 @@
   "extDescription": {
     "message": "Save text, links, and images to a private side panel. Search, filter, and copy — all stored locally."
   },
+  "menuSave": {
+    "message": "Save to Side Stash"
+  },
   "menuSaveText": {
     "message": "Save text to side panel"
   },
@@ -20,11 +23,41 @@
   "actionCopy": {
     "message": "Copy"
   },
+  "actionCopyImageUrl": {
+    "message": "Copy image URL"
+  },
+  "actionCopyLinkUrl": {
+    "message": "Copy link URL"
+  },
   "actionCut": {
     "message": "Cut"
   },
   "actionOpen": {
     "message": "Open"
+  },
+  "actionDownloadImage": {
+    "message": "Download image"
+  },
+  "downloadSelectedImages": {
+    "message": "Download"
+  },
+  "downloadImageSuccess": {
+    "message": "Image download started."
+  },
+  "downloadImagesSuccess": {
+    "message": "Downloading $1 images."
+  },
+  "downloadImagesPartial": {
+    "message": "Downloaded $1 of $2 images."
+  },
+  "downloadImageFailed": {
+    "message": "Could not download image."
+  },
+  "downloadImageUnavailable": {
+    "message": "No image to download."
+  },
+  "downloadImageNoneSelected": {
+    "message": "No images selected."
   },
   "confirmDelete": {
     "message": "Delete this item?"
@@ -225,7 +258,13 @@
     "message": "Settings"
   },
   "settingsSubtitle": {
-    "message": "Language, copy format, and local backup."
+    "message": "Language, panel behavior, copy format, and local backup."
+  },
+  "openPanelOnSaveLabel": {
+    "message": "Open panel when saving"
+  },
+  "openPanelOnSaveHint": {
+    "message": "Automatically expand the side panel after you save text, a link, or an image."
   },
   "privacyHeading": {
     "message": "Local by design"

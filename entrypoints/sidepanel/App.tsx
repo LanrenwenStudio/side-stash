@@ -34,6 +34,7 @@ import {
   subscribeToPreferences,
   updateItem,
 } from './lib/storage';
+import { downloadImageItem, downloadImageItems } from './lib/download';
 import { downloadTextFile, readTextFile } from './lib/transfer';
 import type { CopyFormat, DateFilter, ItemFilter, SavedItem } from './types';
 
@@ -51,6 +52,7 @@ export function App() {
   const [query, setQuery] = useState('');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [copyFormat, setCopyFormat] = useState<CopyFormat>('plain');
+  const [openPanelOnSave, setOpenPanelOnSave] = useState(true);
   const [toast, setToast] = useState<{
     message: string;
     type?: 'success' | 'warning' | 'error' | 'info';
@@ -72,6 +74,10 @@ export function App() {
     [filteredItems, selectedIds],
   );
   const selectedCount = selectedItems.length;
+  const selectedImageCount = useMemo(
+    () => selectedItems.filter((item) => item.type === 'image' && item.imageUrl).length,
+    [selectedItems],
+  );
   const hasActiveFilters =
     activeFilter !== 'all' ||
     dateFilter !== 'all' ||
@@ -137,10 +143,12 @@ export function App() {
         return;
       }
       setCopyFormat(prefs.copyFormat);
+      setOpenPanelOnSave(prefs.openPanelOnSave);
     });
 
     const unsubscribe = subscribeToPreferences((prefs) => {
       setCopyFormat(prefs.copyFormat);
+      setOpenPanelOnSave(prefs.openPanelOnSave);
     });
 
     return () => {
@@ -377,6 +385,58 @@ export function App() {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  const handleDownloadSingle = async (item: SavedItem) => {
+    if (item.type !== 'image' || !item.imageUrl) {
+      setToast({
+        message: t('downloadImageUnavailable', 'No image to download.'),
+        type: 'warning',
+      });
+      return;
+    }
+
+    const success = await downloadImageItem(item);
+    setToast({
+      message: success
+        ? t('downloadImageSuccess', 'Image download started.')
+        : t('downloadImageFailed', 'Could not download image.'),
+      type: success ? 'success' : 'error',
+    });
+  };
+
+  const handleDownloadSelected = async () => {
+    const images = selectedItems.filter((item) => item.type === 'image' && item.imageUrl);
+    if (!images.length) {
+      setToast({
+        message: t('downloadImageNoneSelected', 'No images selected.'),
+        type: 'warning',
+      });
+      return;
+    }
+
+    const result = await downloadImageItems(images);
+    if (result.ok > 0 && result.failed === 0) {
+      setToast({
+        message: t('downloadImagesSuccess', 'Downloading $1 images.', [String(result.ok)]),
+        type: 'success',
+      });
+      return;
+    }
+    if (result.ok > 0) {
+      setToast({
+        message: t('downloadImagesPartial', 'Downloaded $1 of $2 images.', [
+          String(result.ok),
+          String(result.ok + result.failed),
+        ]),
+        type: 'warning',
+      });
+      return;
+    }
+    setToast({
+      message: t('downloadImageFailed', 'Could not download image.'),
+      type: 'error',
+    });
+  };
+
   const handleTogglePin = async (item: SavedItem) => {
     await updateItem(item.id, { pinned: !item.pinned });
     setToast({
@@ -474,6 +534,11 @@ export function App() {
     void setPanelPreferences({ copyFormat: format });
   };
 
+  const handleOpenPanelOnSaveChange = (enabled: boolean) => {
+    setOpenPanelOnSave(enabled);
+    void setPanelPreferences({ openPanelOnSave: enabled });
+  };
+
   const handleExportJson = () => {
     const stamp = new Date().toISOString().slice(0, 10);
     downloadTextFile(`side-stash-${stamp}.json`, itemsToJson(items), 'application/json');
@@ -568,7 +633,7 @@ export function App() {
 
   return (
     <div className="flex h-full min-h-0 flex-col bg-transparent text-zinc-950 dark:text-zinc-50">
-      <div className="mx-auto flex h-full min-h-0 w-full max-w-[460px] flex-col px-3 py-3">
+      <div className="mx-auto flex h-full min-h-0 w-full max-w-[460px] flex-col px-2.5 py-2.5 sm:px-3 sm:py-3">
         <div className="shrink-0">
           <FilterBar
             activeFilter={activeFilter}
@@ -582,7 +647,9 @@ export function App() {
             query={query}
             searchInputRef={searchInputRef}
             selectedCount={selectedCount}
+            selectedImageCount={selectedImageCount}
             copyFormat={copyFormat}
+            openPanelOnSave={openPanelOnSave}
             languageSelectValue={languageSelectValue}
             resolvedLocaleLabel={getLocaleLabel(resolvedLocale)}
             onClearQuery={() => setQuery('')}
@@ -594,10 +661,14 @@ export function App() {
             onCopy={handleCopySelected}
             onCut={handleCutSelected}
             onDelete={() => openDeleteDialog(selectedItems)}
+            onDownload={() => {
+              void handleDownloadSelected();
+            }}
             onLanguageChange={(value) => {
               void setLanguagePreference(value);
             }}
             onCopyFormatChange={handleCopyFormatChange}
+            onOpenPanelOnSaveChange={handleOpenPanelOnSaveChange}
             onExportJson={handleExportJson}
             onExportMarkdown={handleExportMarkdown}
             onImportFile={(file) => {
@@ -606,7 +677,7 @@ export function App() {
           />
         </div>
 
-        <main className="mt-2.5 min-h-0 flex-1 overflow-y-auto pb-14">
+        <main className="mt-2.5 min-h-0 flex-1 overflow-x-hidden overflow-y-auto pb-14">
           {filteredItems.length === 0 ? (
             <EmptyState
               hasActiveFilters={hasActiveFilters}
@@ -620,6 +691,9 @@ export function App() {
               onCopyItem={handleCopySingle}
               onCutItem={handleCutSingle}
               onDeleteItem={handleDeleteSingle}
+              onDownloadItem={(item) => {
+                void handleDownloadSingle(item);
+              }}
               onOpenItem={handleOpenItem}
               onToggleItem={handleToggleItem}
               onTogglePin={(item) => {

@@ -6,6 +6,7 @@ const PREFERENCES_KEY = 'panelPreferences';
 
 const DEFAULT_PREFERENCES: PanelPreferences = {
   copyFormat: 'plain',
+  openPanelOnSave: true,
 };
 
 export async function getItems(): Promise<SavedItem[]> {
@@ -98,8 +99,12 @@ function sanitizePreferences(value: unknown): PanelPreferences {
     candidate.copyFormat === 'markdown' || candidate.copyFormat === 'source'
       ? candidate.copyFormat
       : 'plain';
+  const openPanelOnSave =
+    typeof candidate.openPanelOnSave === 'boolean'
+      ? candidate.openPanelOnSave
+      : DEFAULT_PREFERENCES.openPanelOnSave;
 
-  return { copyFormat };
+  return { copyFormat, openPanelOnSave };
 }
 
 export async function getPanelPreferences(): Promise<PanelPreferences> {

@@ -9,6 +9,7 @@ type ItemListProps = {
   onCopyItem: (item: SavedItem) => void;
   onCutItem: (item: SavedItem) => void;
   onDeleteItem: (item: SavedItem) => void;
+  onDownloadItem: (item: SavedItem) => void;
   onOpenItem: (item: SavedItem) => void;
   onToggleItem: (id: string, checked: boolean) => void;
   onTogglePin: (item: SavedItem) => void;
@@ -20,6 +21,7 @@ export function ItemList({
   onCopyItem,
   onCutItem,
   onDeleteItem,
+  onDownloadItem,
   onOpenItem,
   onToggleItem,
   onTogglePin,
@@ -36,6 +38,7 @@ export function ItemList({
         onCopy={() => onCopyItem(item)}
         onCut={() => onCutItem(item)}
         onDelete={() => onDeleteItem(item)}
+        onDownload={() => onDownloadItem(item)}
         onOpen={() => onOpenItem(item)}
         onToggle={(checked) => onToggleItem(item.id, checked)}
         onTogglePin={() => onTogglePin(item)}

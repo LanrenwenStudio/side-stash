@@ -67,13 +67,102 @@ function getHostname(url?: string) {
   }
 
   try {
-    return new URL(url).hostname.toLowerCase();
+    const parsed = new URL(url);
+    // chrome-extension://abcdef... looks like a raw ID — keep a short label instead.
+    if (parsed.protocol === 'chrome-extension:' || parsed.protocol === 'moz-extension:') {
+      return 'extension';
+    }
+    return parsed.hostname.toLowerCase();
   } catch {
     return '';
   }
 }
 
+function getFilenameFromUrl(url?: string) {
+  if (!url) {
+    return '';
+  }
+
+  try {
+    const parsed = new URL(url);
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    const last = parts[parts.length - 1];
+    if (!last) {
+      return '';
+    }
+    return decodeURIComponent(last);
+  } catch {
+    return '';
+  }
+}
+
+function looksLikeUrl(value: string) {
+  return /^https?:\/\//i.test(value.trim());
+}
+
+/** Primary title shown in the list — type-aware, not always the raw URL. */
+export function getItemTitle(item: SavedItem) {
+  if (item.type === 'image') {
+    const alt = (item.imageAlt || '').trim();
+    if (alt) {
+      return alt;
+    }
+    const content = (item.content || '').trim();
+    if (content && !looksLikeUrl(content)) {
+      return content;
+    }
+    return getFilenameFromUrl(item.imageUrl) || content || 'Image';
+  }
+
+  if (item.type === 'link') {
+    const content = (item.content || '').trim();
+    const linkUrl = (item.linkUrl || '').trim();
+    if (content && content !== linkUrl && !looksLikeUrl(content)) {
+      return content;
+    }
+    if (content && content !== linkUrl) {
+      return content;
+    }
+    // No useful anchor text — prefer hostname + short path over dumping the full URL.
+    try {
+      if (linkUrl) {
+        const parsed = new URL(linkUrl);
+        const path = parsed.pathname === '/' ? '' : parsed.pathname;
+        return `${parsed.hostname}${path}`.replace(/\/$/, '') || linkUrl;
+      }
+    } catch {
+      // fall through
+    }
+    return content || linkUrl || 'Link';
+  }
+
+  return (item.content || '').trim();
+}
+
+/**
+ * Secondary line under the title.
+ * - link: destination URL (what you'll open/copy)
+ * - image: image asset URL (distinct from page source)
+ * - text: empty
+ */
+export function getItemSubtitle(item: SavedItem) {
+  if (item.type === 'link') {
+    return (item.linkUrl || '').trim();
+  }
+  if (item.type === 'image') {
+    return (item.imageUrl || '').trim();
+  }
+  return '';
+}
+
 export function getSourceDomain(item: SavedItem) {
+  if (item.type === 'image') {
+    // Prefer where the image file lives; fall back to the page you saved from.
+    return getHostname(item.imageUrl) || getHostname(item.pageUrl);
+  }
+  if (item.type === 'link') {
+    return getHostname(item.linkUrl) || getHostname(item.pageUrl);
+  }
   return getHostname(item.pageUrl) || getHostname(item.linkUrl) || getHostname(item.imageUrl);
 }
 

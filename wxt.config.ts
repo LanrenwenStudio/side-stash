@@ -32,7 +32,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   }),
   webExt: {
-    startUrls: ['https://www.wikipedia.org/'],
+    startUrls: ['https://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5'],
   },
   hooks: {
     'build:before': () => {
@@ -44,7 +44,7 @@ export default defineConfig({
     description: '__MSG_extDescription__',
     default_locale: 'en',
     version: '0.1.5',
-    permissions: ['contextMenus', 'storage', 'tabs'],
+    permissions: ['contextMenus', 'storage', 'tabs', 'downloads'],
     host_permissions: ['<all_urls>'],
     icons: {
       16: '/icon-16.png',

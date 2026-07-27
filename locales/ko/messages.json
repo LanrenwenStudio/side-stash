@@ -5,6 +5,9 @@
   "extDescription": {
     "message": "텍스트, 링크, 이미지를 사이드 패널에 저장하세요. 검색·필터·복사 지원, 데이터는 기기에만 저장됩니다."
   },
+  "menuSave": {
+    "message": "Side Stash에 저장"
+  },
   "menuSaveText": {
     "message": "텍스트를 사이드 패널에 저장"
   },
@@ -20,11 +23,41 @@
   "actionCopy": {
     "message": "복사"
   },
+  "actionCopyImageUrl": {
+    "message": "이미지 URL 복사"
+  },
+  "actionCopyLinkUrl": {
+    "message": "링크 URL 복사"
+  },
   "actionCut": {
     "message": "잘라내기"
   },
   "actionOpen": {
     "message": "열기"
+  },
+  "actionDownloadImage": {
+    "message": "이미지 다운로드"
+  },
+  "downloadSelectedImages": {
+    "message": "다운로드"
+  },
+  "downloadImageSuccess": {
+    "message": "이미지 다운로드를 시작했습니다."
+  },
+  "downloadImagesSuccess": {
+    "message": "이미지 $1개를 다운로드 중."
+  },
+  "downloadImagesPartial": {
+    "message": "이미지 $2개 중 $1개를 다운로드했습니다."
+  },
+  "downloadImageFailed": {
+    "message": "이미지를 다운로드할 수 없습니다."
+  },
+  "downloadImageUnavailable": {
+    "message": "다운로드할 이미지가 없습니다."
+  },
+  "downloadImageNoneSelected": {
+    "message": "선택된 이미지가 없습니다."
   },
   "confirmDelete": {
     "message": "이 항목을 삭제하시겠습니까?"
@@ -204,7 +237,13 @@
     "message": "설정"
   },
   "settingsSubtitle": {
-    "message": "언어, 복사 형식, 로컬 백업."
+    "message": "언어, 패널 동작, 복사 형식, 로컬 백업."
+  },
+  "openPanelOnSaveLabel": {
+    "message": "저장 시 패널 열기"
+  },
+  "openPanelOnSaveHint": {
+    "message": "텍스트, 링크 또는 이미지를 저장하면 사이드 패널을 자동으로 엽니다."
   },
   "privacyHeading": {
     "message": "로컬 우선"

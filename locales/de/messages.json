@@ -5,6 +5,9 @@
   "extDescription": {
     "message": "Text, Links und Bilder in einem privaten Seitenbereich speichern. Suchen, filtern, kopieren — nur lokal."
   },
+  "menuSave": {
+    "message": "In Side Stash speichern"
+  },
   "menuSaveText": {
     "message": "Text im Seitenbereich speichern"
   },
@@ -20,11 +23,41 @@
   "actionCopy": {
     "message": "Kopieren"
   },
+  "actionCopyImageUrl": {
+    "message": "Bild-URL kopieren"
+  },
+  "actionCopyLinkUrl": {
+    "message": "Link-URL kopieren"
+  },
   "actionCut": {
     "message": "Ausschneiden"
   },
   "actionOpen": {
     "message": "Öffnen"
+  },
+  "actionDownloadImage": {
+    "message": "Bild herunterladen"
+  },
+  "downloadSelectedImages": {
+    "message": "Download"
+  },
+  "downloadImageSuccess": {
+    "message": "Bilddownload gestartet."
+  },
+  "downloadImagesSuccess": {
+    "message": "$1 Bilder werden heruntergeladen."
+  },
+  "downloadImagesPartial": {
+    "message": "$1 von $2 Bildern heruntergeladen."
+  },
+  "downloadImageFailed": {
+    "message": "Bild konnte nicht heruntergeladen werden."
+  },
+  "downloadImageUnavailable": {
+    "message": "Kein Bild zum Herunterladen."
+  },
+  "downloadImageNoneSelected": {
+    "message": "Keine Bilder ausgewählt."
   },
   "confirmDelete": {
     "message": "Dieses Element löschen?"
@@ -204,7 +237,13 @@
     "message": "Einstellungen"
   },
   "settingsSubtitle": {
-    "message": "Sprache, Kopierformat und lokales Backup."
+    "message": "Sprache, Panel-Verhalten, Kopierformat und lokales Backup."
+  },
+  "openPanelOnSaveLabel": {
+    "message": "Panel beim Speichern öffnen"
+  },
+  "openPanelOnSaveHint": {
+    "message": "Öffnet das Seitenpanel automatisch, nachdem Text, Link oder Bild gespeichert wurde."
   },
   "privacyHeading": {
     "message": "Lokal by Design"

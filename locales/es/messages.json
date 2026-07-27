@@ -5,6 +5,9 @@
   "extDescription": {
     "message": "Guarda texto, enlaces e imágenes en un panel lateral privado. Busca, filtra y copia — todo local."
   },
+  "menuSave": {
+    "message": "Guardar en Side Stash"
+  },
   "menuSaveText": {
     "message": "Guardar texto en el panel lateral"
   },
@@ -20,11 +23,41 @@
   "actionCopy": {
     "message": "Copiar"
   },
+  "actionCopyImageUrl": {
+    "message": "Copiar URL de la imagen"
+  },
+  "actionCopyLinkUrl": {
+    "message": "Copiar URL del enlace"
+  },
   "actionCut": {
     "message": "Cortar"
   },
   "actionOpen": {
     "message": "Abrir"
+  },
+  "actionDownloadImage": {
+    "message": "Descargar imagen"
+  },
+  "downloadSelectedImages": {
+    "message": "Descargar"
+  },
+  "downloadImageSuccess": {
+    "message": "Descarga de imagen iniciada."
+  },
+  "downloadImagesSuccess": {
+    "message": "Descargando $1 imágenes."
+  },
+  "downloadImagesPartial": {
+    "message": "Descargadas $1 de $2 imágenes."
+  },
+  "downloadImageFailed": {
+    "message": "No se pudo descargar la imagen."
+  },
+  "downloadImageUnavailable": {
+    "message": "No hay imagen para descargar."
+  },
+  "downloadImageNoneSelected": {
+    "message": "No hay imágenes seleccionadas."
   },
   "confirmDelete": {
     "message": "¿Eliminar este elemento?"
@@ -204,7 +237,13 @@
     "message": "Ajustes"
   },
   "settingsSubtitle": {
-    "message": "Idioma, formato de copia y copia local."
+    "message": "Idioma, comportamiento del panel, formato de copia y copia local."
+  },
+  "openPanelOnSaveLabel": {
+    "message": "Abrir panel al guardar"
+  },
+  "openPanelOnSaveHint": {
+    "message": "Abre automáticamente el panel lateral al guardar texto, un enlace o una imagen."
   },
   "privacyHeading": {
     "message": "Local por diseño"

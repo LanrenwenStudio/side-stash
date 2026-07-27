@@ -17,4 +17,6 @@ export type CopyFormat = 'plain' | 'markdown' | 'source';
 
 export type PanelPreferences = {
   copyFormat: CopyFormat;
+  /** When true, open the side panel after a successful save from the page. */
+  openPanelOnSave: boolean;
 };

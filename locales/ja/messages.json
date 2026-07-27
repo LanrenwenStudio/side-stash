@@ -5,6 +5,9 @@
   "extDescription": {
     "message": "テキスト・リンク・画像をサイドパネルに保存。検索・絞り込み・コピーができ、データは端末内のみ。"
   },
+  "menuSave": {
+    "message": "Side Stash に保存"
+  },
   "menuSaveText": {
     "message": "テキストをサイドパネルに保存"
   },
@@ -20,11 +23,41 @@
   "actionCopy": {
     "message": "コピー"
   },
+  "actionCopyImageUrl": {
+    "message": "画像 URL をコピー"
+  },
+  "actionCopyLinkUrl": {
+    "message": "リンク URL をコピー"
+  },
   "actionCut": {
     "message": "切り取り"
   },
   "actionOpen": {
     "message": "開く"
+  },
+  "actionDownloadImage": {
+    "message": "画像をダウンロード"
+  },
+  "downloadSelectedImages": {
+    "message": "ダウンロード"
+  },
+  "downloadImageSuccess": {
+    "message": "画像のダウンロードを開始しました。"
+  },
+  "downloadImagesSuccess": {
+    "message": "$1 枚の画像をダウンロード中。"
+  },
+  "downloadImagesPartial": {
+    "message": "$2 枚中 $1 枚をダウンロードしました。"
+  },
+  "downloadImageFailed": {
+    "message": "画像をダウンロードできませんでした。"
+  },
+  "downloadImageUnavailable": {
+    "message": "ダウンロードできる画像がありません。"
+  },
+  "downloadImageNoneSelected": {
+    "message": "画像が選択されていません。"
   },
   "confirmDelete": {
     "message": "この項目を削除しますか？"
@@ -204,7 +237,13 @@
     "message": "設定"
   },
   "settingsSubtitle": {
-    "message": "言語、コピー形式、ローカルバックアップ。"
+    "message": "言語、パネル動作、コピー形式、ローカルバックアップ。"
+  },
+  "openPanelOnSaveLabel": {
+    "message": "保存時にパネルを開く"
+  },
+  "openPanelOnSaveHint": {
+    "message": "テキスト・リンク・画像を保存すると、サイドパネルを自動で開きます。"
   },
   "privacyHeading": {
     "message": "ローカル設計"

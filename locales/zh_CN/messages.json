@@ -5,6 +5,9 @@
   "extDescription": {
     "message": "将文本、链接和图片保存到侧边栏。支持搜索、筛选与复制，数据仅存本机。"
   },
+  "menuSave": {
+    "message": "保存到 Side Stash"
+  },
   "menuSaveText": {
     "message": "保存文本到侧边栏"
   },
@@ -20,11 +23,41 @@
   "actionCopy": {
     "message": "复制"
   },
+  "actionCopyImageUrl": {
+    "message": "复制图片链接"
+  },
+  "actionCopyLinkUrl": {
+    "message": "复制链接地址"
+  },
   "actionCut": {
     "message": "剪切"
   },
   "actionOpen": {
     "message": "打开"
+  },
+  "actionDownloadImage": {
+    "message": "下载图片"
+  },
+  "downloadSelectedImages": {
+    "message": "下载"
+  },
+  "downloadImageSuccess": {
+    "message": "已开始下载图片。"
+  },
+  "downloadImagesSuccess": {
+    "message": "正在下载 $1 张图片。"
+  },
+  "downloadImagesPartial": {
+    "message": "已下载 $1 / $2 张图片。"
+  },
+  "downloadImageFailed": {
+    "message": "图片下载失败。"
+  },
+  "downloadImageUnavailable": {
+    "message": "没有可下载的图片。"
+  },
+  "downloadImageNoneSelected": {
+    "message": "未选中图片。"
   },
   "confirmDelete": {
     "message": "确定删除该条目？"
@@ -225,7 +258,13 @@
     "message": "设置"
   },
   "settingsSubtitle": {
-    "message": "语言、复制格式与本地备份。"
+    "message": "语言、侧边栏行为、复制格式与本地备份。"
+  },
+  "openPanelOnSaveLabel": {
+    "message": "保存时打开侧边栏"
+  },
+  "openPanelOnSaveHint": {
+    "message": "保存文本、链接或图片后，自动展开侧边栏。"
   },
   "privacyHeading": {
     "message": "本地优先"

@@ -5,6 +5,9 @@
   "extDescription": {
     "message": "將文字、連結與圖片儲存至側邊欄。支援搜尋、篩選與複製，資料僅存本機。"
   },
+  "menuSave": {
+    "message": "儲存到 Side Stash"
+  },
   "menuSaveText": {
     "message": "儲存文字至側邊欄"
   },
@@ -20,11 +23,41 @@
   "actionCopy": {
     "message": "複製"
   },
+  "actionCopyImageUrl": {
+    "message": "複製圖片連結"
+  },
+  "actionCopyLinkUrl": {
+    "message": "複製連結網址"
+  },
   "actionCut": {
     "message": "剪下"
   },
   "actionOpen": {
     "message": "開啟"
+  },
+  "actionDownloadImage": {
+    "message": "下載圖片"
+  },
+  "downloadSelectedImages": {
+    "message": "下載"
+  },
+  "downloadImageSuccess": {
+    "message": "已開始下載圖片。"
+  },
+  "downloadImagesSuccess": {
+    "message": "正在下載 $1 張圖片。"
+  },
+  "downloadImagesPartial": {
+    "message": "已下載 $1 / $2 張圖片。"
+  },
+  "downloadImageFailed": {
+    "message": "圖片下載失敗。"
+  },
+  "downloadImageUnavailable": {
+    "message": "沒有可下載的圖片。"
+  },
+  "downloadImageNoneSelected": {
+    "message": "未選取圖片。"
   },
   "confirmDelete": {
     "message": "確定刪除此項目？"
@@ -225,7 +258,13 @@
     "message": "設定"
   },
   "settingsSubtitle": {
-    "message": "語言、複製格式與本地備份。"
+    "message": "語言、側邊欄行為、複製格式與本地備份。"
+  },
+  "openPanelOnSaveLabel": {
+    "message": "儲存時開啟側邊欄"
+  },
+  "openPanelOnSaveHint": {
+    "message": "儲存文字、連結或圖片後，自動展開側邊欄。"
   },
   "privacyHeading": {
     "message": "本地優先"

@@ -5,6 +5,9 @@
   "extDescription": {
     "message": "Enregistrez texte, liens et images dans un panneau latéral privé. Recherchez, filtrez, copiez — en local."
   },
+  "menuSave": {
+    "message": "Enregistrer dans Side Stash"
+  },
   "menuSaveText": {
     "message": "Enregistrer le texte dans le panneau latéral"
   },
@@ -20,11 +23,41 @@
   "actionCopy": {
     "message": "Copier"
   },
+  "actionCopyImageUrl": {
+    "message": "Copier l’URL de l’image"
+  },
+  "actionCopyLinkUrl": {
+    "message": "Copier l’URL du lien"
+  },
   "actionCut": {
     "message": "Couper"
   },
   "actionOpen": {
     "message": "Ouvrir"
+  },
+  "actionDownloadImage": {
+    "message": "Télécharger l’image"
+  },
+  "downloadSelectedImages": {
+    "message": "Télécharger"
+  },
+  "downloadImageSuccess": {
+    "message": "Téléchargement de l’image démarré."
+  },
+  "downloadImagesSuccess": {
+    "message": "Téléchargement de $1 images."
+  },
+  "downloadImagesPartial": {
+    "message": "$1 images téléchargées sur $2."
+  },
+  "downloadImageFailed": {
+    "message": "Impossible de télécharger l’image."
+  },
+  "downloadImageUnavailable": {
+    "message": "Aucune image à télécharger."
+  },
+  "downloadImageNoneSelected": {
+    "message": "Aucune image sélectionnée."
   },
   "confirmDelete": {
     "message": "Supprimer cet élément ?"
@@ -204,7 +237,13 @@
     "message": "Paramètres"
   },
   "settingsSubtitle": {
-    "message": "Langue, format de copie et sauvegarde locale."
+    "message": "Langue, comportement du panneau, format de copie et sauvegarde locale."
+  },
+  "openPanelOnSaveLabel": {
+    "message": "Ouvrir le panneau à l’enregistrement"
+  },
+  "openPanelOnSaveHint": {
+    "message": "Ouvre automatiquement le panneau latéral après l’enregistrement d’un texte, d’un lien ou d’une image."
   },
   "privacyHeading": {
     "message": "Local par conception"
