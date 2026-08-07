@@ -249,7 +249,7 @@
     "message": "ローカル設計"
   },
   "privacyBody": {
-    "message": "データはこの端末の chrome.storage.local のみ。送信もトラッキングもありません。"
+    "message": "データはお使いのブラウザ内にのみ保存されます。アップロードや追跡は行われません。"
   },
   "onboardingKicker": {
     "message": "クイックスタート"
@@ -555,7 +555,7 @@
     "message": "Load test items (7)"
   },
   "debugToolsHeading": {
-    "message": "⚡ Debug & Testing"
+    "message": "⚡ テスト・補助ツール"
   },
   "debugSeedMockBtn": {
     "message": "Load Test Data"
@@ -571,5 +571,20 @@
   },
   "welcomeTryAllStashed": {
     "message": "All items saved to side panel"
+  },
+  "downloadZipTooltip": {
+    "message": "選択した画像をZIPで一括保存"
+  },
+  "downloadIndividualTooltip": {
+    "message": "選択した画像を1枚ずつダウンロード"
+  },
+  "settingsDescription": {
+    "message": "設定はこのデバイスに保存されます。"
+  },
+  "openPanelOnSaveDescription": {
+    "message": "テキスト、リンク、画像を保存した際に自動でサイドパネルを開きます。"
+  },
+  "backupHeading": {
+    "message": "バックアップとエクスポート"
   }
 }

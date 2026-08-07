@@ -285,7 +285,7 @@
     "message": "Local by design"
   },
   "privacyBody": {
-    "message": "Items stay in chrome.storage.local on this device. Nothing is uploaded or tracked."
+    "message": "Items are saved locally on this browser. Nothing is uploaded or tracked."
   },
   "onboardingKicker": {
     "message": "Quick start"
@@ -483,7 +483,7 @@
     "message": "Load test items (7)"
   },
   "debugToolsHeading": {
-    "message": "⚡ Debug & Testing"
+    "message": "⚡ Testing & Helper Tools"
   },
   "debugSeedMockBtn": {
     "message": "Load Test Data"
@@ -571,5 +571,20 @@
   },
   "sectionRecent": {
     "message": "Recent"
+  },
+  "downloadZipTooltip": {
+    "message": "Package selected images as ZIP"
+  },
+  "downloadIndividualTooltip": {
+    "message": "Download selected images individually"
+  },
+  "settingsDescription": {
+    "message": "Preferences are saved on this device."
+  },
+  "openPanelOnSaveDescription": {
+    "message": "Opens the panel immediately after you save text, links, or images."
+  },
+  "backupHeading": {
+    "message": "Backup & Export"
   }
 }

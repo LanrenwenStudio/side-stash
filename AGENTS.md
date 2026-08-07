@@ -1,5 +1,8 @@
 # Side Stash — agent notes
 
+This repository inherits `../AGENTS.md`. These notes may add stricter release
+steps but must not weaken the workspace build or GitHub Actions limits.
+
 ## Release / 发版
 
 When the user asks to release / ship / 发版 / publish:
@@ -21,8 +24,9 @@ When the user asks to release / ship / 发版 / publish:
 
 When the user asks only to package / zip / 打包 (no release wording):
 
-1. Run `npm run zip` (and Firefox zip if requested).
-2. Open `.output/` as above — never the repo root.
+1. Do not run `npm run zip` or any packaging build.
+2. Explain that packaging is reserved for an explicitly authorized release,
+   deployment, or shipping task under the workspace policy.
 
 ## Development / 开发
 

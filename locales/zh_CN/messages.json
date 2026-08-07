@@ -285,7 +285,7 @@
     "message": "本地优先"
   },
   "privacyBody": {
-    "message": "条目保存在本机 chrome.storage.local。不会上传，也不会追踪。"
+    "message": "条目保存在本机浏览器中。不会上传，也不会追踪。"
   },
   "onboardingKicker": {
     "message": "快速开始"
@@ -483,7 +483,7 @@
     "message": "填充测试数据 (7 条)"
   },
   "debugToolsHeading": {
-    "message": "⚡ Debug / 测试工具"
+    "message": "⚡ 辅助与测试工具"
   },
   "debugSeedMockBtn": {
     "message": "填充测试数据"
@@ -571,5 +571,20 @@
   },
   "sectionRecent": {
     "message": "最近"
+  },
+  "downloadZipTooltip": {
+    "message": "打包选中的图片为 ZIP 压缩包"
+  },
+  "downloadIndividualTooltip": {
+    "message": "逐张单独下载选中的图片"
+  },
+  "settingsDescription": {
+    "message": "偏好设置已保存在本设备。"
+  },
+  "openPanelOnSaveDescription": {
+    "message": "保存文本、链接或图片后，自动展开侧边栏。"
+  },
+  "backupHeading": {
+    "message": "备份与导出"
   }
 }

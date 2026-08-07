@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
-import { ChevronDown, Download, ExternalLink, Languages, Settings, Upload } from 'lucide-react';
+import { Check, ChevronDown, Download, ExternalLink, Languages, Settings, Upload } from 'lucide-react';
+import { cn } from '../lib/cn';
 import { t } from '../../../lib/i18n';
 import type { LanguageSelectValue } from '../../../lib/i18n';
 import type { CopyFormat } from '../types';
@@ -114,21 +115,41 @@ export function SettingsSheet({
             <label className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
               {t('copyFormatLabel', 'Copy format')}
             </label>
-            <div className="grid grid-cols-2 gap-2">
-              <Button
+            <div
+              className="grid grid-cols-2 gap-1 rounded-xl border border-zinc-200/90 bg-zinc-100/80 p-1 dark:border-zinc-800/90 dark:bg-zinc-900/80"
+              role="radiogroup"
+              aria-label={t('copyFormatLabel', 'Copy format')}
+            >
+              <button
                 type="button"
-                variant={copyFormat === 'plain' ? 'default' : 'secondary'}
+                role="radio"
+                aria-checked={copyFormat === 'plain'}
+                className={cn(
+                  'inline-flex h-8.5 items-center justify-center gap-1.5 rounded-lg text-xs font-medium transition-all duration-150 outline-none select-none cursor-pointer',
+                  copyFormat === 'plain'
+                    ? 'bg-zinc-950 text-white shadow-2xs font-semibold dark:bg-zinc-100 dark:text-zinc-950'
+                    : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
+                )}
                 onClick={() => onCopyFormatChange('plain')}
               >
-                {t('copyFormatPlain', 'Plain text')}
-              </Button>
-              <Button
+                {copyFormat === 'plain' ? <Check className="size-3.5" aria-hidden="true" /> : null}
+                <span>{t('copyFormatPlain', 'Plain text')}</span>
+              </button>
+              <button
                 type="button"
-                variant={copyFormat === 'markdown' ? 'default' : 'secondary'}
+                role="radio"
+                aria-checked={copyFormat === 'markdown'}
+                className={cn(
+                  'inline-flex h-8.5 items-center justify-center gap-1.5 rounded-lg text-xs font-medium transition-all duration-150 outline-none select-none cursor-pointer',
+                  copyFormat === 'markdown'
+                    ? 'bg-zinc-950 text-white shadow-2xs font-semibold dark:bg-zinc-100 dark:text-zinc-950'
+                    : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
+                )}
                 onClick={() => onCopyFormatChange('markdown')}
               >
-                {t('copyFormatMarkdown', 'Markdown')}
-              </Button>
+                {copyFormat === 'markdown' ? <Check className="size-3.5" aria-hidden="true" /> : null}
+                <span>{t('copyFormatMarkdown', 'Markdown')}</span>
+              </button>
             </div>
           </div>
 

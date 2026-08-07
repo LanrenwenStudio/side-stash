@@ -270,7 +270,7 @@
     "message": "本地優先"
   },
   "privacyBody": {
-    "message": "項目保存在本機 chrome.storage.local。不會上傳，也不會追蹤。"
+    "message": "條目儲存在本機瀏覽器中。不會上傳，也不會追蹤。"
   },
   "onboardingKicker": {
     "message": "快速開始"
@@ -555,7 +555,7 @@
     "message": "填充測試資料 (7 條)"
   },
   "debugToolsHeading": {
-    "message": "⚡ Debug / 測試工具"
+    "message": "⚡ 輔助與測試工具"
   },
   "debugSeedMockBtn": {
     "message": "填充測試資料"
@@ -571,5 +571,20 @@
   },
   "welcomeTryAllStashed": {
     "message": "已全存入側邊欄"
+  },
+  "downloadZipTooltip": {
+    "message": "打包選取的圖片為 ZIP 壓縮包"
+  },
+  "downloadIndividualTooltip": {
+    "message": "逐張單獨下載選取的圖片"
+  },
+  "settingsDescription": {
+    "message": "偏好設定已儲存在本裝置。"
+  },
+  "openPanelOnSaveDescription": {
+    "message": "儲存文字、連結或圖片後，自動展開側邊欄。"
+  },
+  "backupHeading": {
+    "message": "備份與匯出"
   }
 }

@@ -72,6 +72,24 @@ Package for Chrome Web Store:
 npm run zip
 ```
 
+## Publish to Chrome Web Store
+
+Configure the service-account settings once in `.env.submit` (copy
+`.env.submit.example` first). The JSON key can be shared by the Chrome
+extensions under the same Publisher account.
+
+Check authentication and Publisher access without uploading:
+
+```bash
+npm run publish:chrome:dry-run
+```
+
+Build, upload, and submit the current Chrome package:
+
+```bash
+npm run release:chrome
+```
+
 ---
 
 ## Project Structure

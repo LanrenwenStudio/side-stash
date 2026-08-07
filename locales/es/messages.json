@@ -249,7 +249,7 @@
     "message": "Local por diseño"
   },
   "privacyBody": {
-    "message": "Los elementos permanecen en chrome.storage.local de este dispositivo. Sin subidas ni seguimiento."
+    "message": "Los elementos se guardan localmente en este navegador. Nada se sube ni se rastrea."
   },
   "onboardingKicker": {
     "message": "Inicio rápido"
@@ -555,7 +555,7 @@
     "message": "Load test items (7)"
   },
   "debugToolsHeading": {
-    "message": "⚡ Debug & Testing"
+    "message": "⚡ Herramientas de prueba y ayuda"
   },
   "debugSeedMockBtn": {
     "message": "Load Test Data"
@@ -571,5 +571,20 @@
   },
   "welcomeTryAllStashed": {
     "message": "All items saved to side panel"
+  },
+  "downloadZipTooltip": {
+    "message": "Empaquetar imágenes seleccionadas como ZIP"
+  },
+  "downloadIndividualTooltip": {
+    "message": "Descargar imágenes seleccionadas individualmente"
+  },
+  "settingsDescription": {
+    "message": "Las preferencias se guardan en este dispositivo."
+  },
+  "openPanelOnSaveDescription": {
+    "message": "Abre automáticamente el panel después de guardar texto, enlaces o imágenes."
+  },
+  "backupHeading": {
+    "message": "Copia de seguridad y exportación"
   }
 }

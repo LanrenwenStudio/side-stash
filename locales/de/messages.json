@@ -249,7 +249,7 @@
     "message": "Lokal by Design"
   },
   "privacyBody": {
-    "message": "Einträge bleiben in chrome.storage.local auf diesem Gerät. Kein Upload, kein Tracking."
+    "message": "Einträge werden lokal in diesem Browser gespeichert. Nichts wird hochgeladen oder verfolgt."
   },
   "onboardingKicker": {
     "message": "Schnellstart"
@@ -555,7 +555,7 @@
     "message": "Load test items (7)"
   },
   "debugToolsHeading": {
-    "message": "⚡ Debug & Testing"
+    "message": "⚡ Test- und Hilfswerkzeuge"
   },
   "debugSeedMockBtn": {
     "message": "Load Test Data"
@@ -571,5 +571,20 @@
   },
   "welcomeTryAllStashed": {
     "message": "All items saved to side panel"
+  },
+  "downloadZipTooltip": {
+    "message": "Ausgewählte Bilder als ZIP packen"
+  },
+  "downloadIndividualTooltip": {
+    "message": "Ausgewählte Bilder einzeln herunterladen"
+  },
+  "settingsDescription": {
+    "message": "Einstellungen werden auf diesem Gerät gespeichert."
+  },
+  "openPanelOnSaveDescription": {
+    "message": "Öffnet das Panel automatisch nach dem Speichern von Texten, Links oder Bildern."
+  },
+  "backupHeading": {
+    "message": "Sicherung & Export"
   }
 }

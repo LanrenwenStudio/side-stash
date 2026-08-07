@@ -740,7 +740,7 @@ export function App() {
                 <p className="m-0 text-[11px] font-medium leading-snug text-amber-900 dark:text-amber-200">
                   {t(
                     'pinTipBodyShort',
-                    '点击右上角图钉图标（📌）将 Side Stash 固定到工具栏',
+                    'Click the top-right Pin icon (📌) to pin Side Stash',
                   )}
                 </p>
               </div>
@@ -751,11 +751,11 @@ export function App() {
                   className="inline-flex h-6.5 items-center justify-center rounded-lg bg-amber-900 px-2.5 text-[10.5px] font-semibold text-white shadow-2xs transition-colors hover:bg-amber-950 dark:bg-amber-100 dark:text-amber-950 dark:hover:bg-white"
                   onClick={handleDismissPinTip}
                 >
-                  {t('pinTipGotIt', '知道了')}
+                  {t('pinTipGotIt', 'Got it')}
                 </button>
                 <button
                   type="button"
-                  aria-label={t('pinTipGotIt', 'Close')}
+                  aria-label={t('pinTipGotIt', 'Got it')}
                   className="shrink-0 text-amber-700 hover:text-amber-950 dark:text-amber-400 dark:hover:text-amber-100"
                   onClick={handleDismissPinTip}
                 >

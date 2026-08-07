@@ -249,7 +249,7 @@
     "message": "로컬 우선"
   },
   "privacyBody": {
-    "message": "항목은 이 기기의 chrome.storage.local에만 저장됩니다. 업로드·추적이 없습니다."
+    "message": "데이터는 이 브라우저에만 로컬로 저장됩니다. 업로드되거나 추적되지 않습니다."
   },
   "onboardingKicker": {
     "message": "빠른 시작"
@@ -555,7 +555,7 @@
     "message": "Load test items (7)"
   },
   "debugToolsHeading": {
-    "message": "⚡ Debug & Testing"
+    "message": "⚡ 테스트 및 도구"
   },
   "debugSeedMockBtn": {
     "message": "Load Test Data"
@@ -571,5 +571,20 @@
   },
   "welcomeTryAllStashed": {
     "message": "All items saved to side panel"
+  },
+  "downloadZipTooltip": {
+    "message": "선택한 이미지를 ZIP으로 압축 다운로드"
+  },
+  "downloadIndividualTooltip": {
+    "message": "선택한 이미지를 개별 다운로드"
+  },
+  "settingsDescription": {
+    "message": "설정은 이 기기에 저장됩니다."
+  },
+  "openPanelOnSaveDescription": {
+    "message": "텍스트, 링크, 이미지를 저장할 때 자동으로 사이드 패널을 엽니다."
+  },
+  "backupHeading": {
+    "message": "백업 및 내보내기"
   }
 }

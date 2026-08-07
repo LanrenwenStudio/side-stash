@@ -182,7 +182,7 @@ export function ItemRow({
         </button>
 
         <div className="flex w-7 shrink-0 justify-end self-start">
-          <ActionTooltip content={item.pinned ? t('actionUnpin', '取消置顶') : t('actionPin', '置顶此项')}>
+          <ActionTooltip content={item.pinned ? t('actionUnpin', 'Unpin') : t('actionPin', 'Pin')}>
             <Button
               aria-label={item.pinned ? t('actionUnpin', 'Unpin') : t('actionPin', 'Pin')}
               className={cn(
@@ -207,7 +207,7 @@ export function ItemRow({
         {/* Secondary actions toolbar inside card */}
         <div className="col-span-3 -mx-0.5 mt-1 flex flex-wrap items-center justify-end gap-0.5 border-t border-zinc-100/80 pt-1.5 dark:border-zinc-800/60">
           {openUrl ? (
-            <ActionTooltip content={t('actionOpen', '打开链接')}>
+            <ActionTooltip content={t('actionOpen', 'Open')}>
               <Button
                 aria-label={t('actionOpen', 'Open')}
                 className={iconBtnClass}
@@ -221,7 +221,7 @@ export function ItemRow({
             </ActionTooltip>
           ) : null}
           {item.type === 'image' && item.imageUrl ? (
-            <ActionTooltip content={t('actionDownloadImage', '下载此原图')}>
+            <ActionTooltip content={t('actionDownloadImage', 'Download image')}>
               <Button
                 aria-label={t('actionDownloadImage', 'Download image')}
                 className={iconBtnClass}
@@ -246,7 +246,7 @@ export function ItemRow({
               <Copy className="size-3.5" aria-hidden="true" />
             </Button>
           </ActionTooltip>
-          <ActionTooltip content={t('actionCut', '剪切此项')}>
+          <ActionTooltip content={t('actionCut', 'Cut')}>
             <Button
               aria-label={t('actionCut', 'Cut')}
               className={iconBtnClass}
@@ -258,7 +258,7 @@ export function ItemRow({
               <Scissors className="size-3.5" aria-hidden="true" />
             </Button>
           </ActionTooltip>
-          <ActionTooltip content={t('actionDelete', '删除此项')}>
+          <ActionTooltip content={t('actionDelete', 'Delete')}>
             <Button
               aria-label={t('actionDelete', 'Delete')}
               className={cn(

@@ -10,6 +10,9 @@
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
     "zip": "wxt zip",
+    "publish:chrome:dry-run": "node scripts/publish-chrome.mjs --dry-run",
+    "publish:chrome": "node scripts/publish-chrome.mjs",
+    "release:chrome": "npm run zip && npm run publish:chrome",
     "zip:firefox": "wxt zip -b firefox",
     "postinstall": "wxt prepare"
   },
