@@ -3,6 +3,8 @@ import { join } from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'wxt';
 
+import pkg from './package.json';
+
 function syncLocalesToPublic() {
   const sourceRoot = join(process.cwd(), 'locales');
   const targetRoot = join(process.cwd(), 'public', '_locales');
@@ -38,7 +40,7 @@ export default defineConfig({
     name: '__MSG_extName__',
     description: '__MSG_extDescription__',
     default_locale: 'en',
-    version: '0.1.6',
+    version: pkg.version,
     permissions: ['contextMenus', 'storage', 'tabs', 'downloads'],
     host_permissions: ['<all_urls>'],
     icons: {
