@@ -581,6 +581,15 @@
   "settingsDescription": {
     "message": "偏好設定已儲存在本裝置。"
   },
+  "shortcutLabel": {
+    "message": "儲存選取範圍快捷鍵"
+  },
+  "shortcutDescription": {
+    "message": "可在 Chrome 中更改，避免快捷鍵衝突。"
+  },
+  "shortcutConfigure": {
+    "message": "設定快捷鍵"
+  },
   "openPanelOnSaveDescription": {
     "message": "儲存文字、連結或圖片後，自動展開側邊欄。"
   },

@@ -581,6 +581,15 @@
   "settingsDescription": {
     "message": "Einstellungen werden auf diesem Gerät gespeichert."
   },
+  "shortcutLabel": {
+    "message": "Tastenkürzel zum Speichern der Auswahl"
+  },
+  "shortcutDescription": {
+    "message": "In Chrome ändern, um Konflikte zu vermeiden."
+  },
+  "shortcutConfigure": {
+    "message": "Tastenkürzel festlegen"
+  },
   "openPanelOnSaveDescription": {
     "message": "Öffnet das Panel automatisch nach dem Speichern von Texten, Links oder Bildern."
   },

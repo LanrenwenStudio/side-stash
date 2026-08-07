@@ -581,6 +581,15 @@
   "settingsDescription": {
     "message": "Les préférences sont enregistrées sur cet appareil."
   },
+  "shortcutLabel": {
+    "message": "Raccourci pour enregistrer la sélection"
+  },
+  "shortcutDescription": {
+    "message": "Modifiez-le dans Chrome pour éviter les conflits."
+  },
+  "shortcutConfigure": {
+    "message": "Configurer le raccourci"
+  },
   "openPanelOnSaveDescription": {
     "message": "Ouvre automatiquement le panneau après l'enregistrement de textes, liens ou images."
   },

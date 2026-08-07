@@ -339,7 +339,7 @@
     "message": "Keyboard shortcut"
   },
   "welcomeStep2Body": {
-    "message": "Select text and press Alt+S to save your selection instantly without right-clicking."
+    "message": "Select text and press your configured shortcut to save your selection instantly without right-clicking."
   },
   "welcomeStep3Title": {
     "message": "One-click toolbar access"
@@ -580,6 +580,15 @@
   },
   "settingsDescription": {
     "message": "Preferences are saved on this device."
+  },
+  "shortcutLabel": {
+    "message": "Save selection shortcut"
+  },
+  "shortcutDescription": {
+    "message": "Change it in Chrome to avoid conflicts."
+  },
+  "shortcutConfigure": {
+    "message": "Set shortcut"
   },
   "openPanelOnSaveDescription": {
     "message": "Opens the panel immediately after you save text, links, or images."

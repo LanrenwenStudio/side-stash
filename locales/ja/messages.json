@@ -581,6 +581,15 @@
   "settingsDescription": {
     "message": "設定はこのデバイスに保存されます。"
   },
+  "shortcutLabel": {
+    "message": "選択範囲を保存するショートカット"
+  },
+  "shortcutDescription": {
+    "message": "Chrome で変更して競合を避けられます。"
+  },
+  "shortcutConfigure": {
+    "message": "ショートカットを設定"
+  },
   "openPanelOnSaveDescription": {
     "message": "テキスト、リンク、画像を保存した際に自動でサイドパネルを開きます。"
   },

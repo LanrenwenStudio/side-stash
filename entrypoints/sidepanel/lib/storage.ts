@@ -24,13 +24,13 @@ export async function getItems(): Promise<SavedItem[]> {
     return stored[STORAGE_KEY] as SavedItem[];
   }
 
-  // First run seed with default mock items for testing
+  // Production installs start empty; the dev-only UI can seed mock items explicitly.
   if (!stored[INITIALIZED_KEY]) {
     await browser.storage.local.set({
-      [STORAGE_KEY]: MOCK_ITEMS,
+      [STORAGE_KEY]: [],
       [INITIALIZED_KEY]: true,
     });
-    return MOCK_ITEMS;
+    return [];
   }
 
   return [];

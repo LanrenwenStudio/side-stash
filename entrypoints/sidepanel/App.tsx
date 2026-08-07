@@ -51,6 +51,8 @@ type DeleteState =
   | { ids: string[]; itemLabel: string; message: string }
   | null;
 
+const isDev = import.meta.env.DEV;
+
 export function App() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [, setLanguageVersion] = useState(0);
@@ -830,10 +832,10 @@ export function App() {
               onImportFile={(file) => {
                 void handleImportFile(file);
               }}
-              onSeedMockData={handleSeedMockData}
-              onClearAllData={handleClearAllData}
-              onOpenWelcomePage={handleOpenWelcomePage}
-              onResetPinTip={handleResetPinTip}
+              onSeedMockData={isDev ? handleSeedMockData : undefined}
+              onClearAllData={isDev ? handleClearAllData : undefined}
+              onOpenWelcomePage={isDev ? handleOpenWelcomePage : undefined}
+              onResetPinTip={isDev ? handleResetPinTip : undefined}
             />
           </div>
 
@@ -843,7 +845,7 @@ export function App() {
                 hasActiveFilters={hasActiveFilters}
                 hasItems={items.length > 0}
                 onResetFilters={handleResetFilters}
-                onLoadMockData={handleSeedMockData}
+                onLoadMockData={isDev ? handleSeedMockData : undefined}
               />
             ) : (
               <ItemList

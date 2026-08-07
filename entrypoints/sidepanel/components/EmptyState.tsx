@@ -45,7 +45,7 @@ export function EmptyState({
       title: t('onboardingStep1Title', 'Right-click to save'),
       body: t(
         'onboardingStep1Body',
-        'Select text, or right-click a link or image, then choose Save to side panel. Shortcut: Alt+S.',
+        'Select text, or right-click a link or image, then choose Save to side panel. You can customize the shortcut in Chrome.',
       ),
     },
     {
@@ -82,7 +82,7 @@ export function EmptyState({
           <p className="m-0 max-w-[280px] text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
             {t(
               'emptyHint',
-              'Right-click on a page to save text, links, or images. Or press Alt+S on a selection.',
+              'Right-click on a page to save text, links, or images, or use your configured shortcut on a selection.',
             )}
           </p>
           {onLoadMockData ? (

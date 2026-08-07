@@ -339,7 +339,7 @@
     "message": "快捷键高效暂存"
   },
   "welcomeStep2Body": {
-    "message": "选中文本后按 Alt+S，无需右键即可快速保存选区。"
+    "message": "选中文本后按你设置的快捷键，无需右键即可快速保存选区。"
   },
   "welcomeStep3Title": {
     "message": "工具栏一键查看"
@@ -580,6 +580,15 @@
   },
   "settingsDescription": {
     "message": "偏好设置已保存在本设备。"
+  },
+  "shortcutLabel": {
+    "message": "保存选区快捷键"
+  },
+  "shortcutDescription": {
+    "message": "可在 Chrome 中更改，避免快捷键冲突。"
+  },
+  "shortcutConfigure": {
+    "message": "设置快捷键"
   },
   "openPanelOnSaveDescription": {
     "message": "保存文本、链接或图片后，自动展开侧边栏。"

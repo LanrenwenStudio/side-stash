@@ -581,6 +581,15 @@
   "settingsDescription": {
     "message": "Las preferencias se guardan en este dispositivo."
   },
+  "shortcutLabel": {
+    "message": "Atajo para guardar la selección"
+  },
+  "shortcutDescription": {
+    "message": "Cámbialo en Chrome para evitar conflictos."
+  },
+  "shortcutConfigure": {
+    "message": "Configurar atajo"
+  },
   "openPanelOnSaveDescription": {
     "message": "Abre automáticamente el panel después de guardar texto, enlaces o imágenes."
   },

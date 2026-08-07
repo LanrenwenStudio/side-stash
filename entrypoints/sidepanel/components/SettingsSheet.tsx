@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Check,
   ChevronDown,
@@ -11,6 +11,7 @@ import {
   Sun,
   Upload,
 } from 'lucide-react';
+import { browser } from 'wxt/browser';
 import { cn } from '../lib/cn';
 import { t } from '../../../lib/i18n';
 import type { LanguageSelectValue } from '../../../lib/i18n';
@@ -44,6 +45,8 @@ type SettingsSheetProps = {
   onResetPinTip?: () => void;
 };
 
+const SAVE_SELECTION_COMMAND = 'save-selection';
+
 export function SettingsSheet({
   languageSelectValue,
   resolvedLocaleLabel,
@@ -63,6 +66,30 @@ export function SettingsSheet({
   onResetPinTip,
 }: SettingsSheetProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [shortcut, setShortcut] = useState('Alt+S');
+
+  useEffect(() => {
+    let active = true;
+
+    const loadShortcut = async () => {
+      try {
+        const commands = await browser.commands.getAll();
+        const command = commands.find(({ name }) => name === SAVE_SELECTION_COMMAND);
+        if (active) {
+          setShortcut(command?.shortcut || '');
+        }
+      } catch {
+        // Keep the manifest default if the browser cannot report shortcuts.
+      }
+    };
+
+    void loadShortcut();
+    window.addEventListener('focus', loadShortcut);
+    return () => {
+      active = false;
+      window.removeEventListener('focus', loadShortcut);
+    };
+  }, []);
 
   return (
     <Dialog>
@@ -180,6 +207,39 @@ export function SettingsSheet({
                 <Moon className="size-3.5" aria-hidden="true" />
                 <span>{t('themeDark', 'Dark')}</span>
               </button>
+            </div>
+          </div>
+
+          {/* Keyboard Shortcut */}
+          <div className="grid gap-1.5">
+            <p className="m-0 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+              {t('shortcutLabel', 'Save selection shortcut')}
+            </p>
+            <div className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200/90 bg-zinc-50/70 p-3 dark:border-zinc-800 dark:bg-zinc-900/60">
+              <p className="m-0 min-w-0 text-[11px] leading-snug text-zinc-500 dark:text-zinc-400">
+                {t('shortcutDescription', 'Change it in Chrome to avoid conflicts.')}
+              </p>
+              <div className="flex shrink-0 items-center gap-2">
+                <kbd className="rounded-lg border border-zinc-200 bg-white px-2 py-1 font-mono text-[11px] text-zinc-700 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200">
+                  {shortcut || '—'}
+                </kbd>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  className="shrink-0 gap-1.5"
+                  onClick={() => {
+                    if (browser.tabs?.create) {
+                      void browser.tabs
+                        .create({ url: 'chrome://extensions/shortcuts' })
+                        .catch(() => undefined);
+                    }
+                  }}
+                >
+                  <ExternalLink className="size-3.5" aria-hidden="true" />
+                  {t('shortcutConfigure', 'Set shortcut')}
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -323,9 +383,6 @@ export function SettingsSheet({
                 'privacyBody',
                 'Items stay in chrome.storage.local on this device. Nothing is uploaded or tracked.',
               )}
-            </p>
-            <p className="mt-2 mb-0 font-mono text-[10.5px] text-zinc-600 dark:text-zinc-400">
-              {t('shortcutHint', 'Shortcut: Alt+S saves the current selection.')}
             </p>
           </div>
         </div>

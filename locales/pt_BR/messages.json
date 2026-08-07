@@ -581,6 +581,15 @@
   "settingsDescription": {
     "message": "As preferências são salvas neste dispositivo."
   },
+  "shortcutLabel": {
+    "message": "Atalho para salvar a seleção"
+  },
+  "shortcutDescription": {
+    "message": "Altere no Chrome para evitar conflitos."
+  },
+  "shortcutConfigure": {
+    "message": "Configurar atalho"
+  },
   "openPanelOnSaveDescription": {
     "message": "Abre automaticamente o painel após salvar texto, links ou imagens."
   },

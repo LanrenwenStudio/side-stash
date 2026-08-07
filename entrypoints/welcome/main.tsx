@@ -157,7 +157,7 @@ function WelcomeApp() {
       title: t('welcomeStep2Title', 'Keyboard shortcut'),
       body: t(
         'welcomeStep2Body',
-        'Select text and press Alt+S to save your selection instantly without right-clicking.',
+        'Select text and press your configured shortcut to save your selection instantly without right-clicking.',
       ),
     },
     {
