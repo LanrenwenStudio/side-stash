@@ -1,14 +1,25 @@
 @import "tailwindcss";
 
+/* Scan extension sidepanel sources so shared UI classes are not purged */
+@source "../../entrypoints/sidepanel/**/*.{ts,tsx}";
+@source "../../lib/**/*.{ts,tsx}";
+
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  /* Match extension sidepanel tokens */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Segoe UI Variable", "Inter", system-ui, sans-serif;
+  --color-paper: #faf9f6;
+  --color-ink: #09090b;
+  --color-copper: #b86f3d;
+  --color-copper-soft: #d9935d;
+  --color-sky: #178fcb;
 }
 
 @layer base {
   :root {
-    color-scheme: dark light;
+    color-scheme: light dark;
   }
 
   html {
@@ -19,38 +30,115 @@
   body {
     margin: 0;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  html.dark body {
+    background: #09090b;
+    color: #f4f4f5;
+  }
+
+  ::selection {
+    background: #09090b;
+    color: #ffffff;
+  }
+
+  html.dark ::selection {
+    background: #f4f4f5;
+    color: #09090b;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(161, 161, 170, 0.4) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(161, 161, 170, 0.35);
+    border-radius: 9999px;
   }
 }
 
-/* Custom Utilities & Keyframe Animations */
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.05); }
+/* Subtle paper grain — keeps the site from feeling flat */
+.site-grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.animate-pulse-glow {
-  animation: pulseGlow 6s ease-in-out infinite;
+html.dark .site-grain {
+  opacity: 0.05;
 }
 
-@keyframes floatSmooth {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+/* Soft ambient glow behind the product panel */
+.panel-ambient {
+  background:
+    radial-gradient(ellipse 70% 55% at 70% 40%, rgb(184 111 61 / 0.12), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgb(23 143 203 / 0.08), transparent 55%);
 }
 
-.animate-float {
-  animation: floatSmooth 4s ease-in-out infinite;
+html.dark .panel-ambient {
+  background:
+    radial-gradient(ellipse 70% 55% at 70% 40%, rgb(217 147 93 / 0.1), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgb(114 206 247 / 0.06), transparent 55%);
 }
 
-.glass-panel {
-  background: rgba(24, 24, 27, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
-.light .glass-panel {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+.animate-float-soft {
+  animation: float-soft 5.5s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.55s ease-out both;
+}
+
+.animate-fade-up-delay-1 {
+  animation: fade-up 0.55s ease-out 0.08s both;
+}
+
+.animate-fade-up-delay-2 {
+  animation: fade-up 0.55s ease-out 0.16s both;
 }
