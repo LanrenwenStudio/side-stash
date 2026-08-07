@@ -11,3 +11,6 @@ public/_locales/
 
 # local imagegen intermediates (final assets live in docs/store-assets/)
 docs/imagegen-store-assets/
+
+dist-website/
+

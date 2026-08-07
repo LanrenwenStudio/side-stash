@@ -14,6 +14,8 @@
     "publish:chrome": "node scripts/publish-chrome.mjs",
     "release:chrome": "npm run zip && npm run publish:chrome",
     "zip:firefox": "wxt zip -b firefox",
+    "dev:website": "vite website",
+    "build:website": "vite build website --outDir dist-website",
     "postinstall": "wxt prepare"
   },
   "keywords": [],
