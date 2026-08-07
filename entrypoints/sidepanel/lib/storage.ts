@@ -1,5 +1,5 @@
 import { browser } from 'wxt/browser';
-import type { CopyFormat, PanelPreferences, SavedItem } from '../types';
+import type { CopyFormat, PanelPreferences, SavedItem, ThemeMode } from '../types';
 
 import { MOCK_ITEMS } from './mockData';
 
@@ -10,6 +10,7 @@ const PREFERENCES_KEY = 'panelPreferences';
 const DEFAULT_PREFERENCES: PanelPreferences = {
   copyFormat: 'plain',
   openPanelOnSave: true,
+  themeMode: 'system',
 };
 
 export async function getItems(): Promise<SavedItem[]> {
@@ -131,7 +132,12 @@ function sanitizePreferences(value: unknown): PanelPreferences {
       ? candidate.openPanelOnSave
       : DEFAULT_PREFERENCES.openPanelOnSave;
 
-  return { copyFormat, openPanelOnSave };
+  const themeMode: ThemeMode =
+    candidate.themeMode === 'light' || candidate.themeMode === 'dark'
+      ? candidate.themeMode
+      : 'system';
+
+  return { copyFormat, openPanelOnSave, themeMode };
 }
 
 export async function getPanelPreferences(): Promise<PanelPreferences> {

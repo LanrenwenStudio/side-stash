@@ -22,6 +22,9 @@ import {
   t,
   type LanguageSelectValue,
 } from '../../lib/i18n';
+import type { ThemeMode } from '../sidepanel/types';
+import { applyTheme, setupThemeListener } from '../sidepanel/lib/theme';
+import { getPanelPreferences, subscribeToPreferences } from '../sidepanel/lib/storage';
 import '../sidepanel/style.css';
 
 type SidePanelApi = {
@@ -92,8 +95,36 @@ async function saveDemoItems(
 function WelcomeApp() {
   const [, setLanguageVersion] = useState(0);
   const [activeFeedback, setActiveFeedback] = useState<string | null>(null);
+  const [themeMode, setThemeMode] = useState<ThemeMode>('system');
   const languageSelectValue = getLanguageSelectValue();
   const resolvedLocale = getResolvedLocale();
+
+  useEffect(() => {
+    let active = true;
+
+    void getPanelPreferences().then((prefs) => {
+      if (!active) {
+        return;
+      }
+      setThemeMode(prefs.themeMode);
+      applyTheme(prefs.themeMode);
+    });
+
+    const unsubscribe = subscribeToPreferences((prefs) => {
+      setThemeMode(prefs.themeMode);
+      applyTheme(prefs.themeMode);
+    });
+
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    applyTheme(themeMode);
+    return setupThemeListener(() => themeMode);
+  }, [themeMode]);
 
   useEffect(() => {
     return subscribeToLanguageChange(() => {

@@ -586,5 +586,17 @@
   },
   "backupHeading": {
     "message": "Backup & Export"
+  },
+  "themeLabel": {
+    "message": "Theme"
+  },
+  "themeSystem": {
+    "message": "System"
+  },
+  "themeLight": {
+    "message": "Light"
+  },
+  "themeDark": {
+    "message": "Dark"
   }
 }

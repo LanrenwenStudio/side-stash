@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* Side Stash Theme Tokens */
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI Variable", "Inter", system-ui, sans-serif;
@@ -32,11 +34,10 @@
     text-rendering: optimizeLegibility;
   }
 
-  @media (prefers-color-scheme: dark) {
-    body {
-      color: #f4f4f5;
-      background: #09090b;
-    }
+  :root.dark body,
+  html.dark body {
+    color: #f4f4f5;
+    background: #09090b;
   }
 
   button,

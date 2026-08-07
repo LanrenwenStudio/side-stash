@@ -17,7 +17,7 @@ import {
 import { cn } from '../lib/cn';
 import { t } from '../../../lib/i18n';
 import type { LanguageSelectValue } from '../../../lib/i18n';
-import type { CopyFormat, DateFilter, ItemFilter } from '../types';
+import type { CopyFormat, DateFilter, ItemFilter, ThemeMode } from '../types';
 import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
 import { SettingsSheet } from './SettingsSheet';
@@ -43,6 +43,7 @@ type FilterBarProps = {
   selectedImageCount: number;
   copyFormat: CopyFormat;
   openPanelOnSave: boolean;
+  themeMode: ThemeMode;
   languageSelectValue: LanguageSelectValue;
   resolvedLocaleLabel: string;
   onClearQuery: () => void;
@@ -59,6 +60,7 @@ type FilterBarProps = {
   onLanguageChange: (value: LanguageSelectValue) => void;
   onCopyFormatChange: (format: CopyFormat) => void;
   onOpenPanelOnSaveChange: (enabled: boolean) => void;
+  onThemeModeChange: (mode: ThemeMode) => void;
   onExportJson: () => void;
   onExportMarkdown: () => void;
   onImportFile: (file: File) => void;
@@ -86,6 +88,7 @@ export function FilterBar({
   selectedImageCount,
   copyFormat,
   openPanelOnSave,
+  themeMode,
   languageSelectValue,
   resolvedLocaleLabel,
   onClearQuery,
@@ -102,6 +105,7 @@ export function FilterBar({
   onLanguageChange,
   onCopyFormatChange,
   onOpenPanelOnSaveChange,
+  onThemeModeChange,
   onExportJson,
   onExportMarkdown,
   onImportFile,
@@ -145,10 +149,12 @@ export function FilterBar({
         <SettingsSheet
           copyFormat={copyFormat}
           openPanelOnSave={openPanelOnSave}
+          themeMode={themeMode}
           languageSelectValue={languageSelectValue}
           resolvedLocaleLabel={resolvedLocaleLabel}
           onCopyFormatChange={onCopyFormatChange}
           onOpenPanelOnSaveChange={onOpenPanelOnSaveChange}
+          onThemeModeChange={onThemeModeChange}
           onExportJson={onExportJson}
           onExportMarkdown={onExportMarkdown}
           onImportFile={onImportFile}

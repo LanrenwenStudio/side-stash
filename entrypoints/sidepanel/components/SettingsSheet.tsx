@@ -1,9 +1,20 @@
 import React, { useRef } from 'react';
-import { Check, ChevronDown, Download, ExternalLink, Languages, Settings, Upload } from 'lucide-react';
+import {
+  Check,
+  ChevronDown,
+  Download,
+  ExternalLink,
+  Languages,
+  Monitor,
+  Moon,
+  Settings,
+  Sun,
+  Upload,
+} from 'lucide-react';
 import { cn } from '../lib/cn';
 import { t } from '../../../lib/i18n';
 import type { LanguageSelectValue } from '../../../lib/i18n';
-import type { CopyFormat } from '../types';
+import type { CopyFormat, ThemeMode } from '../types';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -19,9 +30,11 @@ type SettingsSheetProps = {
   resolvedLocaleLabel: string;
   copyFormat: CopyFormat;
   openPanelOnSave: boolean;
+  themeMode: ThemeMode;
   onLanguageChange: (value: LanguageSelectValue) => void;
   onCopyFormatChange: (format: CopyFormat) => void;
   onOpenPanelOnSaveChange: (enabled: boolean) => void;
+  onThemeModeChange: (mode: ThemeMode) => void;
   onExportJson: () => void;
   onExportMarkdown: () => void;
   onImportFile: (file: File) => void;
@@ -36,9 +49,11 @@ export function SettingsSheet({
   resolvedLocaleLabel,
   copyFormat,
   openPanelOnSave,
+  themeMode,
   onLanguageChange,
   onCopyFormatChange,
   onOpenPanelOnSaveChange,
+  onThemeModeChange,
   onExportJson,
   onExportMarkdown,
   onImportFile,
@@ -107,6 +122,64 @@ export function SettingsSheet({
                 aria-hidden="true"
                 className="pointer-events-none absolute top-1/2 right-2.5 size-4 -translate-y-1/2 text-zinc-400"
               />
+            </div>
+          </div>
+
+          {/* Theme Setting */}
+          <div className="grid gap-1.5">
+            <label className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+              {t('themeLabel', 'Theme')}
+            </label>
+            <div
+              className="grid grid-cols-3 gap-1 rounded-xl border border-zinc-200/90 bg-zinc-100/80 p-1 dark:border-zinc-800/90 dark:bg-zinc-900/80"
+              role="radiogroup"
+              aria-label={t('themeLabel', 'Theme')}
+            >
+              <button
+                type="button"
+                role="radio"
+                aria-checked={themeMode === 'system'}
+                className={cn(
+                  'inline-flex h-8.5 items-center justify-center gap-1.5 rounded-lg text-xs font-medium transition-all duration-150 outline-none select-none cursor-pointer',
+                  themeMode === 'system'
+                    ? 'bg-zinc-950 text-white shadow-2xs font-semibold dark:bg-zinc-100 dark:text-zinc-950'
+                    : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
+                )}
+                onClick={() => onThemeModeChange('system')}
+              >
+                <Monitor className="size-3.5" aria-hidden="true" />
+                <span>{t('themeSystem', 'System')}</span>
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={themeMode === 'light'}
+                className={cn(
+                  'inline-flex h-8.5 items-center justify-center gap-1.5 rounded-lg text-xs font-medium transition-all duration-150 outline-none select-none cursor-pointer',
+                  themeMode === 'light'
+                    ? 'bg-zinc-950 text-white shadow-2xs font-semibold dark:bg-zinc-100 dark:text-zinc-950'
+                    : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
+                )}
+                onClick={() => onThemeModeChange('light')}
+              >
+                <Sun className="size-3.5" aria-hidden="true" />
+                <span>{t('themeLight', 'Light')}</span>
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={themeMode === 'dark'}
+                className={cn(
+                  'inline-flex h-8.5 items-center justify-center gap-1.5 rounded-lg text-xs font-medium transition-all duration-150 outline-none select-none cursor-pointer',
+                  themeMode === 'dark'
+                    ? 'bg-zinc-950 text-white shadow-2xs font-semibold dark:bg-zinc-100 dark:text-zinc-950'
+                    : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
+                )}
+                onClick={() => onThemeModeChange('dark')}
+              >
+                <Moon className="size-3.5" aria-hidden="true" />
+                <span>{t('themeDark', 'Dark')}</span>
+              </button>
             </div>
           </div>
 

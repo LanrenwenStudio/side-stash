@@ -43,7 +43,8 @@ import {
   downloadImagesZip,
 } from './lib/download';
 import { downloadTextFile, readTextFile } from './lib/transfer';
-import type { CopyFormat, DateFilter, ItemFilter, SavedItem } from './types';
+import type { CopyFormat, DateFilter, ItemFilter, SavedItem, ThemeMode } from './types';
+import { applyTheme, setupThemeListener } from './lib/theme';
 import { TooltipProvider } from './components/ui/tooltip';
 
 type DeleteState =
@@ -62,6 +63,7 @@ export function App() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [copyFormat, setCopyFormat] = useState<CopyFormat>('plain');
   const [openPanelOnSave, setOpenPanelOnSave] = useState(true);
+  const [themeMode, setThemeMode] = useState<ThemeMode>('system');
   const [toast, setToast] = useState<{
     message: string;
     type?: 'success' | 'warning' | 'error' | 'info';
@@ -173,11 +175,15 @@ export function App() {
       }
       setCopyFormat(prefs.copyFormat);
       setOpenPanelOnSave(prefs.openPanelOnSave);
+      setThemeMode(prefs.themeMode);
+      applyTheme(prefs.themeMode);
     });
 
     const unsubscribe = subscribeToPreferences((prefs) => {
       setCopyFormat(prefs.copyFormat);
       setOpenPanelOnSave(prefs.openPanelOnSave);
+      setThemeMode(prefs.themeMode);
+      applyTheme(prefs.themeMode);
     });
 
     return () => {
@@ -185,6 +191,11 @@ export function App() {
       unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    applyTheme(themeMode);
+    return setupThemeListener(() => themeMode);
+  }, [themeMode]);
 
   useEffect(() => {
     setSelectedIds((previous) => {
@@ -606,6 +617,12 @@ export function App() {
     void setPanelPreferences({ openPanelOnSave: enabled });
   };
 
+  const handleThemeModeChange = (mode: ThemeMode) => {
+    setThemeMode(mode);
+    applyTheme(mode);
+    void setPanelPreferences({ themeMode: mode });
+  };
+
   const handleExportJson = () => {
     const stamp = new Date().toISOString().slice(0, 10);
     downloadTextFile(`side-stash-${stamp}.json`, itemsToJson(items), 'application/json');
@@ -784,6 +801,7 @@ export function App() {
               selectedImageCount={selectedImageCount}
               copyFormat={copyFormat}
               openPanelOnSave={openPanelOnSave}
+              themeMode={themeMode}
               languageSelectValue={languageSelectValue}
               resolvedLocaleLabel={getLocaleLabel(resolvedLocale)}
               onClearQuery={() => setQuery('')}
@@ -806,6 +824,7 @@ export function App() {
               }}
               onCopyFormatChange={handleCopyFormatChange}
               onOpenPanelOnSaveChange={handleOpenPanelOnSaveChange}
+              onThemeModeChange={handleThemeModeChange}
               onExportJson={handleExportJson}
               onExportMarkdown={handleExportMarkdown}
               onImportFile={(file) => {
