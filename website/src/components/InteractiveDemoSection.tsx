@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Check,
   Copy,
@@ -24,6 +24,7 @@ import { TooltipProvider } from '../../../entrypoints/sidepanel/components/ui/to
 
 type InteractiveDemoSectionProps = {
   lang: 'zh' | 'en';
+  theme: 'dark' | 'light';
 };
 
 const SAMPLE_DEMO_ITEMS: SavedItem[] = [
@@ -59,7 +60,7 @@ const SAMPLE_DEMO_ITEMS: SavedItem[] = [
   },
 ];
 
-export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
+export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionProps) {
   const isZh = lang === 'zh';
   const [items, setItems] = useState<SavedItem[]>(SAMPLE_DEMO_ITEMS);
   const [activeFilter, setActiveFilter] = useState<ItemFilter>('all');
@@ -69,9 +70,13 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [copyFormat, setCopyFormat] = useState<CopyFormat>('plain');
   const [openPanelOnSave, setOpenPanelOnSave] = useState(true);
-  const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
+  const [themeMode, setThemeMode] = useState<ThemeMode>(theme);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'interactive' | 'shortcut'>('interactive');
+
+  // Sync theme parameter with internal themeMode state
+  useEffect(() => {
+    setThemeMode(theme);
+  }, [theme]);
 
   // Context Menu simulator state
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; text?: string; linkUrl?: string; imageUrl?: string } | null>(null);
@@ -161,18 +166,18 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
 
   return (
     <TooltipProvider>
-      <section id="live-demo" className="py-16 md:py-24 bg-zinc-900/50 border-y border-zinc-800/80">
+      <section id="live-demo" className="py-16 md:py-24 bg-zinc-100/70 border-y border-zinc-200 dark:bg-zinc-900/50 dark:border-zinc-800/80 transition-colors">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Section Heading */}
           <div className="text-center">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-400">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
               <MousePointerClick className="size-3.5" />
               <span>{isZh ? '⚡ 网页实时互动试用' : '⚡ Interactive Live Playground'}</span>
             </div>
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl dark:text-white">
               {isZh ? '无需安装，在网页中直接试用功能' : 'Try Side Stash right here in your browser'}
             </h2>
-            <p className="mt-3 text-base text-zinc-400 max-w-2xl mx-auto">
+            <p className="mt-3 text-base text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
               {isZh
                 ? '点击左侧模拟网页中的【保存文本】、【保存链接】或【保存图片】按钮，右侧的侧边栏组件将实时为您呈现捕获与管理效果！'
                 : 'Click any "Save" action on the left simulated article canvas. Watch saved snippets land directly into the live side panel on the right!'}
@@ -184,7 +189,7 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
             
             {/* Left Canvas: Simulated Web Article (7 Cols) */}
             <div
-              className="lg:col-span-7 rounded-2xl border border-zinc-800 bg-zinc-950/90 p-6 shadow-2xl relative"
+              className="lg:col-span-7 rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-950/90 dark:shadow-2xl relative transition-colors"
               onContextMenu={(e) => {
                 e.preventDefault();
                 setContextMenu({
@@ -198,24 +203,24 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
               onClick={() => contextMenu && setContextMenu(null)}
             >
               {/* Browser Bar Mockup */}
-              <div className="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6">
+              <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4 mb-6 transition-colors">
                 <div className="flex items-center gap-2">
                   <div className="size-3 rounded-full bg-rose-500/80" />
                   <div className="size-3 rounded-full bg-amber-500/80" />
                   <div className="size-3 rounded-full bg-emerald-500/80" />
                 </div>
-                <div className="flex items-center gap-2 rounded-lg bg-zinc-900 px-3 py-1 text-xs text-zinc-400 font-mono w-64 justify-center">
+                <div className="flex items-center gap-2 rounded-lg bg-zinc-100 dark:bg-zinc-900 px-3 py-1 text-xs text-zinc-500 dark:text-zinc-400 font-mono w-64 justify-center">
                   <span>https://article-demo.com/design-notes</span>
                 </div>
-                <div className="text-[11px] font-semibold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded">
+                <div className="text-[11px] font-semibold text-indigo-600 bg-indigo-500/10 dark:text-indigo-400 px-2 py-0.5 rounded">
                   {isZh ? '右键可触发模拟菜单' : 'Right-click for Menu'}
                 </div>
               </div>
 
               {/* Simulated Content Block 1: Text */}
-              <div className="group relative rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 transition-all hover:border-indigo-500/40">
+              <div className="group relative rounded-xl border border-zinc-200/90 bg-zinc-50/80 dark:border-zinc-800/80 dark:bg-zinc-900/50 p-4 transition-all hover:border-indigo-500/40">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10.5px] font-semibold uppercase tracking-wider text-indigo-400">
+                  <span className="text-[10.5px] font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
                     {isZh ? '📝 文本选区示例' : '📝 Text Snippet'}
                   </span>
                   <button
@@ -233,15 +238,15 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
                     <span>{isZh ? '保存此段文本' : 'Save Text'}</span>
                   </button>
                 </div>
-                <p className="mt-2.5 text-sm leading-relaxed text-zinc-300 font-serif italic">
+                <p className="mt-2.5 text-sm leading-relaxed text-zinc-800 dark:text-zinc-300 font-serif italic">
                   “{isZh ? 'Side Stash 是一款专注于高效率本地收藏的浏览器侧边栏扩展程序。右键即可瞬时将文字保存进个人侧边栏。' : 'Side Stash is a focused browser side panel extension for local snippet collection. Right-click saves snippets instantly.'}”
                 </p>
               </div>
 
               {/* Simulated Content Block 2: Image */}
-              <div className="group relative mt-4 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 transition-all hover:border-amber-500/40">
+              <div className="group relative mt-4 rounded-xl border border-zinc-200/90 bg-zinc-50/80 dark:border-zinc-800/80 dark:bg-zinc-900/50 p-4 transition-all hover:border-amber-500/40">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10.5px] font-semibold uppercase tracking-wider text-amber-400">
+                  <span className="text-[10.5px] font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">
                     {isZh ? '🖼️ 图片保存示例' : '🖼️ Image Card'}
                   </span>
                   <button
@@ -258,7 +263,7 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
                     <span>{isZh ? '保存此张图片' : 'Save Image'}</span>
                   </button>
                 </div>
-                <div className="relative h-44 overflow-hidden rounded-lg border border-zinc-800">
+                <div className="relative h-44 overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
                   <img
                     src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80"
                     alt="Art Illustration"
@@ -273,11 +278,11 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
               </div>
 
               {/* Simulated Content Block 3: Link */}
-              <div className="group relative mt-4 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 transition-all hover:border-emerald-500/40">
+              <div className="group relative mt-4 rounded-xl border border-zinc-200/90 bg-zinc-50/80 dark:border-zinc-800/80 dark:bg-zinc-900/50 p-4 transition-all hover:border-emerald-500/40">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Link2 className="size-4 text-emerald-400" />
-                    <span className="text-xs font-semibold text-zinc-200">
+                    <Link2 className="size-4 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-200">
                       GitHub Repo: LanrenwenStudio/side-stash
                     </span>
                   </div>
@@ -295,7 +300,7 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
                     <span>{isZh ? '保存此链接' : 'Save Link'}</span>
                   </button>
                 </div>
-                <p className="mt-2 text-xs text-zinc-400">
+                <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
                   https://github.com/LanrenwenStudio/side-stash
                 </p>
               </div>
@@ -303,10 +308,10 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
               {/* Context Menu Overlay Simulator */}
               {contextMenu ? (
                 <div
-                  className="absolute z-30 w-52 rounded-xl border border-zinc-700 bg-zinc-900/95 py-1.5 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-100"
+                  className="absolute z-30 w-52 rounded-xl border border-zinc-200 bg-white/95 dark:border-zinc-700 dark:bg-zinc-900/95 py-1.5 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-100"
                   style={{ top: contextMenu.y, left: contextMenu.x }}
                 >
-                  <div className="px-3 py-1 text-[10px] font-bold tracking-wider text-zinc-500 uppercase">
+                  <div className="px-3 py-1 text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
                     Side Stash {isZh ? '右键快捷菜单' : 'Menu'}
                   </div>
                   <button
@@ -315,7 +320,7 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
                       handleSaveText(contextMenu.text || '选中文本示例');
                       setContextMenu(null);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-zinc-200 hover:bg-indigo-600 hover:text-white"
+                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-zinc-800 dark:text-zinc-200 hover:bg-indigo-600 hover:text-white"
                   >
                     <FileText className="size-3.5" />
                     <span>{isZh ? '保存文本到 Side Stash' : 'Save text to side panel'}</span>
@@ -326,7 +331,7 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
                       handleSaveLink('Side Stash GitHub Repo', contextMenu.linkUrl || 'https://github.com');
                       setContextMenu(null);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-zinc-200 hover:bg-indigo-600 hover:text-white"
+                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-zinc-800 dark:text-zinc-200 hover:bg-indigo-600 hover:text-white"
                   >
                     <Link2 className="size-3.5" />
                     <span>{isZh ? '保存链接到 Side Stash' : 'Save link to side panel'}</span>
@@ -337,7 +342,7 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
                       handleSaveImage('艺术插画', contextMenu.imageUrl || '');
                       setContextMenu(null);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-zinc-200 hover:bg-indigo-600 hover:text-white"
+                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-zinc-800 dark:text-zinc-200 hover:bg-indigo-600 hover:text-white"
                   >
                     <ImageIcon className="size-3.5" />
                     <span>{isZh ? '保存图片到 Side Stash' : 'Save image to side panel'}</span>
@@ -350,7 +355,7 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
             <div className="lg:col-span-5 relative">
               {/* Header Badge */}
               <div className="flex items-center justify-between mb-3 px-1">
-                <div className="flex items-center gap-2 text-xs font-semibold text-zinc-300">
+                <div className="flex items-center gap-2 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
                   <span className="relative flex size-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                     <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
@@ -370,7 +375,7 @@ export function InteractiveDemoSection({ lang }: InteractiveDemoSectionProps) {
               ) : null}
 
               {/* The Actual Side Panel Container */}
-              <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-3.5 shadow-2xl min-h-[580px] max-h-[640px] flex flex-col justify-between overflow-hidden">
+              <div className="rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 p-3.5 shadow-xl dark:shadow-2xl min-h-[580px] max-h-[640px] flex flex-col justify-between overflow-hidden transition-colors">
                 <FilterBar
                   activeFilter={activeFilter}
                   dateFilter={dateFilter}

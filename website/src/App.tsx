@@ -25,7 +25,7 @@ export function App() {
   const toggleLang = () => setLang((prev) => (prev === 'zh' ? 'en' : 'zh'));
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-100 light:bg-zinc-50 light:text-zinc-900">
+    <div className="min-h-screen bg-zinc-50 text-zinc-900 font-sans transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-100">
       <Header
         theme={theme}
         lang={lang}
@@ -35,7 +35,7 @@ export function App() {
 
       <main>
         <HeroSection lang={lang} />
-        <InteractiveDemoSection lang={lang} />
+        <InteractiveDemoSection lang={lang} theme={theme} />
         <FeaturesGrid lang={lang} />
         <PrivacyBand lang={lang} />
       </main>

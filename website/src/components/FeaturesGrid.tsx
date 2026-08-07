@@ -11,7 +11,7 @@ export function FeaturesGrid({ lang }: FeaturesGridProps) {
   const features = [
     {
       icon: MousePointer,
-      iconColor: 'text-indigo-400',
+      iconColor: 'text-indigo-600 dark:text-indigo-400',
       bgColor: 'bg-indigo-500/10 border-indigo-500/20',
       title: isZh ? '右键即刻捕获' : 'Right-Click Capture',
       desc: isZh
@@ -20,7 +20,7 @@ export function FeaturesGrid({ lang }: FeaturesGridProps) {
     },
     {
       icon: Keyboard,
-      iconColor: 'text-amber-400',
+      iconColor: 'text-amber-600 dark:text-amber-400',
       bgColor: 'bg-amber-500/10 border-amber-500/20',
       title: isZh ? 'Alt+S 极速快捷键' : 'Alt+S Instant Shortcut',
       desc: isZh
@@ -29,7 +29,7 @@ export function FeaturesGrid({ lang }: FeaturesGridProps) {
     },
     {
       icon: Archive,
-      iconColor: 'text-rose-400',
+      iconColor: 'text-rose-600 dark:text-rose-400',
       bgColor: 'bg-rose-500/10 border-rose-500/20',
       title: isZh ? 'ZIP 批量图片打包导出' : 'Batch Image ZIP Download',
       desc: isZh
@@ -38,7 +38,7 @@ export function FeaturesGrid({ lang }: FeaturesGridProps) {
     },
     {
       icon: Copy,
-      iconColor: 'text-emerald-400',
+      iconColor: 'text-emerald-600 dark:text-emerald-400',
       bgColor: 'bg-emerald-500/10 border-emerald-500/20',
       title: isZh ? '多格式灵动复制' : 'Flexible Copy Formats',
       desc: isZh
@@ -47,7 +47,7 @@ export function FeaturesGrid({ lang }: FeaturesGridProps) {
     },
     {
       icon: Search,
-      iconColor: 'text-purple-400',
+      iconColor: 'text-purple-600 dark:text-purple-400',
       bgColor: 'bg-purple-500/10 border-purple-500/20',
       title: isZh ? '多维度检索与置顶' : 'Smart Search & Pinning',
       desc: isZh
@@ -56,7 +56,7 @@ export function FeaturesGrid({ lang }: FeaturesGridProps) {
     },
     {
       icon: ShieldCheck,
-      iconColor: 'text-cyan-400',
+      iconColor: 'text-cyan-600 dark:text-cyan-400',
       bgColor: 'bg-cyan-500/10 border-cyan-500/20',
       title: isZh ? '纯本地高隐性存储' : '100% Local & Private',
       desc: isZh
@@ -69,10 +69,10 @@ export function FeaturesGrid({ lang }: FeaturesGridProps) {
     <section id="features" className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl dark:text-white">
             {isZh ? '精心打造，专为高效浏览者设计' : 'Designed for high-efficiency browsing'}
           </h2>
-          <p className="mt-4 text-base text-zinc-400">
+          <p className="mt-4 text-base text-zinc-600 dark:text-zinc-400">
             {isZh
               ? '摆脱繁重的标签页与笔记软件，用最轻量的方式管理日常浏览中的灵感碎片。'
               : 'Ditch cluttered tabs and bloated note tools. Collect references effortlessly while you read.'}
@@ -83,15 +83,15 @@ export function FeaturesGrid({ lang }: FeaturesGridProps) {
           {features.map((f, i) => (
             <div
               key={i}
-              className="group relative rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 backdrop-blur-xs transition-all hover:border-zinc-700 hover:bg-zinc-900/90 hover:shadow-xl"
+              className="group relative rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs transition-all hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/60 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/90 dark:hover:shadow-xl"
             >
               <div className={`inline-flex rounded-xl border p-3 ${f.bgColor}`}>
                 <f.icon className={`size-6 ${f.iconColor}`} />
               </div>
-              <h3 className="mt-4 text-lg font-bold text-white tracking-tight">
+              <h3 className="mt-4 text-lg font-bold text-zinc-900 dark:text-white tracking-tight">
                 {f.title}
               </h3>
-              <p className="mt-2 text-xs leading-relaxed text-zinc-400">
+              <p className="mt-2 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
                 {f.desc}
               </p>
             </div>
