@@ -274,11 +274,16 @@ export function SidePanelDemo({
 
   const resolvedLocale = getResolvedLocale();
 
+  // Fixed shell height so filter switches (text / link / image) never reflow the page.
+  const shellHeight = compact ? 'h-[620px]' : 'h-[680px]';
+  const listHeight = compact ? 'h-[400px]' : 'h-[460px]';
+
   return (
     <TooltipProvider>
       <div
         className={[
           'relative flex flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-[var(--color-paper)] shadow-[0_24px_80px_rgba(9,9,11,0.12)] dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-[0_24px_80px_rgba(0,0,0,0.45)]',
+          shellHeight,
           className,
         ].join(' ')}
       >
@@ -355,12 +360,7 @@ export function SidePanelDemo({
             }}
           />
 
-          <div
-            className={[
-              'min-h-0 flex-1 overflow-y-auto pr-0.5',
-              compact ? 'max-h-[440px] min-h-[360px]' : 'max-h-[560px] min-h-[420px]',
-            ].join(' ')}
-          >
+          <div className={['min-h-0 flex-1 overflow-y-auto pr-0.5', listHeight].join(' ')}>
             {filteredItems.length > 0 ? (
               <ItemList
                 items={filteredItems}
