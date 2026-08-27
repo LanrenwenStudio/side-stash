@@ -66,9 +66,23 @@ async function run() {
 }
 
 function loadServiceAccount() {
+  const rawKey = process.env.CHROME_SERVICE_ACCOUNT_KEY?.trim();
+  if (rawKey) {
+    let credentials;
+    try {
+      credentials = JSON.parse(rawKey);
+    } catch (error) {
+      throw new Error(`Could not parse CHROME_SERVICE_ACCOUNT_KEY JSON: ${error instanceof Error ? error.message : String(error)}`);
+    }
+    if (typeof credentials.client_email !== 'string' || typeof credentials.private_key !== 'string') {
+      throw new Error('Service-account JSON must include client_email and private_key.');
+    }
+    return credentials;
+  }
+
   const keyFile = process.env.CHROME_SERVICE_ACCOUNT_KEY_FILE?.trim();
   if (!keyFile) {
-    throw new Error('CHROME_SERVICE_ACCOUNT_KEY_FILE is required.');
+    throw new Error('CHROME_SERVICE_ACCOUNT_KEY_FILE or CHROME_SERVICE_ACCOUNT_KEY is required.');
   }
 
   const keyPath = resolveHomePath(keyFile);
