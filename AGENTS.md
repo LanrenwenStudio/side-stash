@@ -9,16 +9,13 @@ When the user asks to release / ship / 发版 / publish:
 
 1. **Commit** all intended product changes (never commit secrets; skip unrelated local assets unless asked).
 2. **Push** to the remote tracking branch.
-3. **Package** for Chrome:
+3. **Package, upload, and submit for Chrome Web Store review through the configured API workflow**:
    ```bash
-   npm run zip
+   npm run release:chrome
    ```
-   (Also `npm run zip:firefox` only if the user asks for Firefox.)
-4. After a successful zip, **always open the zip output directory** in Finder:
-   ```bash
-   open .output
-   ```
-5. Do **not** open the repository root. Only open `.output/` (where `side-stash-*-chrome.zip` lives).
+   This command creates the Chrome ZIP, uploads it with the configured service account, and submits it for review.
+4. Do **not** open `.output/`, Finder, or the Chrome Web Store dashboard after packaging. Report the API result directly. Only use an interactive browser if the user explicitly requests it.
+5. Package Firefox with `npm run zip:firefox` only when the user explicitly asks for Firefox; there is no automatic Firefox upload in this workflow.
 
 ## Packaging only
 

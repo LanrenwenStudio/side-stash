@@ -1,23 +1,21 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
   className?: string;
   size?: 'default' | 'icon' | 'sm';
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'danger-solid';
 };
 
-export function Button({
-  children,
-  className = '',
-  size = 'default',
-  variant = 'primary',
-  ...props
-}: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { children, className = '', size = 'default', variant = 'primary', ...props },
+  ref,
+) {
   return (
     <button
+      ref={ref}
       className={cn(
         'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-150 outline-none disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-indigo-500/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-zinc-950 [&_svg]:size-4 active:scale-[0.97]',
         size === 'default' && 'h-9 px-3.5 text-xs',
@@ -31,6 +29,8 @@ export function Button({
           'bg-transparent text-zinc-500 hover:bg-zinc-100/80 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/70 dark:hover:text-zinc-100',
         variant === 'danger' &&
           'border border-rose-200/80 bg-rose-50/80 text-rose-700 hover:bg-rose-100 hover:text-rose-800 dark:border-rose-900/50 dark:bg-rose-950/40 dark:text-rose-300 dark:hover:bg-rose-900/60',
+        variant === 'danger-solid' &&
+          'border border-transparent bg-rose-600 text-white shadow-2xs hover:bg-rose-700 hover:text-white dark:bg-rose-600 dark:text-white dark:hover:bg-rose-500 dark:hover:text-white',
         className,
       )}
       {...props}
@@ -38,4 +38,4 @@ export function Button({
       {children}
     </button>
   );
-}
+});

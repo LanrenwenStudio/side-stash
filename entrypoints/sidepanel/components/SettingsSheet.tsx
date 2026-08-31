@@ -17,6 +17,7 @@ import { t } from '../../../lib/i18n';
 import type { LanguageSelectValue } from '../../../lib/i18n';
 import type { CopyFormat, ThemeMode } from '../types';
 import { Button } from './ui/button';
+import { Popconfirm } from './Popconfirm';
 import {
   Dialog,
   DialogContent,
@@ -366,9 +367,20 @@ export function SettingsSheet({
                   </Button>
                 ) : null}
                 {onClearAllData ? (
-                  <Button type="button" variant="danger" onClick={onClearAllData}>
-                    {t('debugClearAllBtn', 'Clear All Data')}
-                  </Button>
+                  <Popconfirm
+                    title={t('toastClearedAllData', 'Clear all items?')}
+                    description={t('privacyBody', 'Items stay in chrome.storage.local on this device.')}
+                    confirmText={t('actionDelete', 'Delete')}
+                    cancelText={t('confirmCancel', 'Cancel')}
+                    variant="danger"
+                    align="end"
+                    side="top"
+                    onConfirm={onClearAllData}
+                  >
+                    <Button type="button" variant="danger">
+                      {t('debugClearAllBtn', 'Clear All Data')}
+                    </Button>
+                  </Popconfirm>
                 ) : null}
               </div>
             </div>

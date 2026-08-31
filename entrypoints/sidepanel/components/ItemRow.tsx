@@ -16,6 +16,7 @@ import { getResolvedLocale, t } from '../../../lib/i18n';
 import { getItemSubtitle, getItemTitle, getOpenUrl, getSourceDomain } from '../lib/items';
 import type { SavedItem } from '../types';
 import { Button } from './ui/button';
+import { Popconfirm } from './Popconfirm';
 import { ActionTooltip } from './ui/tooltip';
 import { Checkbox } from './ui/checkbox';
 
@@ -258,9 +259,19 @@ export function ItemRow({
               <Scissors className="size-3.5" aria-hidden="true" />
             </Button>
           </ActionTooltip>
-          <ActionTooltip content={t('actionDelete', 'Delete')}>
+          <Popconfirm
+            title={t('confirmDelete', 'Delete this item?')}
+            confirmText={t('actionDelete', 'Delete')}
+            cancelText={t('confirmCancel', 'Cancel')}
+            variant="danger"
+            align="end"
+            side="top"
+            sideOffset={4}
+            onConfirm={onDelete}
+          >
             <Button
               aria-label={t('actionDelete', 'Delete')}
+              title={t('actionDelete', 'Delete')}
               className={cn(
                 iconBtnClass,
                 'hover:!bg-rose-50 hover:!text-rose-600 dark:hover:!bg-rose-950/50 dark:hover:!text-rose-300',
@@ -268,11 +279,10 @@ export function ItemRow({
               size="icon"
               type="button"
               variant="ghost"
-              onClick={onDelete}
             >
               <Trash2 className="size-3.5" aria-hidden="true" />
             </Button>
-          </ActionTooltip>
+          </Popconfirm>
         </div>
       </div>
     </li>

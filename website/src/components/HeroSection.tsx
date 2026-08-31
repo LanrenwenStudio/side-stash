@@ -77,7 +77,7 @@ export function HeroSection({ lang, theme }: HeroSectionProps) {
               Alt+S
             </li>
             <li className="inline-flex items-center gap-1.5 font-mono text-[11px] text-zinc-400">
-              v0.1.7
+              v0.1.10
             </li>
           </ul>
         </div>

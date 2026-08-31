@@ -20,6 +20,7 @@ import type { LanguageSelectValue } from '../../../lib/i18n';
 import type { CopyFormat, DateFilter, ItemFilter, ThemeMode } from '../types';
 import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
+import { Popconfirm } from './Popconfirm';
 import { SettingsSheet } from './SettingsSheet';
 import { ActionTooltip } from './ui/tooltip';
 
@@ -46,6 +47,8 @@ type FilterBarProps = {
   themeMode: ThemeMode;
   languageSelectValue: LanguageSelectValue;
   resolvedLocaleLabel: string;
+  isDeleteConfirmOpen?: boolean;
+  onDeleteConfirmOpenChange?: (open: boolean) => void;
   onClearQuery: () => void;
   onFilterChange: (filter: ItemFilter) => void;
   onDateFilterChange: (filter: DateFilter) => void;
@@ -91,6 +94,8 @@ export function FilterBar({
   themeMode,
   languageSelectValue,
   resolvedLocaleLabel,
+  isDeleteConfirmOpen,
+  onDeleteConfirmOpenChange,
   onClearQuery,
   onFilterChange,
   onDateFilterChange,
@@ -353,16 +358,30 @@ export function FilterBar({
               </button>
             </ActionTooltip>
 
-            <ActionTooltip content={t('tooltipDeleteSelected', 'Delete selected')}>
+            <Popconfirm
+              title={
+                selectedCount > 1
+                  ? t('confirmDeleteMultiple', 'Delete $1 items?', [String(selectedCount)])
+                  : t('confirmDelete', 'Delete this item?')
+              }
+              confirmText={t('actionDelete', 'Delete')}
+              cancelText={t('confirmCancel', 'Cancel')}
+              variant="danger"
+              align="end"
+              side="bottom"
+              open={isDeleteConfirmOpen}
+              onOpenChange={onDeleteConfirmOpenChange}
+              onConfirm={onDelete}
+            >
               <button
                 type="button"
+                title={t('tooltipDeleteSelected', 'Delete selected')}
                 aria-label={t('deleteSelectedTooltip', 'Delete selected items')}
-                onClick={onDelete}
                 className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-rose-400 outline-none transition-colors hover:bg-rose-500/25 hover:text-rose-200 dark:text-rose-600 dark:hover:bg-rose-500/20 dark:hover:text-rose-700"
               >
                 <Trash2 className="size-4 shrink-0 stroke-[2.25]" aria-hidden="true" />
               </button>
-            </ActionTooltip>
+            </Popconfirm>
           </div>
         ) : (
           <span className="shrink-0 font-mono text-[11px] font-medium text-zinc-400 dark:text-zinc-500">

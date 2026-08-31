@@ -1,7 +1,6 @@
 import React, { startTransition, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { browser } from 'wxt/browser';
 import { Pin, X } from 'lucide-react';
-import { ConfirmDialog } from './components/ConfirmDialog';
 import { EmptyState } from './components/EmptyState';
 import { FilterBar } from './components/FilterBar';
 import { ItemList } from './components/ItemList';
@@ -47,10 +46,6 @@ import type { CopyFormat, DateFilter, ItemFilter, SavedItem, ThemeMode } from '.
 import { applyTheme, setupThemeListener } from './lib/theme';
 import { TooltipProvider } from './components/ui/tooltip';
 
-type DeleteState =
-  | { ids: string[]; itemLabel: string; message: string }
-  | null;
-
 const isDev = import.meta.env.DEV;
 
 export function App() {
@@ -74,7 +69,7 @@ export function App() {
       onClick: () => void;
     };
   } | null>(null);
-  const [deleteState, setDeleteState] = useState<DeleteState>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const deferredQuery = useDeferredValue(query.trim().toLowerCase());
   const filteredItems = useMemo(
@@ -541,8 +536,8 @@ export function App() {
     );
   };
 
-  const openDeleteDialog = (targetItems: SavedItem[]) => {
-    if (!targetItems.length) {
+  const handleBatchDelete = async () => {
+    if (!selectedItems.length) {
       setToast({
         message: t('deleteNoneSelected', 'No items selected.'),
         type: 'warning',
@@ -550,25 +545,7 @@ export function App() {
       return;
     }
 
-    if (targetItems.length === 1) {
-      void handleDeleteSingle(targetItems[0]);
-      return;
-    }
-
-    setDeleteState({
-      ids: targetItems.map((item) => item.id),
-      itemLabel: t('selectedCount', '$1 selected', [String(targetItems.length)]),
-      message: t('confirmDeleteMultiple', 'Delete $1 items?', [String(targetItems.length)]),
-    });
-  };
-
-  const handleConfirmDelete = async () => {
-    if (!deleteState?.ids.length) {
-      setDeleteState(null);
-      return;
-    }
-
-    const idsToDelete = [...deleteState.ids];
+    const idsToDelete = selectedItems.map((item) => item.id);
     const deletedItems: SavedItem[] = [];
     const deletedIndices: number[] = [];
     items.forEach((item, index) => {
@@ -586,7 +563,7 @@ export function App() {
       return nextSelected;
     });
 
-    setDeleteState(null);
+    setIsDeleteConfirmOpen(false);
 
     setToast({
       message: idsToDelete.length === 1
@@ -702,12 +679,18 @@ export function App() {
         target instanceof HTMLSelectElement ||
         target?.isContentEditable;
 
-      if (event.key === 'Escape' && selectedIds.size > 0 && deleteState === null) {
-        setSelectedIds(new Set());
-        return;
+      if (event.key === 'Escape') {
+        if (isDeleteConfirmOpen) {
+          setIsDeleteConfirmOpen(false);
+          return;
+        }
+        if (selectedIds.size > 0) {
+          setSelectedIds(new Set());
+          return;
+        }
       }
 
-      if (event.key === '/' && !isTypingTarget && deleteState === null) {
+      if (event.key === '/' && !isTypingTarget && !isDeleteConfirmOpen) {
         event.preventDefault();
         searchInputRef.current?.focus();
         return;
@@ -722,25 +705,25 @@ export function App() {
         setSelectedIds(new Set(filteredItems.map((item) => item.id)));
       }
 
-      if (event.key === 'Enter' && selectedIds.size > 0 && !isTypingTarget && deleteState === null) {
+      if (event.key === 'Enter' && selectedIds.size > 0 && !isTypingTarget && !isDeleteConfirmOpen) {
         event.preventDefault();
         void handleCopySelected();
       }
 
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'x' && selectedItems.length > 0 && !isTypingTarget && deleteState === null) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'x' && selectedItems.length > 0 && !isTypingTarget && !isDeleteConfirmOpen) {
         event.preventDefault();
         void handleCutSelected();
       }
 
-      if ((event.key === 'Delete' || event.key === 'Backspace') && selectedItems.length > 0 && !isTypingTarget && deleteState === null) {
+      if ((event.key === 'Delete' || event.key === 'Backspace') && selectedItems.length > 0 && !isTypingTarget && !isDeleteConfirmOpen) {
         event.preventDefault();
-        openDeleteDialog(selectedItems);
+        setIsDeleteConfirmOpen(true);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [copyFormat, deleteState, filteredItems, selectedIds.size, selectedItems]);
+  }, [copyFormat, isDeleteConfirmOpen, filteredItems, selectedIds.size, selectedItems]);
 
   return (
     <TooltipProvider delayDuration={120}>
@@ -806,6 +789,8 @@ export function App() {
               themeMode={themeMode}
               languageSelectValue={languageSelectValue}
               resolvedLocaleLabel={getLocaleLabel(resolvedLocale)}
+              isDeleteConfirmOpen={isDeleteConfirmOpen}
+              onDeleteConfirmOpenChange={setIsDeleteConfirmOpen}
               onClearQuery={() => setQuery('')}
               onFilterChange={setActiveFilter}
               onDateFilterChange={setDateFilter}
@@ -814,7 +799,7 @@ export function App() {
               onToggleSelectAll={handleToggleSelectAll}
               onCopy={handleCopySelected}
               onCut={handleCutSelected}
-              onDelete={() => openDeleteDialog(selectedItems)}
+              onDelete={handleBatchDelete}
               onDownloadZip={() => {
                 void handleDownloadSelectedZip();
               }}
@@ -868,19 +853,6 @@ export function App() {
         </div>
 
         <StatusToast message={toast?.message ?? ''} type={toast?.type} action={toast?.action} />
-
-        <ConfirmDialog
-          description={deleteState?.message ?? t('confirmDelete', 'Delete this item?')}
-          open={deleteState !== null}
-          title={t('confirmTitle', 'Delete item')}
-          value={deleteState?.itemLabel ?? ''}
-          onConfirm={handleConfirmDelete}
-          onOpenChange={(open) => {
-            if (!open) {
-              setDeleteState(null);
-            }
-          }}
-        />
       </div>
     </TooltipProvider>
   );

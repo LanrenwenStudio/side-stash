@@ -39,7 +39,7 @@ export function Footer({ lang }: FooterProps) {
           <div className="flex items-center gap-2.5">
             <img src="/icon-32.png" alt="" className="size-6 rounded-md" />
             <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Side Stash</span>
-            <span className="font-mono text-[11px] text-zinc-400">v0.1.7</span>
+            <span className="font-mono text-[11px] text-zinc-400">v0.1.10</span>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-5 text-xs font-medium text-zinc-500 dark:text-zinc-400">
