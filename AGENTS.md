@@ -7,15 +7,20 @@ steps but must not weaken the workspace build or GitHub Actions limits.
 
 When the user asks to release / ship / 发版 / publish:
 
-1. **Commit** all intended product changes (never commit secrets; skip unrelated local assets unless asked).
-2. **Push** to the remote tracking branch.
-3. **Package, upload, and submit for Chrome Web Store review through the configured API workflow**:
+1. **Bump version** in `package.json` (e.g. `v0.1.10`), and synchronize any version strings in website components if needed.
+2. **Commit and push** to `main`:
    ```bash
-   npm run release:chrome
+   git commit -am "chore: bump version to v0.1.10"
+   git push origin main
    ```
-   This command creates the Chrome ZIP, uploads it with the configured service account, and submits it for review.
-4. Do **not** open `.output/`, Finder, or the Chrome Web Store dashboard after packaging. Report the API result directly. Only use an interactive browser if the user explicitly requests it.
-5. Package Firefox with `npm run zip:firefox` only when the user explicitly asks for Firefox; there is no automatic Firefox upload in this workflow.
+3. **Tag and push** to trigger the automated GitHub Actions CI/CD release pipeline:
+   ```bash
+   git tag v0.1.10
+   git push origin v0.1.10
+   ```
+4. GitHub Actions will build the zip package, upload to the Chrome Web Store via service account API, submit for review, and create the GitHub Release asset automatically.
+5. (Optional manual fallback only if CI fails or user explicitly asks for local upload: `npm run release:chrome`).
+6. Package Firefox with `npm run zip:firefox` only when the user explicitly asks for Firefox; there is no automatic Firefox upload in this workflow.
 
 ## Packaging only
 
