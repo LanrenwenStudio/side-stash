@@ -1,0 +1,33 @@
+# Side Stash
+
+> Side Stash is a Chrome browser extension for collecting text, links and image URLs in a private side panel. Developed by LanrenwenStudio.
+
+## Product facts
+
+- Save selected text, links or images using the right-click menu. Alt+S saves selected text.
+- Search and filter by type, date or source site. Pin items and select multiple items to copy, cut or delete.
+- Copy as plain text, Markdown or with source context.
+- Export JSON for backup and import, or export Markdown. Download selected images individually or as ZIP.
+- Saved items and preferences use local Chrome extension storage. No account or cloud synchronization is provided.
+- The website playground uses demonstration data and is not the user's extension collection.
+- Export a backup before clearing browser data or uninstalling the extension.
+
+## Official pages
+
+- [English website](https://sidestash.lanrenwen.com/): Product information, interactive demo and FAQ.
+- [简体中文](https://sidestash.lanrenwen.com/zh/)
+- [繁體中文](https://sidestash.lanrenwen.com/zh-TW/)
+- [日本語](https://sidestash.lanrenwen.com/ja/)
+- [한국어](https://sidestash.lanrenwen.com/ko/)
+- [Español](https://sidestash.lanrenwen.com/es/)
+- [Privacy policy](https://sidestash.lanrenwen.com/privacy-policy.html): Existing policy on data handling and deletion.
+- [Chrome Web Store](https://chromewebstore.google.com/detail/side-stash/khbkjkjokbmldbaelpknjbfoecdkehbk): Official installation listing.
+- [Source repository](https://github.com/LanrenwenStudio/side-stash)
+- [Support issues](https://github.com/LanrenwenStudio/side-stash/issues)
+- [Developer studio](https://lanrenwen.com/)
+
+## Contact
+
+Support and privacy questions: support@lanrenwen.com.
+
+Website information last updated: 2026-10-06. This is not the extension's initial release date.

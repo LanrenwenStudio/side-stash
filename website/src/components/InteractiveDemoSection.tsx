@@ -3,9 +3,10 @@ import { Plus, RotateCcw } from 'lucide-react';
 import { Button } from '../../../entrypoints/sidepanel/components/ui/button';
 import { t } from '../../../lib/i18n';
 import { SidePanelDemo, type SidePanelDemoHandle } from './SidePanelDemo';
+import { siteText, type SiteLocale } from '../i18n';
 
 type InteractiveDemoSectionProps = {
-  lang: 'zh' | 'en';
+  lang: SiteLocale;
   theme: 'dark' | 'light';
 };
 
@@ -30,17 +31,19 @@ const PAGE_TITLE = 'Demo article';
 const PAGE_URL = 'https://sidestash.lanrenwen.com/demo';
 
 export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionProps) {
-  const isZh = lang === 'zh';
   const pageRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<SidePanelDemoHandle | null>(null);
   const [contextMenu, setContextMenu] = useState<DemoContextMenu | null>(null);
 
-  const sampleText = isZh
-    ? 'Side Stash 把网页上的灵感碎片收进本地侧边栏：文本、链接、图片，搜索与复制都在同一处。'
-    : 'Side Stash keeps page fragments in a local side panel — text, links, and images, ready to search and copy.';
+  const sampleText = siteText(lang,
+    'Side Stash keeps page fragments in a local side panel — text, links, and images, ready to search and copy.',
+    'Side Stash 把网页上的灵感碎片收进本地侧边栏：文本、链接、图片，搜索与复制都在同一处。',
+    'Side Stash はテキスト、リンク、画像をローカルのサイドパネルに保存し、同じ場所で検索やコピーができます。',
+    'Side Stash는 텍스트, 링크, 이미지를 로컬 사이드 패널에 모아 한곳에서 검색하고 복사할 수 있게 합니다.',
+    'Side Stash 把網頁上的靈感片段收進本機側邊欄：文字、連結、圖片，搜尋與複製都在同一處。');
 
   const sampleImage = {
-    alt: isZh ? '极简建筑空间' : 'Minimal architectural space',
+    alt: siteText(lang, 'Minimal architectural space', '极简建筑空间', 'ミニマルな建築空間', '미니멀 건축 공간', '極簡建築空間'),
     url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop',
   };
 
@@ -49,7 +52,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
     url: 'https://github.com/LanrenwenStudio/side-stash',
   };
 
-  const pageTitle = isZh ? '演示文章' : PAGE_TITLE;
+  const pageTitle = siteText(lang, PAGE_TITLE, '演示文章', 'デモ記事', '데모 글', '示範文章');
 
   // Dismiss menu on Escape / scroll outside (closer to real browser chrome)
   useEffect(() => {
@@ -126,7 +129,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
       panelRef.current?.notify(
         t(
           'saveEmptySelection',
-          isZh ? '请先选中文本，再按快捷键。' : 'Select text first, then press the shortcut.',
+          siteText(lang, 'Select text first, then press the shortcut.', '请先选中文本，再按快捷键。', 'テキストを選択してからショートカットを押してください。', '텍스트를 먼저 선택한 뒤 단축키를 누르세요.', '請先選取文字，再按快捷鍵。'),
         ),
         'info',
       );
@@ -134,7 +137,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isZh, pageTitle]);
+  }, [lang, pageTitle]);
 
   const saveLink = (title: string, url: string) => {
     panelRef.current?.addItem({
@@ -207,10 +210,10 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
 
   const stashMenuLabel =
     contextMenu?.kind === 'text'
-      ? t('menuSaveText', isZh ? '保存文本到侧边栏' : 'Save text to side panel')
+      ? t('menuSaveText', 'Save text to side panel')
       : contextMenu?.kind === 'link'
-        ? t('menuSaveLink', isZh ? '保存链接到侧边栏' : 'Save link to side panel')
-        : t('menuSaveImage', isZh ? '保存图片到侧边栏' : 'Save image to side panel');
+        ? t('menuSaveLink', 'Save link to side panel')
+        : t('menuSaveImage', 'Save image to side panel');
 
   return (
     <section
@@ -221,15 +224,13 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-xl">
             <p className="text-[11px] font-semibold tracking-[0.16em] text-zinc-500 uppercase dark:text-zinc-400">
-              {isZh ? '交互试用' : 'Live playground'}
+              {siteText(lang, 'Live playground', '交互试用', '操作を試す', '직접 체험', '互動試用')}
             </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-950 text-balance dark:text-zinc-50 sm:text-4xl">
-              {isZh ? '不用安装，先在网页里点一遍。' : 'No install needed — try the real panel UI.'}
+              {siteText(lang, 'No install needed — try the real panel UI.', '不用安装，先在网页里点一遍。', 'インストール不要。サイドパネルを試せます。', '설치 없이 실제 패널을 체험하세요.', '不用安裝，先在網頁裡試一試。')}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              {isZh
-                ? '左侧模拟真实网页：选中文字后右键或按 Alt+S，也可右键图片 / 链接。右侧是同一套侧边栏组件。'
-                : 'Left: a mock page — select text then right-click or press Alt+S; right-click images/links too. Right: the real side-panel UI.'}
+              {siteText(lang, 'Left: a mock page — select text then right-click or press Alt+S; right-click images/links too. Right: the real side-panel UI.', '左侧模拟真实网页：选中文字后右键或按 Alt+S，也可右键图片 / 链接。右侧是同一套侧边栏组件。', '左のページでテキストを選択し、右クリックまたは Alt+S で保存。画像やリンクも右クリックで保存できます。右側は実際のサイドパネルです。', '왼쪽에서 텍스트를 선택한 후 오른쪽 클릭 또는 Alt+S로 저장하세요. 이미지와 링크도 오른쪽 클릭으로 저장할 수 있습니다. 오른쪽은 실제 패널입니다.', '左側模擬網頁：選取文字後按右鍵或 Alt+S，也可對圖片、連結按右鍵。右側是同一套側邊欄元件。')}
             </p>
           </div>
           <Button
@@ -240,7 +241,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
             onClick={() => panelRef.current?.reset()}
           >
             <RotateCcw className="size-3.5" />
-            {isZh ? '重置演示' : 'Reset demo'}
+            {siteText(lang, 'Reset demo', '重置演示', 'デモをリセット', '데모 초기화', '重設示範')}
           </Button>
         </div>
 
@@ -269,25 +270,9 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
 
             <div className="space-y-4 p-5">
               <p className="text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">
-                {isZh ? (
-                  <>
-                    选中文字后右键或按{' '}
-                    <kbd className="rounded border border-zinc-300 bg-white px-1 py-0.5 font-mono text-[10px] text-zinc-700 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200">
-                      Alt+S
-                    </kbd>
-                    {' · '}
-                    也可右键图片 / 链接
-                  </>
-                ) : (
-                  <>
-                    Select text, then right-click or press{' '}
-                    <kbd className="rounded border border-zinc-300 bg-white px-1 py-0.5 font-mono text-[10px] text-zinc-700 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200">
-                      Alt+S
-                    </kbd>
-                    {' · '}
-                    or right-click image / link
-                  </>
-                )}
+                {siteText(lang, 'Select text, then right-click or press ', '选中文字后右键或按 ', 'テキストを選択し、右クリックまたは ', '텍스트를 선택하고 오른쪽 클릭 또는 ', '選取文字後按右鍵或 ')}
+                <kbd className="rounded border border-zinc-300 bg-white px-1 py-0.5 font-mono text-[10px] text-zinc-700 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200">Alt+S</kbd>
+                {siteText(lang, ' · or right-click image / link', ' · 也可右键图片 / 链接', ' · 画像やリンクも右クリック', ' · 이미지와 링크도 오른쪽 클릭', ' · 也可對圖片、連結按右鍵')}
               </p>
 
               {/* Text — contexts: selection */}
@@ -297,7 +282,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                    {isZh ? '文本片段' : 'Text snippet'}
+                    {siteText(lang, 'Text snippet', '文本片段', 'テキスト', '텍스트 조각', '文字片段')}
                   </div>
                   <Button
                     type="button"
@@ -307,7 +292,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
                     onClick={() => saveText(sampleText)}
                   >
                     <Plus className="size-3.5" />
-                    {isZh ? '保存' : 'Save'}
+                    {siteText(lang, 'Save', '保存', '保存', '저장', '儲存')}
                   </Button>
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
@@ -319,7 +304,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
               <article className="rounded-xl border border-zinc-200/90 bg-zinc-50/80 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
                 <div className="mb-3 flex items-start justify-between gap-3">
                   <div className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                    {isZh ? '图片' : 'Image'}
+                    {siteText(lang, 'Image', '图片', '画像', '이미지', '圖片')}
                   </div>
                   <Button
                     type="button"
@@ -329,7 +314,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
                     onClick={() => saveImage(sampleImage.alt, sampleImage.url)}
                   >
                     <Plus className="size-3.5" />
-                    {isZh ? '保存' : 'Save'}
+                    {siteText(lang, 'Save', '保存', '保存', '저장', '儲存')}
                   </Button>
                 </div>
                 <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
@@ -350,7 +335,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                      {isZh ? '链接' : 'Link'}
+                      {siteText(lang, 'Link', '链接', 'リンク', '링크', '連結')}
                     </div>
                     <a
                       href={sampleLink.url}
@@ -374,7 +359,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
                     onClick={() => saveLink(sampleLink.title, sampleLink.url)}
                   >
                     <Plus className="size-3.5" />
-                    {isZh ? '保存' : 'Save'}
+                    {siteText(lang, 'Save', '保存', '保存', '저장', '儲存')}
                   </Button>
                 </div>
               </article>
@@ -393,10 +378,10 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
                 {/* Decorative browser chrome rows — non-interactive, for realism */}
                 <div className="pointer-events-none select-none px-1 opacity-45" aria-hidden="true">
                   <FakeMenuRow>
-                    {isZh ? '复制' : 'Copy'}
+                    {siteText(lang, 'Copy', '复制', 'コピー', '복사', '複製')}
                   </FakeMenuRow>
                   <FakeMenuRow>
-                    {isZh ? '查阅“选中内容”' : 'Look Up “selection”'}
+                    {siteText(lang, 'Look Up “selection”', '查阅“选中内容”', '選択した内容を調べる', '선택한 내용 조회', '查詢「選取內容」')}
                   </FakeMenuRow>
                   <div className="mx-2.5 my-1.5 h-px bg-black/10 dark:bg-white/10" />
                 </div>
@@ -421,7 +406,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
 
                 <div className="pointer-events-none select-none px-1 opacity-45" aria-hidden="true">
                   <div className="mx-2.5 my-1.5 h-px bg-black/10 dark:bg-white/10" />
-                  <FakeMenuRow>{isZh ? '检查' : 'Inspect'}</FakeMenuRow>
+                  <FakeMenuRow>{siteText(lang, 'Inspect', '检查', '検証', '검사', '檢查')}</FakeMenuRow>
                 </div>
               </div>
             ) : null}
@@ -437,9 +422,7 @@ export function InteractiveDemoSection({ lang, theme }: InteractiveDemoSectionPr
               className="w-full"
             />
             <p className="mt-3 text-center text-[11px] text-zinc-400 dark:text-zinc-500">
-              {isZh
-                ? '初始为空 · 选中后 Alt+S / 右键保存会出现在这里'
-                : 'Starts empty · Alt+S or right-click saves land here'}
+              {siteText(lang, 'Starts empty · Alt+S or right-click saves land here', '初始为空 · 选中后 Alt+S / 右键保存会出现在这里', '最初は空です · Alt+S または右クリックで保存した項目が表示されます', '처음에는 비어 있습니다 · Alt+S 또는 오른쪽 클릭으로 저장하면 여기에 표시됩니다', '初始為空 · Alt+S 或右鍵儲存的內容會出現在這裡')}
             </p>
           </div>
         </div>

@@ -14,6 +14,7 @@ import type {
   ThemeMode,
 } from '../../../entrypoints/sidepanel/types';
 import { getLocaleLabel, getResolvedLocale } from '../../../lib/i18n';
+import { SITE_LOCALES, siteText, type SiteLocale } from '../i18n';
 
 export type SidePanelDemoHandle = {
   addItem: (item: Omit<SavedItem, 'id' | 'createdAt' | 'pinned'> & Partial<Pick<SavedItem, 'id' | 'createdAt' | 'pinned'>>) => void;
@@ -26,7 +27,7 @@ export type SidePanelDemoHandle = {
 };
 
 type SidePanelDemoProps = {
-  lang: 'zh' | 'en';
+  lang: SiteLocale;
   theme: 'dark' | 'light';
   /** Compact height for hero embed */
   compact?: boolean;
@@ -60,7 +61,6 @@ export function SidePanelDemo({
   demoRef,
   seedItems,
 }: SidePanelDemoProps) {
-  const isZh = lang === 'zh';
   const searchInputRef = useRef<HTMLInputElement>(null);
   // `undefined` seed → start with mock data (hero). Explicit `[]` → empty playground.
   const [items, setItems] = useState<SavedItem[]>(() =>
@@ -141,24 +141,18 @@ export function SidePanelDemo({
       linkUrl: partial.linkUrl,
       imageUrl: partial.imageUrl,
       imageAlt: partial.imageAlt,
-      pageTitle: partial.pageTitle || (isZh ? '演示页面' : 'Demo page'),
+      pageTitle: partial.pageTitle || (siteText(lang, 'Demo page', '演示页面', 'デモページ', '데모 페이지', '示範頁面')),
       pageUrl: partial.pageUrl || 'https://sidestash.lanrenwen.com',
       createdAt: partial.createdAt || new Date().toISOString(),
       pinned: partial.pinned ?? false,
     };
     setItems((prev) => [newItem, ...prev]);
     showToast(
-      isZh
-        ? newItem.type === 'image'
-          ? '已保存图片'
-          : newItem.type === 'link'
-            ? '已保存链接'
-            : '已保存文本'
-        : newItem.type === 'image'
-          ? 'Image saved'
-          : newItem.type === 'link'
-            ? 'Link saved'
-            : 'Text saved',
+      newItem.type === 'image'
+        ? siteText(lang, 'Image saved', '已保存图片', '画像を保存しました', '이미지 저장됨', '已儲存圖片')
+        : newItem.type === 'link'
+          ? siteText(lang, 'Link saved', '已保存链接', 'リンクを保存しました', '링크 저장됨', '已儲存連結')
+          : siteText(lang, 'Text saved', '已保存文本', 'テキストを保存しました', '텍스트 저장됨', '已儲存文字'),
     );
   };
 
@@ -182,7 +176,7 @@ export function SidePanelDemo({
       setQuery('');
       setSelectedIds(new Set());
     }
-    showToast(isZh ? '已重置演示数据' : 'Demo data reset', 'info');
+    showToast(siteText(lang, 'Demo data reset', '已重置演示数据', 'デモをリセットしました', '데모 데이터 초기화됨', '已重設示範資料'), 'info');
   };
 
   useEffect(() => {
@@ -220,24 +214,24 @@ export function SidePanelDemo({
 
   const handleCopyItems = async (targetItems: SavedItem[]) => {
     if (!targetItems.length) {
-      showToast(isZh ? '请先选择条目' : 'Select items first', 'warning');
+      showToast(siteText(lang, 'Select items first', '请先选择条目', '項目を選択してください', '항목을 먼저 선택하세요', '請先選取項目'), 'warning');
       return;
     }
     const lines = targetItems.map((item) => getCopyValue(item, copyFormat)).filter(Boolean);
     if (!lines.length) {
-      showToast(isZh ? '没有可复制的内容' : 'Nothing to copy', 'warning');
+      showToast(siteText(lang, 'Nothing to copy', '没有可复制的内容', 'コピーする内容がありません', '복사할 내용이 없습니다', '沒有可複製的內容'), 'warning');
       return;
     }
     const ok = await copyToClipboard(lines.join('\n'));
     showToast(
-      ok ? (isZh ? '已复制到剪贴板' : 'Copied to clipboard') : isZh ? '复制失败' : 'Copy failed',
+      ok ? siteText(lang, 'Copied to clipboard', '已复制到剪贴板', 'クリップボードにコピーしました', '클립보드에 복사됨', '已複製到剪貼簿') : siteText(lang, 'Copy failed', '复制失败', 'コピーできませんでした', '복사 실패', '複製失敗'),
       ok ? 'success' : 'error',
     );
   };
 
   const handleDeleteItems = (targetItems: SavedItem[]) => {
     if (!targetItems.length) {
-      showToast(isZh ? '请先选择条目' : 'Select items first', 'warning');
+      showToast(siteText(lang, 'Select items first', '请先选择条目', '項目を選択してください', '항목을 먼저 선택하세요', '請先選取項目'), 'warning');
       return;
     }
     const ids = new Set(targetItems.map((item) => item.id));
@@ -248,8 +242,8 @@ export function SidePanelDemo({
       ids.forEach((id) => next.delete(id));
       return next;
     });
-    showToast(isZh ? '已删除' : 'Deleted', 'success', {
-      label: isZh ? '撤销' : 'Undo',
+    showToast(siteText(lang, 'Deleted', '已删除', '削除しました', '삭제됨', '已刪除'), 'success', {
+      label: siteText(lang, 'Undo', '撤销', '元に戻す', '실행 취소', '復原'),
       onClick: () => {
         setItems((prev) => [...snapshot, ...prev]);
         setToast(null);
@@ -259,7 +253,7 @@ export function SidePanelDemo({
 
   const handleCutItems = async (targetItems: SavedItem[]) => {
     if (!targetItems.length) {
-      showToast(isZh ? '请先选择条目' : 'Select items first', 'warning');
+      showToast(siteText(lang, 'Select items first', '请先选择条目', '項目を選択してください', '항목을 먼저 선택하세요', '請先選取項目'), 'warning');
       return;
     }
     await handleCopyItems(targetItems);
@@ -323,7 +317,7 @@ export function SidePanelDemo({
             copyFormat={copyFormat}
             openPanelOnSave={openPanelOnSave}
             themeMode={themeMode}
-            languageSelectValue={isZh ? 'zh_CN' : 'en'}
+            languageSelectValue={SITE_LOCALES[lang].extensionLocale}
             resolvedLocaleLabel={getLocaleLabel(resolvedLocale)}
             onClearQuery={() => setQuery('')}
             onFilterChange={setActiveFilter}
@@ -335,28 +329,28 @@ export function SidePanelDemo({
             onCut={() => void handleCutItems(selectedItems)}
             onDelete={() => handleDeleteItems(selectedItems)}
             onDownloadZip={() =>
-              showToast(isZh ? '演示模式：ZIP 打包' : 'Demo: ZIP download', 'info')
+              showToast(siteText(lang, 'Demo: ZIP download', '演示模式：ZIP 打包', 'デモ：ZIP ダウンロード', '데모: ZIP 다운로드', '示範：ZIP 下載'), 'info')
             }
             onDownloadIndividual={() =>
-              showToast(isZh ? '演示模式：逐张下载' : 'Demo: download images', 'info')
+              showToast(siteText(lang, 'Demo: download images', '演示模式：逐张下载', 'デモ：画像を個別にダウンロード', '데모: 이미지 개별 다운로드', '示範：逐張下載'), 'info')
             }
             onLanguageChange={() => undefined}
             onCopyFormatChange={setCopyFormat}
             onOpenPanelOnSaveChange={setOpenPanelOnSave}
             onThemeModeChange={setThemeMode}
-            onExportJson={() => showToast(isZh ? '演示模式：导出 JSON' : 'Demo: export JSON', 'info')}
+            onExportJson={() => showToast(siteText(lang, 'Demo: export JSON', '演示模式：导出 JSON', 'デモ：JSON エクスポート', '데모: JSON 내보내기', '示範：匯出 JSON'), 'info')}
             onExportMarkdown={() =>
-              showToast(isZh ? '演示模式：导出 Markdown' : 'Demo: export Markdown', 'info')
+              showToast(siteText(lang, 'Demo: export Markdown', '演示模式：导出 Markdown', 'デモ：Markdown エクスポート', '데모: Markdown 내보내기', '示範：匯出 Markdown'), 'info')
             }
             onImportFile={() => undefined}
             onSeedMockData={() => {
               loadMocks();
-              showToast(isZh ? '已载入示例数据' : 'Loaded sample items', 'info');
+              showToast(siteText(lang, 'Loaded sample items', '已载入示例数据', 'サンプルを読み込みました', '샘플 데이터 불러옴', '已載入範例資料'), 'info');
             }}
             onClearAllData={() => {
               setItems([]);
               setSelectedIds(new Set());
-              showToast(isZh ? '已清空演示数据' : 'Demo cleared', 'info');
+              showToast(siteText(lang, 'Demo cleared', '已清空演示数据', 'デモを消去しました', '데모 데이터 지움', '已清空示範資料'), 'info');
             }}
           />
 
@@ -369,7 +363,7 @@ export function SidePanelDemo({
                 onCutItem={(item) => void handleCutItems([item])}
                 onDeleteItem={(item) => handleDeleteItems([item])}
                 onDownloadItem={() =>
-                  showToast(isZh ? '演示模式：下载图片' : 'Demo: download image', 'info')
+                  showToast(siteText(lang, 'Demo: download image', '演示模式：下载图片', 'デモ：画像ダウンロード', '데모: 이미지 다운로드', '示範：下載圖片'), 'info')
                 }
                 onOpenItem={(item) => {
                   const url =
@@ -395,7 +389,7 @@ export function SidePanelDemo({
                 }}
                 onLoadMockData={() => {
                   loadMocks();
-                  showToast(isZh ? '已载入示例数据' : 'Loaded sample items', 'info');
+                  showToast(siteText(lang, 'Loaded sample items', '已载入示例数据', 'サンプルを読み込みました', '샘플 데이터 불러옴', '已載入範例資料'), 'info');
                 }}
               />
             )}

@@ -14,3 +14,6 @@ docs/imagegen-store-assets/
 
 dist-website/
 
+website/cloudflare/
+.cloudflare/
+.wrangler/

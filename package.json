@@ -16,7 +16,7 @@
     "zip:firefox": "wxt zip -b firefox",
     "dev:website": "vite website",
     "build:website": "vite build website",
-    "deploy:website": "npm run build:website && npx wrangler pages deploy dist-website --project-name side-stash --branch main",
+    "deploy:website": "npm run build:website && cd website/cloudflare && cf deploy",
     "postinstall": "wxt prepare"
   },
   "keywords": [],

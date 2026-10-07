@@ -60,6 +60,41 @@ npm install
 npm run dev
 ```
 
+The product website preserves its existing React UI and interactive demos.
+Preview it with `npm run dev:website -- --host 0.0.0.0 --port 8088 --strictPort`
+after checking that the port is free.
+
+Website SEO uses `/` (English), `/zh/`, `/zh-TW/`, `/ja/`, `/ko/`, and `/es/`, with fixed language, localized initial HTML,
+metadata, self-canonical URLs, reciprocal hreflang and SoftwareApplication
+structured data. English is self-canonical at `/`; `/en`, `/en/` and `/en/index.html` permanently redirect to `/` on Pages.
+Language switching uses a six-language menu with crawlable links; `robots.txt` advertises the multilingual
+sitemap. Vite prerenders the same React page components for each HTML entry,
+including during authorized production builds. The client mounts the existing
+interactive UI after locale initialization; build-time demo timestamps are not
+hydrated as if they were current. Website and WXT use separate dependency caches.
+Marketing copy, navigation, demo instructions and feedback are localized in all
+six website languages; shared panel controls use the corresponding extension
+dictionary. Existing layout, theme controls and sample interactions are retained.
+Each HTML entry loads CSS directly in its head (`style.css?direct` in Vite dev),
+not through the client JavaScript import, so prerendered content is styled before
+first paint when navigating between languages.
+The six-language FAQ exposes product definitions, storage boundaries and export
+behavior. Visible developer/contact sections and publisher schema identify
+LanrenwenStudio and the existing support@lanrenwen.com address. FAQ schema is
+generated from the same visible answers; it does not promise rich results.
+The existing privacy policy is served at `/privacy-policy.html` without changing
+its legal text. Terms are not invented: the repository currently has conflicting
+MIT/ISC license declarations and no LICENSE file; resolve these before adding
+license-based terms or claims.
+`/llms.txt` lists verified product facts and official sources. WebPage and FAQPage
+schema carry the visible content-update date (`2026-10-06`), not an invented
+initial publication date. Update this date when the corresponding content changes.
+
+Production builds, packaging and deployment require explicit release/deployment
+authorization. Ordinary SEO work uses development mode and lightweight checks.
+
+Website hosting migrates under explicit authorization to Worker `sidestash-site`, keeping the official domain unchanged. The project deploy script runs the original website build into parent `dist-website`, then enters `website/cloudflare` for `cf deploy`. That directory contains cf/Wrangler dependencies, `cloudflare.config.ts` with `assetsDirectory` pointing to prebuilt output, and internal bundler `wrangler.config.ts`. Use cf exclusively; no direct Wrangler, Actions, or automatic commit/push. Old Pages remain for rollback only and are not redeployed. Report actual deployment/domain verification, not configuration-only success.
+
 Build the production bundle:
 
 ```bash
