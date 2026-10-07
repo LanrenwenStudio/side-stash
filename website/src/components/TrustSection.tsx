@@ -4,6 +4,7 @@ import { TRUST } from '../trust';
 
 export function TrustSection({ lang }: { lang: SiteLocale }) {
   const copy = TRUST[lang];
+  const published: Record<SiteLocale, string> = { en: 'First published', zh: '首次发布', 'zh-TW': '首次發布', ja: '初回公開日', ko: '최초 출시', es: 'Publicado' };
   const updated: Record<SiteLocale, string> = { en: 'Content updated', zh: '内容更新', 'zh-TW': '內容更新', ja: '内容更新日', ko: '내용 업데이트', es: 'Contenido actualizado' };
   return <section id="faq" className="border-b border-zinc-200/80 py-16 dark:border-zinc-800/80">
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -16,7 +17,10 @@ export function TrustSection({ lang }: { lang: SiteLocale }) {
         <div id="about"><h2 className="text-base font-semibold">{copy.about}</h2><p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{copy.developer}</p><a href="https://lanrenwen.com/" className="mt-2 inline-block text-sm underline underline-offset-4">LanrenwenStudio</a></div>
         <div id="contact"><h2 className="text-base font-semibold">{copy.contact}</h2><p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{copy.support}</p><div className="mt-2 flex flex-wrap gap-4 text-sm"><a href="mailto:support@lanrenwen.com" className="underline underline-offset-4">support@lanrenwen.com</a><a href="https://github.com/LanrenwenStudio/side-stash/issues" className="underline underline-offset-4">GitHub Issues</a></div></div>
       </div>
-      <p className="mt-6 text-xs text-zinc-500 dark:text-zinc-400">{updated[lang]}: <time dateTime="2026-10-06">2026-10-06</time></p>
+      <p className="mt-6 flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
+        <span>{published[lang]}: <time dateTime="2026-01-31">2026-01-31</time></span>
+        <span>{updated[lang]}: <time dateTime="2026-10-06">2026-10-06</time></span>
+      </p>
     </div>
   </section>;
 }

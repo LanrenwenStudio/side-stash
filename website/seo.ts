@@ -25,12 +25,15 @@ export function localizedPages(): Plugin {
           const publisher = { '@type': 'Organization', '@id': `${origin}/#publisher`, name: 'LanrenwenStudio', url: 'https://lanrenwen.com/', sameAs: ['https://github.com/LanrenwenStudio'], contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', email: 'support@lanrenwen.com' } };
           const schema = JSON.stringify({ '@context': 'https://schema.org', '@graph': [
             publisher,
-            { '@type': 'SoftwareApplication', '@id': `${origin}/#app`, name: 'Side Stash', url, inLanguage: locale.htmlLang, description, applicationCategory: 'ProductivityApplication', operatingSystem: 'Chrome', author: { '@id': publisher['@id'] }, publisher: { '@id': publisher['@id'] }, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
-            { '@type': 'WebPage', '@id': `${url}#page`, url, name: title, inLanguage: locale.htmlLang, dateModified: '2026-10-06', author: { '@id': publisher['@id'] }, publisher: { '@id': publisher['@id'] }, about: { '@id': `${origin}/#app` } },
-            { '@type': 'FAQPage', '@id': `${url}#faq`, inLanguage: locale.htmlLang, dateModified: '2026-10-06', mainEntity: TRUST[lang].questions.map(({ question, answer }) => ({ '@type': 'Question', name: question, acceptedAnswer: { '@type': 'Answer', text: answer } })) },
+            { '@type': 'SoftwareApplication', '@id': `${origin}/#app`, name: 'Side Stash', url, inLanguage: locale.htmlLang, description, applicationCategory: 'ProductivityApplication', operatingSystem: 'Chrome', image: `${origin}/og-image.png`, screenshot: `${origin}/og-image.png`, datePublished: '2026-01-31', dateModified: '2026-10-06', author: { '@id': publisher['@id'] }, publisher: { '@id': publisher['@id'] }, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+            { '@type': 'WebPage', '@id': `${url}#page`, url, name: title, inLanguage: locale.htmlLang, datePublished: '2026-01-31', dateModified: '2026-10-06', primaryImageOfPage: { '@type': 'ImageObject', url: `${origin}/og-image.png`, width: 1200, height: 630 }, author: { '@id': publisher['@id'] }, publisher: { '@id': publisher['@id'] }, about: { '@id': `${origin}/#app` } },
+            { '@type': 'FAQPage', '@id': `${url}#faq`, inLanguage: locale.htmlLang, datePublished: '2026-01-31', dateModified: '2026-10-06', mainEntity: TRUST[lang].questions.map(({ question, answer }) => ({ '@type': 'Question', name: question, acceptedAnswer: { '@type': 'Answer', text: answer } })) },
           ] });
           const metadata = `<title>${title}</title>
 <meta name="description" content="${description}" />
+<meta name="author" content="LanrenwenStudio" />
+<meta property="article:published_time" content="2026-01-31T00:00:00Z" />
+<meta property="article:modified_time" content="2026-10-06T00:00:00Z" />
 <link rel="canonical" href="${url}" />
 ${Object.entries(SITE_LOCALES).map(([code, info]) => `<link rel="alternate" hreflang="${info.htmlLang}" href="${code === 'en' ? `${origin}/` : `${origin}/${code}/`}" />`).join('\n')}
 <link rel="alternate" hreflang="x-default" href="${origin}/" />
@@ -40,11 +43,16 @@ ${Object.entries(SITE_LOCALES).map(([code, info]) => `<link rel="alternate" href
 <meta property="og:title" content="${title}" />
 <meta property="og:description" content="${description}" />
 <meta property="og:locale" content="${locale.ogLocale}" />
-<meta property="og:image" content="${origin}/icon-128.png" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:image" content="${origin}/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:alt" content="Side Stash — Private Browser Side-Panel Collector &amp; Web Highlighter" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${title}" />
 <meta name="twitter:description" content="${description}" />
-<meta name="twitter:image" content="${origin}/icon-128.png" />
+<meta name="twitter:image" content="${origin}/og-image.png" />
+<meta name="twitter:image:alt" content="Side Stash — Private Browser Side-Panel Collector &amp; Web Highlighter" />
 <script type="application/ld+json">${schema.replace(/</g, '\\u003c')}</script>`;
           return html.replace('<!-- seo-metadata -->', metadata).replace('lang="en"', `lang="${locale.htmlLang}"`).replace('<div id="root"></div>', `<div id="root" data-locale="${lang}">${body}</div>`);
         } finally {
