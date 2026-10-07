@@ -27,7 +27,7 @@
   </defs>
 
   <style>
-    .font-sans { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; }
+    .font-sans { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans CJK KR", "Noto Sans CJK JP", "SF Pro Display", "SF Pro Text", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; }
   </style>
 
   <!-- Background -->
@@ -50,8 +50,8 @@
     Side Stash
   </text>
 
-  <!-- 3. Giant Slogan: Stash it. Find it. -->
-  <text x="600" y="468" text-anchor="middle" class="font-sans" font-size="88" font-weight="850" letter-spacing="-0.05em" filter="url(#textGlow)">
+  <!-- 3. Giant Slogan per Locale -->
+  <text x="600" y="468" text-anchor="middle" class="font-sans" font-size="88" font-weight="850" letter-spacing="-0.04em" filter="url(#textGlow)">
     <tspan fill="#ffffff">Stash it. </tspan>
     <tspan fill="#60a5fa">Find it.</tspan>
   </text>

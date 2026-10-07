@@ -1,13 +1,58 @@
 import { writeFileSync, readFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
-// Prepare crisp large 384x384 logo from docs/logo.png
+// 1. Prepare crisp large 384x384 logo from docs/logo.png
 execSync('sips -z 384 384 docs/logo.png --out /tmp/logo-384.png');
 const logoB64 = readFileSync('/tmp/logo-384.png').toString('base64');
 
-// Ultra-clean, bold, high-impact 1200x630 OG image
-// Only 3 elements: Huge Logo + Product Name + Punchy Slogan
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+// 2. Define slogans and font scale per locale
+const LOCALES = [
+  {
+    code: 'en',
+    part1: 'Stash it.',
+    part2: 'Find it.',
+    fontSize: 88,
+    gap: ' '
+  },
+  {
+    code: 'zh',
+    part1: '随手存。',
+    part2: '立刻找。',
+    fontSize: 82,
+    gap: ' '
+  },
+  {
+    code: 'zh-TW',
+    part1: '隨手存。',
+    part2: '立刻找。',
+    fontSize: 82,
+    gap: ' '
+  },
+  {
+    code: 'ja',
+    part1: 'さっと保存。',
+    part2: 'すぐ見つかる。',
+    fontSize: 70,
+    gap: ' '
+  },
+  {
+    code: 'ko',
+    part1: '바로 저장.',
+    part2: '금방 찾기.',
+    fontSize: 74,
+    gap: ' '
+  },
+  {
+    code: 'es',
+    part1: 'Guárdalo.',
+    part2: 'Encuéntralo.',
+    fontSize: 66,
+    gap: ' '
+  }
+];
+
+function generateSvg({ part1, part2, fontSize, gap }) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <!-- Background Gradient -->
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
@@ -36,7 +81,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   </defs>
 
   <style>
-    .font-sans { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; }
+    .font-sans { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans CJK KR", "Noto Sans CJK JP", "SF Pro Display", "SF Pro Text", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; }
   </style>
 
   <!-- Background -->
@@ -59,13 +104,36 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
     Side Stash
   </text>
 
-  <!-- 3. Giant Slogan: Stash it. Find it. -->
-  <text x="600" y="468" text-anchor="middle" class="font-sans" font-size="88" font-weight="850" letter-spacing="-0.05em" filter="url(#textGlow)">
-    <tspan fill="#ffffff">Stash it. </tspan>
-    <tspan fill="#60a5fa">Find it.</tspan>
+  <!-- 3. Giant Slogan per Locale -->
+  <text x="600" y="468" text-anchor="middle" class="font-sans" font-size="${fontSize}" font-weight="850" letter-spacing="-0.04em" filter="url(#textGlow)">
+    <tspan fill="#ffffff">${part1}${gap}</tspan>
+    <tspan fill="#60a5fa">${part2}</tspan>
   </text>
 </svg>`;
+}
 
-writeFileSync('website/public/og-image.svg', svg);
-execSync('rsvg-convert -o website/public/og-image.png website/public/og-image.svg');
-console.log('Regenerated ultra-bold minimalist website/public/og-image.png');
+for (const loc of LOCALES) {
+  const svg = generateSvg(loc);
+  const svgPath = `/tmp/og-${loc.code}.svg`;
+  const pngPath = `/tmp/og-${loc.code}.png`;
+  const webpPath = `website/public/og-${loc.code}.webp`;
+  const outPngPath = `website/public/og-${loc.code}.png`;
+
+  writeFileSync(svgPath, svg);
+  // Render high-res PNG via rsvg-convert
+  execSync(`rsvg-convert -o ${pngPath} ${svgPath}`);
+  // Copy PNG to website/public
+  execSync(`cp ${pngPath} ${outPngPath}`);
+  // Compress to WebP with high quality (q=90)
+  execSync(`cwebp -q 90 -m 6 ${pngPath} -o ${webpPath} -quiet`);
+
+  console.log(`Generated: ${webpPath} & ${outPngPath}`);
+
+  // Also write default fallback og-image.webp and og-image.png from English
+  if (loc.code === 'en') {
+    execSync(`cp ${webpPath} website/public/og-image.webp`);
+    execSync(`cp ${outPngPath} website/public/og-image.png`);
+    writeFileSync('website/public/og-image.svg', svg);
+    console.log(`Updated default: website/public/og-image.webp & .png`);
+  }
+}
